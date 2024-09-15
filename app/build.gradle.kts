@@ -33,9 +33,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
 
-    kotlinOptions {
-        jvmTarget = "21"
-    }
+    kotlinOptions { jvmTarget = "21" }
 
     buildFeatures {
         compose = true
@@ -47,7 +45,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
 
+composeCompiler {
+    enableStrongSkippingMode = true
+    enableIntrinsicRemember = true
 }
 
 dependencies {
@@ -66,13 +68,19 @@ dependencies {
     //Coil Image Loading Library
     implementation(libs.coil.compose)
 
-
     //Koin As Dependency Injection
     implementation(platform(libs.koin.bom))
     implementation(libs.bundles.koin)
 
-    //Ktor
+    //Ktor for Network Requests
     implementation(libs.bundles.ktor.client)
+
+    //Room Database
+    implementation(libs.bundles.room.db)
+    ksp(libs.room.ksp)
+
+    //Paging Library
+    implementation(libs.pagging.library)
 
     //Reels Player
     implementation(libs.reels.player)
