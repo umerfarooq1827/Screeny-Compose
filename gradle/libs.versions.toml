@@ -12,7 +12,7 @@ reelsPlayer = "2.0.3"
 ktor = "2.3.12"
 roomVersion = "2.6.1"
 pager3Version = "3.3.2"
-
+kotlinXJson = "1.7.1"
 
 
 [libraries]
@@ -46,6 +46,8 @@ pagging-library = { module = "androidx.paging:paging-compose", version.ref = "pa
 
 
 
+
+
 [bundles]
 ktor-client = ["ktor-client-android", "ktor-client-core", "ktor-client-serialization", "ktor-client-logging"]
 koin = ["koin-core", "koin-compose"]
@@ -59,4 +61,3 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
-

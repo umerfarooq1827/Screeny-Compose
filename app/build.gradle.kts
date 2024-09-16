@@ -1,13 +1,20 @@
+import java.io.File
+import java.io.FileInputStream
+import java.util.*
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.ksp)
+    kotlin("plugin.serialization")
+
 }
 
 android {
     namespace = "com.shahid.iqbal.screeny"
     compileSdk = 35
+
 
     defaultConfig {
         applicationId = "com.shahid.iqbal.screeny"
@@ -19,6 +26,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val prop = Properties().apply {
+            load(FileInputStream(File(rootProject.rootDir, "local.properties")))
+        }
+        val apiKey = prop.getProperty("api_key")
+        buildConfigField("String", "API_KEY", apiKey)
     }
 
     buildTypes {
@@ -37,6 +50,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
 
@@ -45,11 +59,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-}
-
-composeCompiler {
-    enableStrongSkippingMode = true
-    enableIntrinsicRemember = true
 }
 
 dependencies {
@@ -84,5 +93,6 @@ dependencies {
 
     //Reels Player
     implementation(libs.reels.player)
+
 
 }

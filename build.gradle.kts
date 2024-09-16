@@ -3,5 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.kotlin.ksp) apply false
     alias(libs.plugins.compose.compiler) apply false
+    kotlin("plugin.serialization") version "2.0.0"
 
 }
