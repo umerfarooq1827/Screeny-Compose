@@ -9,7 +9,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
 
-class PexelApiImpl(private val httpClient: HttpClient) : PexelPhotoApi {
+class PexelPhotoApiImpl(private val httpClient: HttpClient) : PexelPhotoApi {
 
     override suspend fun getWallpapers(page: Int): PhotosResponse = httpClient.get(HttpRoutes.GET_WALLPAPERS) {
         parameter("page", page)
