@@ -34,6 +34,7 @@ reels-player = { module = "com.github.Shahidzbi4213:SampleReelsApp", version.ref
 
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 
@@ -49,7 +50,11 @@ pagging-library = { module = "androidx.paging:paging-compose", version.ref = "pa
 
 
 [bundles]
-ktor-client = ["ktor-client-android", "ktor-client-core", "ktor-client-serialization", "ktor-client-logging"]
+ktor-client = ["ktor-client-android", "ktor-client-core",
+                "ktor-client-serialization", "ktor-client-logging",
+                    "ktor-content-negotiation"]
+
+
 koin = ["koin-core", "koin-compose"]
 room-db = ["room-runtime", "room-ktx", "room-pagging"]
 
