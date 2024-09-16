@@ -1,4 +1,4 @@
-package com.shahid.iqbal.screeny.core
+package com.shahid.iqbal.screeny.core.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
