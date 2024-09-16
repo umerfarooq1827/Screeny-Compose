@@ -7,11 +7,11 @@ import androidx.annotation.Keep
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.shahid.iqbal.screeny.features.wallpapers.data.utils.Constant.PEXEL_IMAGE_TABLE
+import com.shahid.iqbal.screeny.features.wallpapers.data.utils.Constant.PEXEL_WALLPAPER_TABLE
 
 @Keep
 @Serializable
-@Entity(tableName = PEXEL_IMAGE_TABLE)
+@Entity(tableName = PEXEL_WALLPAPER_TABLE)
 data class Photo(
     @SerialName("id")
     @PrimaryKey(autoGenerate = false)
