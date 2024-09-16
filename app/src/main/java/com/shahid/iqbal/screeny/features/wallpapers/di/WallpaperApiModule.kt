@@ -1,11 +1,11 @@
 package com.shahid.iqbal.screeny.features.wallpapers.di
 
-import com.shahid.iqbal.screeny.features.wallpapers.data.remote.PexelPhotoApi
-import com.shahid.iqbal.screeny.features.wallpapers.data.remote.PexelPhotoApiImpl
+import com.shahid.iqbal.screeny.features.wallpapers.data.remote.PexelWallpapersApi
+import com.shahid.iqbal.screeny.features.wallpapers.data.remote.PexelWallpapersApiImpl
 import org.koin.dsl.module
 
 
 val wallpaperApiModule = module {
 
-    single<PexelPhotoApi> { PexelPhotoApiImpl(get()) }
+    single<PexelWallpapersApi> { PexelWallpapersApiImpl(get()) }
 }
