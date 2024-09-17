@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Keep
 @Serializable
-data class PhotosResponse(
+data class WallpaperResponse(
     @SerialName("photos")
-    val photos: List<Photo>
+    val wallpapers: List<Wallpaper>
 )

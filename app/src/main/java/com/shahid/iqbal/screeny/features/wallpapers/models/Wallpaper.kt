@@ -12,10 +12,10 @@ import com.shahid.iqbal.screeny.features.wallpapers.data.utils.Constant.PEXEL_WA
 @Keep
 @Serializable
 @Entity(tableName = PEXEL_WALLPAPER_TABLE)
-data class Photo(
+data class Wallpaper(
     @SerialName("id")
     @PrimaryKey(autoGenerate = false)
-    val id: Int, // 28271326
+    val id: Int,
     @SerialName("photographer")
     val photographerName: String, // Mathias Reding
     @SerialName("photographer_url")
