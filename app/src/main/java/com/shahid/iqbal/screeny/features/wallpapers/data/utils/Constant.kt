@@ -6,5 +6,5 @@ object Constant {
     const val PEXEL_WALLPAPER_REMOTE_KEYS_TABLE = "pexel_wallpaper_remote_keys_table"
 
     const val PER_PAGE_ITEMS = 40
-    const val PEXEL_WALLPAPER_DATABASE_NAME = "wallpaper_db"
+    const val PEXEL_WALLPAPER_DATABASE = "wallpaper_db"
 }
