@@ -8,11 +8,5 @@ import org.koin.dsl.module
 
 val wallpaperDatabaseModule = module {
 
-    single {
-        Room.databaseBuilder(
-            get(), PexelWallpaperDatabase::class.java,
-            Constant.PEXEL_WALLPAPER_DATABASE_NAME
-        ).fallbackToDestructiveMigration()
-            .build()
-    }
+    single { Room.databaseBuilder(get(), PexelWallpaperDatabase::class.java, Constant.PEXEL_WALLPAPER_DATABASE_NAME).fallbackToDestructiveMigration().build() }
 }
