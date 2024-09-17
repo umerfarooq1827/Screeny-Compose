@@ -11,7 +11,6 @@ import com.shahid.iqbal.screeny.features.wallpapers.data.utils.Constant.PEXEL_WA
 
 @Keep
 @Serializable
-@SerialName("photos")
 @Entity(tableName = PEXEL_WALLPAPER_TABLE)
 data class Wallpaper(
     @SerialName("id")

@@ -1,15 +1,10 @@
 package com.shahid.iqbal.screeny.features.wallpapers.models
 
-
-import androidx.annotation.Keep
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Keep
 @Serializable
-data class Src(
-    @SerialName("medium")
-    val medium: String,
-    @SerialName("portrait")
-    val portrait: String,
+data class WallpaperResponse(
+    @SerialName("photos")
+    val wallpapers: List<Wallpaper>,
 )

@@ -1,9 +1,9 @@
 package com.shahid.iqbal.screeny.features.wallpapers.data.remote
 
-import com.shahid.iqbal.screeny.features.wallpapers.models.Wallpaper
+import com.shahid.iqbal.screeny.features.wallpapers.models.WallpaperResponse
 
 interface PexelWallpapersApi {
 
-    suspend fun getWallpapers(page: Int): List<Wallpaper>
+    suspend fun getWallpapers(page: Int): WallpaperResponse
 
 }

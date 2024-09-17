@@ -7,7 +7,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.ksp)
-    kotlin("plugin.serialization")
+    id("kotlinx-serialization")
+
 
 }
 
