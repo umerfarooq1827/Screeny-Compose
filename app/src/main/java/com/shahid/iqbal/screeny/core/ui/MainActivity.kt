@@ -24,13 +24,11 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
-    val repo: WallpaperRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             MainContent()
         }
     }
