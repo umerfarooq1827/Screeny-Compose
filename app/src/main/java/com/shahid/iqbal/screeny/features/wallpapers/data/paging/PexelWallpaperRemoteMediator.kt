@@ -37,17 +37,13 @@ class PexelWallpaperRemoteMediator(
 
                 LoadType.PREPEND -> {
                     val remoteKeys = getRemoteKeyForFirstItem(state)
-                    val prevPage = remoteKeys?.prevPage ?: return MediatorResult.Success(
-                        endOfPaginationReached = remoteKeys != null
-                    )
+                    val prevPage = remoteKeys?.prevPage ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                     prevPage
                 }
 
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeyForLastItem(state)
-                    val nextPage = remoteKeys?.nextPage ?: return MediatorResult.Success(
-                        endOfPaginationReached = remoteKeys != null
-                    )
+                    val nextPage = remoteKeys?.nextPage ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                     nextPage
                 }
             }
@@ -64,11 +60,7 @@ class PexelWallpaperRemoteMediator(
                     wallpaperDao.deleteAllWallpapers()
                     remoteKeysDao.deleteAllRemoteKeys()
                 }
-                val keys = response.map { wallpaper ->
-                    WallpaperRemoteKeys(
-                        id = wallpaper.id, prevPage = prevPage, nextPage = nextPage
-                    )
-                }
+                val keys = response.map { wallpaper -> WallpaperRemoteKeys(id = wallpaper.id, prevPage = prevPage, nextPage = nextPage) }
                 remoteKeysDao.addAllRemoteKeys(remoteKeys = keys)
                 wallpaperDao.addWallpapers(response)
             }

@@ -13,10 +13,13 @@ import kotlinx.coroutines.flow.Flow
 class WallpaperRepository(private val remoteMediator: PexelWallpaperRemoteMediator) {
 
     fun getAllWallpapers(): Flow<PagingData<Wallpaper>> {
+
+        val pageConfig = PagingConfig(pageSize = Constant.PER_PAGE_ITEMS)
+
         return Pager(
-            config = PagingConfig(pageSize = Constant.PER_PAGE_ITEMS),
+            config = pageConfig,
             initialKey = null,
-            pagingSourceFactory = remoteMediator,
+            pagingSourceFactory = { remoteMediator },
             remoteMediator = remoteMediator
         ).flow
     }
