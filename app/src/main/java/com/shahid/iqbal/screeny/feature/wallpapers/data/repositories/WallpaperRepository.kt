@@ -1,15 +1,14 @@
-package com.shahid.iqbal.screeny.features.wallpapers.data.repositories
+package com.shahid.iqbal.screeny.feature.wallpapers.data.repositories
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.shahid.iqbal.screeny.features.wallpapers.data.local.PexelWallpaperDatabase
-import com.shahid.iqbal.screeny.features.wallpapers.data.paging.PexelWallpaperRemoteMediator
-import com.shahid.iqbal.screeny.features.wallpapers.data.remote.PexelWallpapersApi
-import com.shahid.iqbal.screeny.features.wallpapers.data.remote.PexelWallpapersApiImpl
-import com.shahid.iqbal.screeny.features.wallpapers.data.utils.Constant
-import com.shahid.iqbal.screeny.features.wallpapers.models.Wallpaper
+import com.shahid.iqbal.screeny.feature.wallpapers.data.local.PexelWallpaperDatabase
+import com.shahid.iqbal.screeny.feature.wallpapers.data.paging.PexelWallpaperRemoteMediator
+import com.shahid.iqbal.screeny.feature.wallpapers.data.remote.PexelWallpapersApi
+import com.shahid.iqbal.screeny.feature.wallpapers.data.utils.Constant
+import com.shahid.iqbal.screeny.feature.wallpapers.models.Wallpaper
 import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalPagingApi::class)

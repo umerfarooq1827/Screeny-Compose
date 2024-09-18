@@ -1,8 +1,8 @@
-package com.shahid.iqbal.screeny.features.wallpapers.data.remote
+package com.shahid.iqbal.screeny.feature.wallpapers.data.remote
 
-import com.shahid.iqbal.screeny.features.wallpapers.data.utils.Constant.PER_PAGE_ITEMS
-import com.shahid.iqbal.screeny.features.wallpapers.data.utils.HttpRoutes
-import com.shahid.iqbal.screeny.features.wallpapers.models.WallpaperResponse
+import com.shahid.iqbal.screeny.feature.wallpapers.data.utils.Constant.PER_PAGE_ITEMS
+import com.shahid.iqbal.screeny.feature.wallpapers.data.utils.HttpRoutes
+import com.shahid.iqbal.screeny.feature.wallpapers.models.WallpaperResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

@@ -1,14 +1,14 @@
-package com.shahid.iqbal.screeny.features.wallpapers.data.paging
+package com.shahid.iqbal.screeny.feature.wallpapers.data.paging
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.shahid.iqbal.screeny.features.wallpapers.data.local.PexelWallpaperDatabase
-import com.shahid.iqbal.screeny.features.wallpapers.data.remote.PexelWallpapersApi
-import com.shahid.iqbal.screeny.features.wallpapers.models.Wallpaper
-import com.shahid.iqbal.screeny.features.wallpapers.models.WallpaperRemoteKeys
+import com.shahid.iqbal.screeny.feature.wallpapers.data.local.PexelWallpaperDatabase
+import com.shahid.iqbal.screeny.feature.wallpapers.data.remote.PexelWallpapersApi
+import com.shahid.iqbal.screeny.feature.wallpapers.models.Wallpaper
+import com.shahid.iqbal.screeny.feature.wallpapers.models.WallpaperRemoteKeys
 
 @OptIn(ExperimentalPagingApi::class)
 class PexelWallpaperRemoteMediator(

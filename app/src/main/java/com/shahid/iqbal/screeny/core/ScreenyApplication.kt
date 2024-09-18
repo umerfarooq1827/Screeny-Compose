@@ -2,9 +2,9 @@ package com.shahid.iqbal.screeny.core
 
 import android.app.Application
 import com.shahid.iqbal.screeny.core.di.networkModule
-import com.shahid.iqbal.screeny.features.wallpapers.di.sharedWallpaperModule
-import com.shahid.iqbal.screeny.features.wallpapers.di.wallpaperApiModule
-import com.shahid.iqbal.screeny.features.wallpapers.di.wallpaperDatabaseModule
+import com.shahid.iqbal.screeny.feature.wallpapers.di.sharedWallpaperModule
+import com.shahid.iqbal.screeny.feature.wallpapers.di.wallpaperApiModule
+import com.shahid.iqbal.screeny.feature.wallpapers.di.wallpaperDatabaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin

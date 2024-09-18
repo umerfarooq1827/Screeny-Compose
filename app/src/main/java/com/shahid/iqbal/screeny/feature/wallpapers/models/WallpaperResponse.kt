@@ -1,4 +1,4 @@
-package com.shahid.iqbal.screeny.features.wallpapers.models
+package com.shahid.iqbal.screeny.feature.wallpapers.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

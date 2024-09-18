@@ -69,6 +69,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
@@ -92,8 +94,8 @@ dependencies {
     //Paging Library
     implementation(libs.pagging.library)
 
-    //Reels Player
-    implementation(libs.reels.player)
+    //Navigation Library
+    implementation(libs.compose.navigation)
 
 
 }

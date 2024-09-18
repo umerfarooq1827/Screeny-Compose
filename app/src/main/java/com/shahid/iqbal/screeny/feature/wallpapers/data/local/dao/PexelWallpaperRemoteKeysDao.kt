@@ -1,9 +1,9 @@
-package com.shahid.iqbal.screeny.features.wallpapers.data.local.dao
+package com.shahid.iqbal.screeny.feature.wallpapers.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.shahid.iqbal.screeny.features.wallpapers.models.WallpaperRemoteKeys
+import com.shahid.iqbal.screeny.feature.wallpapers.models.WallpaperRemoteKeys
 
 @Dao
 interface PexelWallpaperRemoteKeysDao {

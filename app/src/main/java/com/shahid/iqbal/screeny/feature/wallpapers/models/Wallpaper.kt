@@ -1,4 +1,4 @@
-package com.shahid.iqbal.screeny.features.wallpapers.models
+package com.shahid.iqbal.screeny.feature.wallpapers.models
 
 
 import kotlinx.serialization.SerialName
@@ -7,7 +7,7 @@ import androidx.annotation.Keep
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.shahid.iqbal.screeny.features.wallpapers.data.utils.Constant.PEXEL_WALLPAPER_TABLE
+import com.shahid.iqbal.screeny.feature.wallpapers.data.utils.Constant.PEXEL_WALLPAPER_TABLE
 
 @Keep
 @Serializable

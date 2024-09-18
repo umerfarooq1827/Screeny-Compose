@@ -1,9 +1,8 @@
-package com.shahid.iqbal.screeny.features.wallpapers.di
+package com.shahid.iqbal.screeny.feature.wallpapers.di
 
 import androidx.room.Room
-import com.shahid.iqbal.screeny.features.wallpapers.data.local.PexelWallpaperDatabase
-import com.shahid.iqbal.screeny.features.wallpapers.data.repositories.WallpaperRepository
-import com.shahid.iqbal.screeny.features.wallpapers.data.utils.Constant
+import com.shahid.iqbal.screeny.feature.wallpapers.data.local.PexelWallpaperDatabase
+import com.shahid.iqbal.screeny.feature.wallpapers.data.utils.Constant
 import org.koin.dsl.module
 
 

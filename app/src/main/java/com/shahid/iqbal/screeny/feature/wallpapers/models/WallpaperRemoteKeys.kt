@@ -1,8 +1,8 @@
-package com.shahid.iqbal.screeny.features.wallpapers.models
+package com.shahid.iqbal.screeny.feature.wallpapers.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.shahid.iqbal.screeny.features.wallpapers.data.utils.Constant.PEXEL_WALLPAPER_REMOTE_KEYS_TABLE
+import com.shahid.iqbal.screeny.feature.wallpapers.data.utils.Constant.PEXEL_WALLPAPER_REMOTE_KEYS_TABLE
 
 
 @Entity(PEXEL_WALLPAPER_REMOTE_KEYS_TABLE)

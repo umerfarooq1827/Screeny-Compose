@@ -1,4 +1,4 @@
-package com.shahid.iqbal.screeny.features.wallpapers.data.utils
+package com.shahid.iqbal.screeny.feature.wallpapers.data.utils
 
 object HttpRoutes {
 
