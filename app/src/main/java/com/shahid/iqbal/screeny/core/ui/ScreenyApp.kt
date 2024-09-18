@@ -81,8 +81,6 @@ fun ScreenyApp(navController: NavHostController) {
 @SuppressLint("RestrictedApi")
 @Composable
 fun BottomNav(navController: NavHostController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
     var selectIndex by rememberSaveable { mutableIntStateOf(0) }
 
     NavigationBar(

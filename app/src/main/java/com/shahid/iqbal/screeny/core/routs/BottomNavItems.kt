@@ -8,7 +8,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
-data class TopLevelRoute<T : Any>(val name: String, val route: T, val icon: ImageVector)
+data class TopLevelRoute(val name: String, val route: Screens, val icon: ImageVector)
 
 val bottomNavigationItems = listOf(
     TopLevelRoute("Home", Screens.Home, Icons.Filled.Home),
