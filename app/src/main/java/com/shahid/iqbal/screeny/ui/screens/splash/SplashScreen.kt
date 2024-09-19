@@ -60,7 +60,7 @@ fun SplashScreen(
     context.HideSystemBars(true)
 
     LaunchedEffect(key1 = progress) {
-        if (progress >=1f)
+        if (progress >= 1f)
             navController.navigate(Routs.Home)
 
     }
@@ -68,7 +68,9 @@ fun SplashScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(SplashColor), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+            .background(SplashColor),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         AsyncImage(
