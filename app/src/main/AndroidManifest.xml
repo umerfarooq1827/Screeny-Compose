@@ -14,7 +14,7 @@
 
 
     <application
-        android:name=".core.ScreenyApplication"
+        android:name=".ScreenyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,7 +26,7 @@
         android:theme="@style/Theme.Screeny"
         tools:targetApi="31">
         <activity
-            android:name=".core.ui.MainActivity"
+            android:name=".ui.core.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Screeny">
             <intent-filter>
