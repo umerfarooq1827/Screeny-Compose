@@ -11,6 +11,7 @@ import com.shahid.iqbal.screeny.data.utils.Constant
 import com.shahid.iqbal.screeny.models.Wallpaper
 import kotlinx.coroutines.flow.Flow
 
+
 @OptIn(ExperimentalPagingApi::class)
 class WallpaperRepository(private val api: PexelWallpapersApi, private val database: PexelWallpaperDatabase) {
 
@@ -22,7 +23,6 @@ class WallpaperRepository(private val api: PexelWallpapersApi, private val datab
 
         return Pager(
             config = pageConfig,
-            initialKey = null,
             pagingSourceFactory = pagingSourceFactory,
             remoteMediator = remoteMediator
         ).flow

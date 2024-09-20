@@ -22,7 +22,7 @@ class SplashViewModel : ViewModel() {
         viewModelScope.launch {
             while (progress.value < 1f) {
                 _progress.value += 0.01f
-                delay(50)
+                delay(10)
             }
         }
     }
