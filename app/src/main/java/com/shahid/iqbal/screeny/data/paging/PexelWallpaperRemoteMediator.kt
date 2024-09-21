@@ -9,6 +9,8 @@ import com.shahid.iqbal.screeny.data.local.database.PexelWallpaperDatabase
 import com.shahid.iqbal.screeny.data.remote.PexelWallpapersApi
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.models.WallpaperRemoteKeys
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalPagingApi::class)
 class PexelWallpaperRemoteMediator(
@@ -26,47 +28,49 @@ class PexelWallpaperRemoteMediator(
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Wallpaper>): MediatorResult {
 
-        return try {
+        return withContext(Dispatchers.IO) {
+            try {
 
-            val currentPage = when (loadType) {
-                LoadType.REFRESH -> {
-                    val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                    remoteKeys?.nextPage?.minus(1) ?: 1
+                val currentPage = when (loadType) {
+                    LoadType.REFRESH -> {
+                        val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
+                        remoteKeys?.nextPage?.minus(1) ?: 1
+                    }
+
+                    LoadType.PREPEND -> {
+                        val remoteKeys = getRemoteKeyForFirstItem(state)
+                        val prevPage = remoteKeys?.prevPage ?: return@withContext MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                        prevPage
+                    }
+
+                    LoadType.APPEND -> {
+                        val remoteKeys = getRemoteKeyForLastItem(state)
+                        val nextPage = remoteKeys?.nextPage ?: return@withContext MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                        nextPage
+                    }
                 }
 
-                LoadType.PREPEND -> {
-                    val remoteKeys = getRemoteKeyForFirstItem(state)
-                    val prevPage = remoteKeys?.prevPage ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
-                    prevPage
-                }
+                val response = pexelWallpapersApi.getWallpapers(page = currentPage)
 
-                LoadType.APPEND -> {
-                    val remoteKeys = getRemoteKeyForLastItem(state)
-                    val nextPage = remoteKeys?.nextPage ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
-                    nextPage
+
+                val prevPage = if (response.prevPage == null) null else getPageNumber(response.prevPage)
+                val nextPage = if (response.nextPage == null) null else getPageNumber(response.nextPage)
+
+                wallpaperDatabase.withTransaction {
+                    if (loadType == LoadType.REFRESH) {
+                        wallpaperDao.deleteAllWallpapers()
+                        remoteKeysDao.deleteAllRemoteKeys()
+                    }
+                    val keys = response.wallpapers.map { wallpaper ->
+                        WallpaperRemoteKeys(id = wallpaper.id, prevPage = prevPage, nextPage = nextPage)
+                    }
+                    remoteKeysDao.addAllRemoteKeys(remoteKeys = keys)
+                    wallpaperDao.addWallpapers(response.wallpapers)
                 }
+                MediatorResult.Success(endOfPaginationReached = (response.nextPage == null))
+            } catch (e: Exception) {
+                MediatorResult.Error(e)
             }
-
-            val response = pexelWallpapersApi.getWallpapers(page = currentPage)
-
-
-            val prevPage = if (response.prevPage == null) null else getPageNumber(response.prevPage)
-            val nextPage = if (response.nextPage == null) null else getPageNumber(response.nextPage)
-
-            wallpaperDatabase.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    wallpaperDao.deleteAllWallpapers()
-                    remoteKeysDao.deleteAllRemoteKeys()
-                }
-                val keys = response.wallpapers.map { wallpaper ->
-                    WallpaperRemoteKeys(id = wallpaper.id, prevPage = prevPage, nextPage = nextPage)
-                }
-                remoteKeysDao.addAllRemoteKeys(remoteKeys = keys)
-                wallpaperDao.addWallpapers(response.wallpapers)
-            }
-            MediatorResult.Success(endOfPaginationReached = (response.nextPage == null))
-        } catch (e: Exception) {
-            MediatorResult.Error(e)
         }
     }
 
@@ -82,13 +86,15 @@ class PexelWallpaperRemoteMediator(
     ): WallpaperRemoteKeys? {
 
         // Get the user's current position in the list (anchorPosition).
-        return state.anchorPosition?.let { position ->
+        return withContext(Dispatchers.IO){
+            state.anchorPosition?.let { position ->
 
-            // Find the  Wallpaper closest to that position.
-            state.closestItemToPosition(position)?.id?.let { id ->
+                // Find the  Wallpaper closest to that position.
+                state.closestItemToPosition(position)?.id?.let { id ->
 
-                // Use the wallpaper's ID to retrieve the corresponding remote key from the database.
-                remoteKeysDao.getRemoteKeys(id = id)
+                    // Use the wallpaper's ID to retrieve the corresponding remote key from the database.
+                    remoteKeysDao.getRemoteKeys(id = id)
+                }
             }
         }
     }
@@ -104,10 +110,12 @@ class PexelWallpaperRemoteMediator(
     ): WallpaperRemoteKeys? {
 
         // Find the first page that contains data (not empty).
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { wallpaper ->
+        return withContext(Dispatchers.IO) {
+            state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { wallpaper ->
 
-            // Use the first wallpaper's ID to retrieve the corresponding remote key from the database.
-            remoteKeysDao.getRemoteKeys(id = wallpaper.id)
+                // Use the first wallpaper's ID to retrieve the corresponding remote key from the database.
+                remoteKeysDao.getRemoteKeys(id = wallpaper.id)
+            }
         }
     }
 
@@ -123,10 +131,12 @@ class PexelWallpaperRemoteMediator(
     ): WallpaperRemoteKeys? {
 
         // Find the last page that contains data (not empty).
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { wallpaper ->
+        return withContext(Dispatchers.IO){
+            state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { wallpaper ->
 
-            // Use the last Wallpaper's ID to retrieve the corresponding remote key from the database.
-            remoteKeysDao.getRemoteKeys(id = wallpaper.id)
+                // Use the last Wallpaper's ID to retrieve the corresponding remote key from the database.
+                remoteKeysDao.getRemoteKeys(id = wallpaper.id)
+            }
         }
     }
 

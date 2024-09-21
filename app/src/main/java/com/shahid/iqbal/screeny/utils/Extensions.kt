@@ -5,7 +5,7 @@ import android.util.Log
 object Extensions {
 
 
-    fun Any?.debug(tag: String = "PexelApi") {
+    fun Any?.debug(tag: String = "Logger") {
         Log.d(tag, "$this")
     }
 }

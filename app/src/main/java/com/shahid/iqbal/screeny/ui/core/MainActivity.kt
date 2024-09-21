@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
+import com.shahid.iqbal.screeny.ui.theme.ScreenyTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -14,8 +15,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            val navController = rememberNavController()
-            ScreenyApp(navController)
+            ScreenyTheme(dynamicColor = true) {
+                val navController = rememberNavController()
+                ScreenyApp(navController)
+            }
+
         }
     }
 }

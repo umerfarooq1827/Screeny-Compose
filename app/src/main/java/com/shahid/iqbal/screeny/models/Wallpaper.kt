@@ -23,4 +23,9 @@ data class Wallpaper(
     val photographerUrl: String, // https://www.pexels.com/@matreding
     @SerialName("src")
     @Embedded val wallpaperSource: Src,
+
+    @SerialName("created_at")
+    val createdAt: Long = System.currentTimeMillis()
+
+
 )

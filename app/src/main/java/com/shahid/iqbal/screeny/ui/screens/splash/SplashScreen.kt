@@ -1,15 +1,12 @@
 package com.shahid.iqbal.screeny.ui.screens.splash
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap.Companion.Round
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
@@ -32,10 +28,9 @@ import coil.ImageLoader
 import coil.compose.AsyncImage
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.ui.routs.Routs
-import com.shahid.iqbal.screeny.ui.theme.GrayColor
+import com.shahid.iqbal.screeny.ui.screens.components.SplashProgressBar
 import com.shahid.iqbal.screeny.ui.theme.SplashColor
 import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.HideSystemBars
-import com.shahid.iqbal.screeny.utils.Extensions.debug
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -60,24 +55,18 @@ fun SplashScreen(
     context.HideSystemBars(true)
 
     LaunchedEffect(key1 = progress) {
-        if (progress >= 1f)
-            navController.navigate(Routs.Home)
+        if (progress >= 1f) navController.navigate(Routs.Home)
 
     }
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(SplashColor),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(SplashColor), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         AsyncImage(
-            modifier = Modifier.size(100.dp),
-            model = R.drawable.app_logo,
-            contentScale = ContentScale.Fit,
-            contentDescription = null, imageLoader = imageLoader
+            modifier = Modifier.size(100.dp), model = R.drawable.app_logo, contentScale = ContentScale.Fit, contentDescription = null, imageLoader = imageLoader
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -86,17 +75,8 @@ fun SplashScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        LinearProgressIndicator(
-            modifier = Modifier
-                .height(6.dp)
-                .fillMaxWidth(0.4f),
-            color = Color.White,
-            trackColor = GrayColor,
-            strokeCap = Round,
-            progress = { progress },
-            gapSize = 0.dp
-        )
+
+        SplashProgressBar(progress = progress)
+
     }
-
-
 }

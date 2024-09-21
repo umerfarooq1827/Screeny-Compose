@@ -10,7 +10,7 @@ import com.shahid.iqbal.screeny.models.Wallpaper
 @Dao
 interface PexelWallpaperDao {
 
-    @Query("SELECT * FROM pexel_wallpaper_table")
+    @Query("SELECT * FROM pexel_wallpaper_table Order by createdAt ASC")
     fun getAllWallpapers(): PagingSource<Int, Wallpaper>
 
     @Upsert
