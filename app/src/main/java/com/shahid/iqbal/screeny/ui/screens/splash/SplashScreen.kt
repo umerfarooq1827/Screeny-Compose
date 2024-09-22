@@ -1,5 +1,6 @@
 package com.shahid.iqbal.screeny.ui.screens.splash
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import com.shahid.iqbal.screeny.R
@@ -55,9 +57,16 @@ fun SplashScreen(
     context.HideSystemBars(true)
 
     LaunchedEffect(key1 = progress) {
-        if (progress >= 1f) navController.navigate(Routs.Home)
+        if (progress >= 1f) {
+            navController.navigate(
+                Routs.Home, navOptions = NavOptions.Builder().setPopUpTo(Routs.Splash, true).build()
+            )
+        }
 
     }
+
+    /*Disable Back Button on Splash Screen*/
+    BackHandler(enabled = false) {}
 
     Column(
         modifier = modifier

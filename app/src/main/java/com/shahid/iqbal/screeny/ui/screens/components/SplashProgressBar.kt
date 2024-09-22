@@ -13,7 +13,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import com.shahid.iqbal.screeny.ui.theme.GrayColor
 
 @Composable
 fun SplashProgressBar(

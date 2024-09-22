@@ -40,14 +40,18 @@ import com.shahid.iqbal.screeny.ui.routs.Routs.Home
 import com.shahid.iqbal.screeny.ui.routs.Routs.Setting
 import com.shahid.iqbal.screeny.ui.routs.Routs.Splash
 import com.shahid.iqbal.screeny.ui.routs.bottomNavigationItems
+import com.shahid.iqbal.screeny.ui.screens.category.CategoryScreen
 import com.shahid.iqbal.screeny.ui.screens.components.BottomNavigationBar
 import com.shahid.iqbal.screeny.ui.screens.components.ManageBarVisibility
 import com.shahid.iqbal.screeny.ui.screens.components.TopBar
+import com.shahid.iqbal.screeny.ui.screens.favourite.FavouriteScreen
 import com.shahid.iqbal.screeny.ui.screens.home.HomeScreen
 import com.shahid.iqbal.screeny.ui.screens.home.WallpaperViewModel
+import com.shahid.iqbal.screeny.ui.screens.settings.SettingScreen
 import com.shahid.iqbal.screeny.ui.screens.splash.SplashScreen
 import com.shahid.iqbal.screeny.utils.Extensions.debug
 import org.koin.androidx.compose.koinViewModel
+import kotlin.system.exitProcess
 
 
 @Composable
@@ -61,7 +65,7 @@ fun ScreenyApp(navController: NavHostController) {
 
 
     ManageBarVisibility(
-        navController = navController,
+        currentEntry = stackEntry,
         showTopBar = { canShowTopBar = it },
         showBottomBar = { canShowBottomBar = it }
     )
@@ -91,14 +95,20 @@ fun ScreenyApp(navController: NavHostController) {
             }
 
             composable<Home> {
-                HomeScreen(wallpaperViewModel)
+                HomeScreen(wallpaperViewModel, onBack = { exitProcess(0) })
             }
 
-            composable<Category> {}
+            composable<Category> {
+                CategoryScreen()
+            }
 
-            composable<Favourite> {}
+            composable<Favourite> {
+                FavouriteScreen()
+            }
 
-            composable<Setting> {}
+            composable<Setting> {
+                SettingScreen()
+            }
 
         }
     }

@@ -1,5 +1,6 @@
 package com.shahid.iqbal.screeny.ui.screens.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,9 +30,13 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     wallpaperViewModel: WallpaperViewModel,
     modifier: Modifier = Modifier,
+    onBack: () -> Unit
 ) {
 
     val wallpapers = wallpaperViewModel.getAllWallpapers.collectAsLazyPagingItems()
+
+    BackHandler { onBack() }
+
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(100.dp),
@@ -63,8 +68,10 @@ fun WallpaperItem(wallpaper: Wallpaper) {
         placeholder = painterResource(R.drawable.ic_placeholder),
         contentDescription = null,
         contentScale = ContentScale.Crop,
-        modifier = Modifier.clip(
-            RoundedCornerShape(10.dp)
-        ).wrapContentSize()
+        modifier = Modifier
+            .clip(
+                RoundedCornerShape(10.dp)
+            )
+            .wrapContentSize()
     )
 }
