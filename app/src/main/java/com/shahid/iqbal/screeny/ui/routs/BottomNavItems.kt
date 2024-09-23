@@ -33,7 +33,7 @@ val bottomNavigationItems = listOf(
     BottomNavRoutes(
         name = R.string.home, route = Routs.Home, icon = IconType.Vector(Icons.Outlined.Home), selectedIcon = IconType.Vector(Icons.Filled.Home)
     ), BottomNavRoutes(
-        name = R.string.category, route = Routs.Category, icon = IconType.Drawable(R.drawable.category), selectedIcon = IconType.Drawable(R.drawable.category_filled)
+        name = R.string.category, route = Routs.Categories, icon = IconType.Drawable(R.drawable.category), selectedIcon = IconType.Drawable(R.drawable.category_filled)
     ), BottomNavRoutes(
         name = R.string.favourite, route = Routs.Favourite, icon = IconType.Vector(Icons.Outlined.FavoriteBorder), selectedIcon = IconType.Vector(Icons.Filled.Favorite)
     ), BottomNavRoutes(

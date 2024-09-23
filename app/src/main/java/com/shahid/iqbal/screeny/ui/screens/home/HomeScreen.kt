@@ -24,6 +24,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.models.Wallpaper
+import com.shahid.iqbal.screeny.ui.screens.components.imageRequestBuilder
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -61,10 +62,7 @@ fun HomeScreen(
 fun WallpaperItem(wallpaper: Wallpaper) {
 
     AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(wallpaper.wallpaperSource.portrait)
-            .crossfade(true)
-            .build(),
+        model = imageRequestBuilder(image = wallpaper.wallpaperSource.portrait).build(),
         placeholder = painterResource(R.drawable.ic_placeholder),
         contentDescription = null,
         contentScale = ContentScale.Crop,

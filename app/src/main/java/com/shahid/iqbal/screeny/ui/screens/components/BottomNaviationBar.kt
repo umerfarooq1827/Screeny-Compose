@@ -55,7 +55,8 @@ fun BottomNavigationBar(navController: NavHostController) {
                         Icon(
                             painter = painterResource(
                                 id =
-                                if (isSelected && bottomNavItem.selectedIcon is IconType.Drawable) bottomNavItem.selectedIcon.iconRes
+                                if (isSelected && bottomNavItem.selectedIcon is IconType.Drawable)
+                                    bottomNavItem.selectedIcon.iconRes
                                 else bottomNavItem.icon.iconRes
                             ), contentDescription = stringResource(id = bottomNavItem.name)
                         )

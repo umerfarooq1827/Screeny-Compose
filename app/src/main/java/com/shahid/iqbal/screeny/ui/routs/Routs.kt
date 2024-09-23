@@ -12,7 +12,7 @@ sealed interface Routs {
     data object Home : Routs
 
     @Serializable
-    data object Category : Routs
+    data object Categories : Routs
 
     @Serializable
     data object Favourite : Routs
