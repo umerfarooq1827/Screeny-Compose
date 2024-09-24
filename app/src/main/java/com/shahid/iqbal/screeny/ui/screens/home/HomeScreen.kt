@@ -1,7 +1,6 @@
 package com.shahid.iqbal.screeny.ui.screens.home
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,31 +9,25 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.models.Wallpaper
-import com.shahid.iqbal.screeny.ui.screens.components.imageRequestBuilder
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun HomeScreen(
-    wallpaperViewModel: WallpaperViewModel,
-    modifier: Modifier = Modifier,
-    onBack: () -> Unit
+    wallpaperViewModel: WallpaperViewModel, modifier: Modifier = Modifier, onBack: () -> Unit
 ) {
 
     val wallpapers = wallpaperViewModel.getAllWallpapers.collectAsLazyPagingItems()
+    val imageLoader: ImageLoader = koinInject()
 
     BackHandler { onBack() }
 
@@ -51,7 +44,7 @@ fun HomeScreen(
             if (index < wallpapers.itemCount) {
                 val wallpaper = wallpapers[index]
                 if (wallpaper != null) {
-                    WallpaperItem(wallpaper = wallpaper)
+                    WallpaperItem(wallpaper = wallpaper, imageLoader)
                 }
             }
         }
@@ -59,17 +52,17 @@ fun HomeScreen(
 }
 
 @Composable
-fun WallpaperItem(wallpaper: Wallpaper) {
+fun WallpaperItem(wallpaper: Wallpaper, imageLoader: ImageLoader) {
 
     AsyncImage(
-        model = imageRequestBuilder(image = wallpaper.wallpaperSource.portrait).build(),
-        placeholder = painterResource(R.drawable.ic_placeholder),
+        model = wallpaper.wallpaperSource.portrait,
         contentDescription = null,
+        imageLoader = imageLoader,
         contentScale = ContentScale.Crop,
         modifier = Modifier
-            .clip(
-                RoundedCornerShape(10.dp)
-            )
-            .wrapContentSize()
+            .clip(RoundedCornerShape(10.dp))
+            .wrapContentSize(),
+        placeholder = painterResource(R.drawable.ic_placeholder)
     )
+
 }

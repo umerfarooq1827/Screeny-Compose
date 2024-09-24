@@ -1,6 +1,5 @@
 package com.shahid.iqbal.screeny.ui.screens.category
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,15 +26,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import coil.size.Size
-import coil.size.SizeResolver
 import com.shahid.iqbal.screeny.models.Category
-import com.shahid.iqbal.screeny.ui.screens.components.imageRequestBuilder
+import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
+import com.shahid.iqbal.screeny.utils.Extensions.toPx
 import kotlinx.coroutines.delay
+import org.koin.compose.koinInject
 
 
 @Composable
@@ -45,16 +49,17 @@ fun CategoryScreen(modifier: Modifier = Modifier) {
         mutableStateOf(false)
     }
 
+
     LaunchedEffect(key1 = Unit) {
-        delay(100)
+        delay(300)
         showContent = true
     }
 
+    val imageLoader: ImageLoader = koinInject()
+
     if (!showContent) {
         CircularProgressIndicator(modifier = Modifier.wrapContentSize())
-    }
-
-    AnimatedVisibility(visible = showContent) {
+    } else {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -62,16 +67,27 @@ fun CategoryScreen(modifier: Modifier = Modifier) {
             contentPadding = PaddingValues(16.dp), modifier = modifier.fillMaxSize()
         ) {
             items(categories, key = { it.name }) { category ->
-                CategoryItem(category = category)
+                CategoryItem(category = category, imageLoader)
             }
 
         }
     }
 
+
 }
 
+
 @Composable
-fun CategoryItem(category: Category) {
+fun CategoryItem(category: Category, imageLoader: ImageLoader) {
+
+    val context = LocalContext.current
+    val categoryImageSize = Size(800.dp.toPx().toInt(), 800.dp.toPx().toInt())
+    val imageRequest = remember {
+        ImageRequest.Builder(context)
+            .data(category.thumbnail)
+            .size(categoryImageSize)
+            .build()
+    }
 
     Box(
         modifier = Modifier
@@ -81,15 +97,18 @@ fun CategoryItem(category: Category) {
     ) {
 
         AsyncImage(
-            model = imageRequestBuilder(image = category.thumbnail)
-                .build(),
-            contentDescription = category.name, modifier = Modifier.fillMaxSize(),
+            model = imageRequest,
+            contentDescription = category.name,
+            imageLoader = imageLoader,
             contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .matchParentSize()
         )
+
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .matchParentSize()
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(Color.Black, Color(0xFF29323B))
@@ -99,7 +118,7 @@ fun CategoryItem(category: Category) {
             Text(
                 text = category.name,
                 style =
-                MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
+                MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold, fontSize = 20.sp),
                 textAlign = TextAlign.Center,
             )
         }

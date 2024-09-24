@@ -14,12 +14,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             ScreenyTheme(dynamicColor = true) {
                 val navController = rememberNavController()
                 ScreenyApp(navController)
             }
-
         }
     }
 }

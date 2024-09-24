@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.shahid.iqbal.screeny.R
+import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,7 +23,8 @@ fun TopBar(title: String) {
         title = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                fontFamily = screenyFontFamily
 
             )
         },
