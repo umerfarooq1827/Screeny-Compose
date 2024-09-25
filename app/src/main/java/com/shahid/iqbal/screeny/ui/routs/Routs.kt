@@ -20,4 +20,7 @@ sealed interface Routs {
     @Serializable
     data object Setting : Routs
 
+    @Serializable
+    data class SearchedWallpaper(val query: String) : Routs
+
 }

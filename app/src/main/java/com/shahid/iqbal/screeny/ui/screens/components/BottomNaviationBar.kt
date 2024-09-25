@@ -15,27 +15,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.shahid.iqbal.screeny.ui.routs.IconType
 import com.shahid.iqbal.screeny.ui.routs.bottomNavigationItems
 
 @SuppressLint("RestrictedApi")
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    var selectIndex by rememberSaveable { mutableIntStateOf(0) }
+
 
     NavigationBar(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        bottomNavigationItems.forEachIndexed { index, bottomNavItem ->
+        bottomNavigationItems.forEach { bottomNavItem ->
 
-            val isSelected = (selectIndex == index)
+            val isSelected = navController.currentDestination?.hierarchy?.any { it.hasRoute(bottomNavItem.route::class) } == true
+
 
             NavigationBarItem(selected = isSelected, onClick = {
-                selectIndex = index
                 navController.navigate(bottomNavItem.route) {
                     // Pop up to the start destination of the graph to
                     // avoid building up a large stack of destinations

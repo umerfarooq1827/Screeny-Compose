@@ -73,12 +73,16 @@ fun SplashScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(SplashColor), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+            .background(SplashColor), verticalArrangement = Arrangement.Center,
+             horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
 
         Image(
-            painter = painterResource(id = R.drawable.app_logo), modifier = Modifier.size(100.dp), contentScale = ContentScale.Fit, contentDescription = stringResource(id = R.string.app_name)
+            painter = painterResource(id = R.drawable.app_logo),
+            modifier = Modifier.size(100.dp),
+            contentScale = ContentScale.Fit,
+            contentDescription = stringResource(id = R.string.app_name)
         )
 
         Spacer(modifier = Modifier.height(10.dp))

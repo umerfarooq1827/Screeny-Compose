@@ -6,4 +6,5 @@ interface PexelWallpapersApi {
 
     suspend fun getWallpapers(page: Int): WallpaperResponse
 
+    suspend fun searchWallpaper(page: Int, query: String): WallpaperResponse
 }

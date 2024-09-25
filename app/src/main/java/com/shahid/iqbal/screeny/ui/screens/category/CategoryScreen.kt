@@ -1,6 +1,7 @@
 package com.shahid.iqbal.screeny.ui.screens.category
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -43,7 +44,7 @@ import org.koin.compose.koinInject
 
 
 @Composable
-fun CategoryScreen(modifier: Modifier = Modifier) {
+fun CategoryScreen(modifier: Modifier = Modifier, onCategoryClick: (String) -> Unit) {
 
     var showContent by remember {
         mutableStateOf(false)
@@ -67,7 +68,9 @@ fun CategoryScreen(modifier: Modifier = Modifier) {
             contentPadding = PaddingValues(16.dp), modifier = modifier.fillMaxSize()
         ) {
             items(categories, key = { it.name }) { category ->
-                CategoryItem(category = category, imageLoader)
+                CategoryItem(category = category, imageLoader) {
+                    onCategoryClick(category.name)
+                }
             }
 
         }
@@ -78,7 +81,7 @@ fun CategoryScreen(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun CategoryItem(category: Category, imageLoader: ImageLoader) {
+fun CategoryItem(category: Category, imageLoader: ImageLoader, onClick: () -> Unit) {
 
     val context = LocalContext.current
     val categoryImageSize = Size(800.dp.toPx().toInt(), 800.dp.toPx().toInt())
@@ -92,7 +95,8 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
-            .height(100.dp),
+            .height(100.dp)
+            .clickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {
 
@@ -112,13 +116,16 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader) {
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(Color.Black, Color(0xFF29323B))
-                    ), alpha = 0.6f
+                    ), alpha = 0.45f
                 ), contentAlignment = Alignment.Center
         ) {
             Text(
                 text = category.name,
                 style =
-                MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold, fontSize = 20.sp),
+                MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold, fontSize = 20.sp,
+                    fontFamily = screenyFontFamily
+                ),
                 textAlign = TextAlign.Center,
             )
         }

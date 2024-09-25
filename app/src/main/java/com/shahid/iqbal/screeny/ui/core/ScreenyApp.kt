@@ -15,11 +15,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import coil.ImageLoader
+import androidx.navigation.toRoute
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.ui.routs.Routs.Categories
 import com.shahid.iqbal.screeny.ui.routs.Routs.Favourite
 import com.shahid.iqbal.screeny.ui.routs.Routs.Home
+import com.shahid.iqbal.screeny.ui.routs.Routs.SearchedWallpaper
 import com.shahid.iqbal.screeny.ui.routs.Routs.Setting
 import com.shahid.iqbal.screeny.ui.routs.Routs.Splash
 import com.shahid.iqbal.screeny.ui.screens.category.CategoryScreen
@@ -30,10 +31,11 @@ import com.shahid.iqbal.screeny.ui.screens.components.TopBar
 import com.shahid.iqbal.screeny.ui.screens.favourite.FavouriteScreen
 import com.shahid.iqbal.screeny.ui.screens.home.HomeScreen
 import com.shahid.iqbal.screeny.ui.screens.home.WallpaperViewModel
+import com.shahid.iqbal.screeny.ui.screens.search.SearchWallpaperViewModel
+import com.shahid.iqbal.screeny.ui.screens.search.SearchedWallpaperScreen
 import com.shahid.iqbal.screeny.ui.screens.settings.SettingScreen
 import com.shahid.iqbal.screeny.ui.screens.splash.SplashScreen
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 import kotlin.system.exitProcess
 
 
@@ -43,38 +45,27 @@ fun ScreenyApp(navController: NavHostController) {
 
     var canShowBottomBar by rememberSaveable { mutableStateOf(false) }
     var canShowTopBar by rememberSaveable { mutableStateOf(false) }
-    val wallpaperViewModel: WallpaperViewModel = koinViewModel()
     val stackEntry by navController.currentBackStackEntryAsState()
 
 
-    ManageBarVisibility(
-        currentEntry = stackEntry,
-        showTopBar = { canShowTopBar = it },
-        showBottomBar = { canShowBottomBar = it }
-    )
+    ManageBarVisibility(currentEntry = stackEntry, showTopBar = { canShowTopBar = it }, showBottomBar = { canShowBottomBar = it })
 
-    Scaffold(
-        bottomBar = {
-            if (canShowBottomBar) BottomNavigationBar(navController)
-        },
-        topBar = {
-            if (canShowTopBar) {
-                val title = stackEntry?.destination?.route?.substringAfterLast(".")
-                    ?: stringResource(id = R.string.app_name)
-                TopBar(title = title)
-            }
+    Scaffold(bottomBar = {
+        if (canShowBottomBar) BottomNavigationBar(navController)
+    }, topBar = {
+        if (canShowTopBar) {
+            val title = stackEntry?.destination?.route?.substringAfterLast(".") ?: stringResource(id = R.string.app_name)
+            TopBar(title = title)
         }
-    ) { innerPadding ->
+    }) { innerPadding ->
 
         CompositionLocalProvider(LocalNavController provides navController) {
             NavHost(
-                navController,
-                startDestination = Splash,
+                navController, startDestination = Splash,
                 Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-            )
-            {
+            ) {
 
 
                 composable<Splash> {
@@ -82,11 +73,14 @@ fun ScreenyApp(navController: NavHostController) {
                 }
 
                 composable<Home> {
+                    val wallpaperViewModel: WallpaperViewModel = koinViewModel()
                     HomeScreen(wallpaperViewModel, onBack = { exitProcess(0) })
                 }
 
                 composable<Categories> {
-                    CategoryScreen()
+                    CategoryScreen() { category ->
+                        navController.navigate(SearchedWallpaper(category))
+                    }
                 }
 
                 composable<Favourite> {
@@ -95,6 +89,11 @@ fun ScreenyApp(navController: NavHostController) {
 
                 composable<Setting> {
                     SettingScreen()
+                }
+
+                composable<SearchedWallpaper> { backStackEntry ->
+                    val searchedWallpaper: SearchedWallpaper = backStackEntry.toRoute()
+                    SearchedWallpaperScreen(searchedWallpaper.query)
                 }
 
             }
