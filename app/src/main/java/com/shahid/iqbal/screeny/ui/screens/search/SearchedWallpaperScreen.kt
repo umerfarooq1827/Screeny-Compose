@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -40,11 +41,13 @@ fun SearchedWallpaperScreen(title: String, searchedWallpaperViewModel: SearchWal
     val wallpapers = searchedWallpaperViewModel.searchWallpapers(title).collectAsLazyPagingItems()
     val imageLoader: ImageLoader = koinInject()
 
-    Column(modifier = Modifier.fillMaxSize(),
+    Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-       ToolBar(title = title)
+        ToolBar(title = title)
 
 
         LazyVerticalGrid(
@@ -55,10 +58,13 @@ fun SearchedWallpaperScreen(title: String, searchedWallpaperViewModel: SearchWal
             modifier = Modifier.fillMaxSize(),
         ) {
 
-            if (wallpapers.loadState.refresh == LoadState.Loading ||
-                wallpapers.loadState.append == LoadState.Loading
+            if (wallpapers.loadState.refresh == LoadState.Loading
             ) {
                 items(20) {
+                    LoadingPlaceHolder()
+                }
+            } else if (wallpapers.loadState.append == LoadState.Loading) {
+                item {
                     LoadingPlaceHolder()
                 }
             } else {
@@ -82,9 +88,10 @@ fun SearchedWallpaperScreen(title: String, searchedWallpaperViewModel: SearchWal
 fun ToolBar(title: String, modifier: Modifier = Modifier) {
     TopAppBar(title = {
         Text(
-            text = title, style = MaterialTheme.
-            typography.titleLarge.copy(fontWeight = FontWeight.Bold), fontFamily = screenyFontFamily,
-            modifier = Modifier.fillMaxHeight().fillMaxWidth(),
+            text = title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), fontFamily = screenyFontFamily,
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth(),
             textAlign = TextAlign.Start
 
         )
