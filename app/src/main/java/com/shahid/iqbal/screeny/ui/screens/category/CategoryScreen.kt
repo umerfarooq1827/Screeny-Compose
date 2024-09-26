@@ -37,6 +37,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 import com.shahid.iqbal.screeny.models.Category
+import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
+import com.shahid.iqbal.screeny.ui.screens.components.shimmerBrush
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
 import com.shahid.iqbal.screeny.utils.Extensions.toPx
 import kotlinx.coroutines.delay
@@ -52,28 +54,30 @@ fun CategoryScreen(modifier: Modifier = Modifier, onCategoryClick: (String) -> U
 
 
     LaunchedEffect(key1 = Unit) {
-        delay(300)
+        delay(500)
         showContent = true
     }
 
     val imageLoader: ImageLoader = koinInject()
 
-    if (!showContent) {
-        CircularProgressIndicator(modifier = Modifier.wrapContentSize())
-    } else {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(16.dp), modifier = modifier.fillMaxSize()
-        ) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2), verticalArrangement = Arrangement.spacedBy(16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(16.dp), modifier = modifier.fillMaxSize()
+    ) {
+
+
+        if (showContent) {
             items(categories, key = { it.name }) { category ->
                 CategoryItem(category = category, imageLoader) {
                     onCategoryClick(category.name)
                 }
             }
 
+        } else {
+            items(categories.size) {
+                LoadingPlaceHolder(modifier = Modifier.height(100.dp))
+            }
         }
+
     }
 
 
@@ -86,10 +90,11 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader, onClick: () -> Un
     val context = LocalContext.current
     val categoryImageSize = Size(800.dp.toPx().toInt(), 800.dp.toPx().toInt())
     val imageRequest = remember {
-        ImageRequest.Builder(context)
-            .data(category.thumbnail)
-            .size(categoryImageSize)
-            .build()
+        ImageRequest.Builder(context).data(category.thumbnail).size(categoryImageSize).build()
+    }
+
+    var showShimmer by remember {
+        mutableStateOf(true)
     }
 
     Box(
@@ -101,12 +106,12 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader, onClick: () -> Un
     ) {
 
         AsyncImage(
-            model = imageRequest,
-            contentDescription = category.name,
-            imageLoader = imageLoader,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
+            model = imageRequest, contentDescription = category.name, imageLoader = imageLoader, contentScale = ContentScale.Crop, onSuccess = { showShimmer = false }, modifier = Modifier
                 .matchParentSize()
+                .background(
+                    shimmerBrush(targetValue = 1300f, showShimmer = showShimmer), shape = RoundedCornerShape(10.dp)
+                )
+
         )
 
 
@@ -121,10 +126,8 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader, onClick: () -> Un
         ) {
             Text(
                 text = category.name,
-                style =
-                MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold, fontSize = 20.sp,
-                    fontFamily = screenyFontFamily
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold, fontSize = 20.sp, fontFamily = screenyFontFamily
                 ),
                 textAlign = TextAlign.Center,
             )

@@ -54,11 +54,9 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize(),
     ) {
 
-        if (wallpapers.loadState.refresh == LoadState.Loading ||
-            wallpapers.loadState.append == LoadState.Loading
-        ) {
+        if (wallpapers.loadState.refresh == LoadState.Loading) {
             items(20) {
-                LoadingPlaceHolder()
+                LoadingPlaceHolder(modifier = Modifier.height(200.dp))
             }
         } else {
             items(wallpapers.itemCount) { index ->

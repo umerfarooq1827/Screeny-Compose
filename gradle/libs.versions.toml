@@ -24,9 +24,10 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeKtx" }
+
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
-androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeKtx" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
@@ -45,15 +46,17 @@ room-ksp = { module = "androidx.room:room-compiler", version.ref = "roomVersion"
 
 pagging-library = { module = "androidx.paging:paging-compose", version.ref = "pager3Version" }
 
-compose-navigation = { module = "androidx.navigation:navigation-compose" , version.ref = "composeNavigationVersion" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigationVersion" }
 
 
 
 
 
 [bundles]
-ktor-client = ["ktor-client-android", "ktor-client-core",
-    "ktor-client-serialization", "ktor-client-logging",
+ktor-client = ["ktor-client-android",
+    "ktor-client-core",
+    "ktor-client-serialization",
+    "ktor-client-logging",
     "ktor-content-negotiation"]
 
 

@@ -4,13 +4,22 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.shahid.iqbal.screeny.data.local.dao.PexelWallpaperDao
 import com.shahid.iqbal.screeny.data.local.dao.PexelWallpaperRemoteKeysDao
+import com.shahid.iqbal.screeny.data.local.dao.RecentSearchDao
+import com.shahid.iqbal.screeny.models.RecentSearch
 import com.shahid.iqbal.screeny.models.WallpaperRemoteKeys
 import com.shahid.iqbal.screeny.models.Wallpaper
 
-@Database(entities = [Wallpaper::class, WallpaperRemoteKeys::class], version = 1, exportSchema = false)
+@Database(
+    entities = [Wallpaper::class,
+        WallpaperRemoteKeys::class,
+        RecentSearch::class], version = 1, exportSchema = false
+)
 abstract class PexelWallpaperDatabase : RoomDatabase() {
 
     abstract fun pexelWallpaperDao(): PexelWallpaperDao
 
     abstract fun pexelWallpaperRemoteKeysDao(): PexelWallpaperRemoteKeysDao
+
+    abstract fun recentSearchDao(): RecentSearchDao
+
 }

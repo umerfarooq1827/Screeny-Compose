@@ -1,25 +1,22 @@
-package com.shahid.iqbal.screeny.ui.screens.search
+package com.shahid.iqbal.screeny.ui.screens.category
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,24 +27,29 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
+import com.shahid.iqbal.screeny.ui.screens.components.LocalNavController
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
-fun SearchedWallpaperScreen(title: String, searchedWallpaperViewModel: SearchWallpaperViewModel = koinViewModel()) {
+fun CategoryDetailScreen(
+    title: String,
+    searchedWallpaperViewModel: CategoryViewModel = koinViewModel()
+) {
 
     val wallpapers = searchedWallpaperViewModel.searchWallpapers(title).collectAsLazyPagingItems()
     val imageLoader: ImageLoader = koinInject()
+    val navController = LocalNavController.current
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        ToolBar(title = title)
+        ToolBar(title = title) {
+            navController.navigateUp()
+        }
 
 
         LazyVerticalGrid(
@@ -58,14 +60,9 @@ fun SearchedWallpaperScreen(title: String, searchedWallpaperViewModel: SearchWal
             modifier = Modifier.fillMaxSize(),
         ) {
 
-            if (wallpapers.loadState.refresh == LoadState.Loading
-            ) {
+            if (wallpapers.loadState.refresh == LoadState.Loading) {
                 items(20) {
-                    LoadingPlaceHolder()
-                }
-            } else if (wallpapers.loadState.append == LoadState.Loading) {
-                item {
-                    LoadingPlaceHolder()
+                    LoadingPlaceHolder(modifier = Modifier.height(200.dp))
                 }
             } else {
                 items(wallpapers.itemCount) { index ->
@@ -83,23 +80,27 @@ fun SearchedWallpaperScreen(title: String, searchedWallpaperViewModel: SearchWal
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToolBar(title: String, modifier: Modifier = Modifier) {
-    TopAppBar(title = {
-        Text(
-            text = title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), fontFamily = screenyFontFamily,
-            modifier = Modifier
-                .wrapContentHeight()
-                .fillMaxWidth(),
-            textAlign = TextAlign.Start
+fun ToolBar(title: String, modifier: Modifier = Modifier, onBackClick: () -> Unit) {
+
+    Row(
+        modifier = modifier
+            .height(70.dp)
+            .fillMaxWidth(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier
+                .wrapContentSize()
+                .padding(horizontal = 20.dp)
+                .clickable { onBackClick() }
 
         )
-    }, navigationIcon = {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
-            modifier = Modifier.padding(horizontal = 20.dp)
+
+        Text(
+            text = title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            fontFamily = screenyFontFamily, modifier = Modifier.wrapContentSize(), textAlign = TextAlign.Start
+
         )
-    }, modifier = modifier.height(70.dp)
-    )
+    }
+
 }

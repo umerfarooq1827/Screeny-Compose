@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.Flow
 
 
 @OptIn(ExperimentalPagingApi::class)
-class WallpaperRepository(private val api: PexelWallpapersApi, private val database: PexelWallpaperDatabase) {
+class WallpaperRepository(private val api: PexelWallpapersApi,
+                          private val database: PexelWallpaperDatabase) {
 
     fun getAllWallpapers(): Flow<PagingData<Wallpaper>> {
 

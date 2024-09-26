@@ -1,5 +1,6 @@
 package com.shahid.iqbal.screeny.ui.screens.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -18,7 +19,7 @@ import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(title: String) {
+fun TopBar(title: String, onClick: () -> Unit) {
     TopAppBar(
         title = {
             Text(
@@ -33,7 +34,9 @@ fun TopBar(title: String) {
                 Icon(
                     imageVector = Icons.Filled.Search,
                     contentDescription = null,
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .clickable { onClick() }
                 )
         },
         modifier = Modifier

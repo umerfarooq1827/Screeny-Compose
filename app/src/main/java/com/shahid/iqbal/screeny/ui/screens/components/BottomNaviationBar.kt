@@ -27,6 +27,8 @@ import com.shahid.iqbal.screeny.ui.routs.bottomNavigationItems
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
     NavigationBar(
         modifier = Modifier
@@ -35,7 +37,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     ) {
         bottomNavigationItems.forEach { bottomNavItem ->
 
-            val isSelected = navController.currentDestination?.hierarchy?.any { it.hasRoute(bottomNavItem.route::class) } == true
+            val isSelected = currentDestination?.hierarchy?.any { it.route == bottomNavItem.route::class.qualifiedName } == true
 
 
             NavigationBarItem(selected = isSelected, onClick = {
