@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -18,13 +17,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.shahid.iqbal.screeny.R
+import com.shahid.iqbal.screeny.ui.routs.Routs
 import com.shahid.iqbal.screeny.ui.routs.Routs.Categories
-import com.shahid.iqbal.screeny.ui.routs.Routs.CategoryDetailScreen
 import com.shahid.iqbal.screeny.ui.routs.Routs.Favourite
 import com.shahid.iqbal.screeny.ui.routs.Routs.Home
-import com.shahid.iqbal.screeny.ui.routs.Routs.SearchedWallpaperScreen
 import com.shahid.iqbal.screeny.ui.routs.Routs.Setting
 import com.shahid.iqbal.screeny.ui.routs.Routs.Splash
+import com.shahid.iqbal.screeny.ui.screens.category.CategoryDetailScreen
 import com.shahid.iqbal.screeny.ui.screens.category.CategoryScreen
 import com.shahid.iqbal.screeny.ui.screens.components.BottomNavigationBar
 import com.shahid.iqbal.screeny.ui.screens.components.LocalNavController
@@ -59,7 +58,7 @@ fun ScreenyApp(navController: NavHostController) {
             val title = stackEntry?.destination?.route?.substringAfterLast(".") ?: stringResource(id = R.string.app_name)
 
             TopBar(title = title) {
-                navController.navigate(SearchedWallpaperScreen)
+                navController.navigate(Routs.SearchedWallpaper)
             }
         }
     }) { innerPadding ->
@@ -82,7 +81,7 @@ fun ScreenyApp(navController: NavHostController) {
 
                 composable<Categories> {
                     CategoryScreen { category ->
-                        navController.navigate(CategoryDetailScreen(category))
+                        navController.navigate(Routs.CategoryDetail(category))
                     }
                 }
 
@@ -95,12 +94,12 @@ fun ScreenyApp(navController: NavHostController) {
                 }
 
 
-                composable<CategoryDetailScreen> { backStackEntry ->
-                    val categoryDetailScreen: CategoryDetailScreen = backStackEntry.toRoute()
-                    CategoryDetailScreen(categoryDetailScreen.query)
+                composable<Routs.CategoryDetail> { backStackEntry ->
+                    val categoryDetail:Routs.CategoryDetail = backStackEntry.toRoute()
+                    CategoryDetailScreen(categoryDetail.query)
                 }
 
-                composable<SearchedWallpaperScreen> {
+                composable<Routs.SearchedWallpaper> {
                     SearchedWallpaperScreen()
                 }
 

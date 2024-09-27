@@ -21,9 +21,9 @@ sealed interface Routs {
     data object Setting : Routs
 
     @Serializable
-    data class CategoryDetailScreen(val query: String) : Routs
+    data class CategoryDetail(val query: String) : Routs
 
     @Serializable
-    data object SearchedWallpaperScreen : Routs
+    data object SearchedWallpaper: Routs
 
 }
