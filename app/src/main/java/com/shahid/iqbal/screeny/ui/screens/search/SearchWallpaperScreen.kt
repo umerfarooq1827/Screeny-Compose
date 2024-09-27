@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
@@ -25,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,7 +64,14 @@ fun SearchedWallpaperScreen() {
                     expanded = expanded,
                     onExpandedChange = { expanded = it },
                     placeholder = { Text(stringResource(id = R.string.search_wallpaper)) },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    leadingIcon = {
+                        if (!expanded) Icon(Icons.Default.Search, contentDescription = null) else
+                            Icon(Icons.AutoMirrored.Default.ArrowBack, contentDescription = null,
+                                modifier = Modifier.clickable {
+                                    text = ""
+                                    expanded = false
+                                })
+                    },
                     trailingIcon = {
                         if (text.isNotEmpty())
                             Icon(Icons.Default.Clear, contentDescription = null,
@@ -94,11 +104,12 @@ fun SearchedWallpaperScreen() {
 @Composable
 fun SingleRecentItem(recentSearch: RecentSearch) {
     Row(modifier = Modifier.fillMaxWidth()) {
-        Icon(imageVector = Icons.Default.Refresh, contentDescription = null)
+        Icon(painter = painterResource(id = R.drawable.history), contentDescription = null)
         Text(
             text = recentSearch.query, fontFamily = screenyFontFamily, style = MaterialTheme.typography.bodyMedium
-                .copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
+                .copy(color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 10.dp, vertical = 4.dp)
         )
-        Icon(imageVector = Icons.Default.Clear, contentDescription = null)
     }
 }
