@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -98,7 +99,7 @@ fun ToolBar(title: String, modifier: Modifier = Modifier, onBackClick: () -> Uni
 
         Text(
             text = title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-            fontFamily = screenyFontFamily, modifier = Modifier.wrapContentSize(), textAlign = TextAlign.Start
+            fontFamily = screenyFontFamily, modifier = Modifier.wrapContentSize(), textAlign = TextAlign.Center
 
         )
     }

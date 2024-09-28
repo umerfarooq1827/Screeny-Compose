@@ -24,6 +24,9 @@ sealed interface Routs {
     data class CategoryDetail(val query: String) : Routs
 
     @Serializable
-    data object SearchedWallpaper: Routs
+    data object SearchedWallpaper : Routs
+
+    @Serializable
+    data object WallpaperDetail : Routs
 
 }

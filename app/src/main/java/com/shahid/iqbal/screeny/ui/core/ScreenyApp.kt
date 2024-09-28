@@ -103,6 +103,9 @@ fun ScreenyApp(navController: NavHostController) {
                     SearchedWallpaperScreen()
                 }
 
+                composable<Routs.WallpaperDetail>(){
+
+                }
 
             }
 
