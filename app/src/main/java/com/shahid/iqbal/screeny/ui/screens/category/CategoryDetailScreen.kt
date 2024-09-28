@@ -70,7 +70,7 @@ fun CategoryDetailScreen(
                     if (index < wallpapers.itemCount) {
                         val wallpaper = wallpapers[index]
                         if (wallpaper != null) {
-                            WallpaperItem(wallpaper = wallpaper, imageLoader)
+                            WallpaperItem(wallpaper = wallpaper, imageLoader){}
                         }
                     }
                 }

@@ -6,6 +6,7 @@ import com.shahid.iqbal.screeny.ui.routs.Routs
 import com.shahid.iqbal.screeny.ui.routs.Routs.CategoryDetail
 import com.shahid.iqbal.screeny.ui.routs.Routs.SearchedWallpaper
 import com.shahid.iqbal.screeny.ui.routs.Routs.Splash
+import com.shahid.iqbal.screeny.ui.routs.Routs.WallpaperDetail
 import com.shahid.iqbal.screeny.utils.Extensions.debug
 
 @Composable
@@ -16,7 +17,8 @@ fun ManageBarVisibility(currentEntry: NavBackStackEntry?, showTopBar: (Boolean) 
             in arrayOf(
                 Splash::class.qualifiedName,
                 CategoryDetail::class.qualifiedName,
-                SearchedWallpaper::class.qualifiedName
+                SearchedWallpaper::class.qualifiedName,
+                WallpaperDetail::class.qualifiedName
 
             ) -> {
                 showTopBar(false)

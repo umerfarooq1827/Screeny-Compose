@@ -15,5 +15,6 @@ val sharedWallpaperModule = module {
     single<SearchWallpapersRepository> { SearchWallpapersRepository(get()) }
     single<RecentSearchRepository> { RecentSearchRepository(get()) }
 
+
     single<ImageLoader> { ImageLoader.Builder(get()).crossfade(true).build() }
 }

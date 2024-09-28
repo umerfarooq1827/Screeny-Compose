@@ -1,6 +1,7 @@
 package com.shahid.iqbal.screeny.ui.screens.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +21,8 @@ import com.shahid.iqbal.screeny.models.Wallpaper
 @Composable
 fun WallpaperItem(
     wallpaper: Wallpaper, imageLoader: ImageLoader,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onWallpaperClick: () -> Unit
 ) {
 
     var showShimmer by remember { mutableStateOf(true) }
@@ -37,7 +39,8 @@ fun WallpaperItem(
             )
             .clip(RoundedCornerShape(10.dp))
             .height(200.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onWallpaperClick() }
     )
 
 }

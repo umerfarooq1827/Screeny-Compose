@@ -35,6 +35,8 @@ import com.shahid.iqbal.screeny.ui.screens.home.WallpaperViewModel
 import com.shahid.iqbal.screeny.ui.screens.search.SearchedWallpaperScreen
 import com.shahid.iqbal.screeny.ui.screens.settings.SettingScreen
 import com.shahid.iqbal.screeny.ui.screens.splash.SplashScreen
+import com.shahid.iqbal.screeny.ui.screens.wallpapers.WallpaperDetailScreen
+import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
 import org.koin.androidx.compose.koinViewModel
 import kotlin.system.exitProcess
 
@@ -46,6 +48,7 @@ fun ScreenyApp(navController: NavHostController) {
     var canShowBottomBar by rememberSaveable { mutableStateOf(false) }
     var canShowTopBar by rememberSaveable { mutableStateOf(false) }
     val stackEntry by navController.currentBackStackEntryAsState()
+    val sharedWallpaperViewModel = koinViewModel<SharedWallpaperViewModel>()
 
 
     ManageBarVisibility(currentEntry = stackEntry, showTopBar = { canShowTopBar = it }, showBottomBar = { canShowBottomBar = it })
@@ -76,7 +79,13 @@ fun ScreenyApp(navController: NavHostController) {
 
                 composable<Home> {
                     val wallpaperViewModel: WallpaperViewModel = koinViewModel()
-                    HomeScreen(wallpaperViewModel, onBack = { exitProcess(0) })
+
+                    HomeScreen(wallpaperViewModel,
+                        onWallpaperClick = { index, list ->
+                            sharedWallpaperViewModel.updateWallpaperList(list)
+                            navController.navigate(Routs.WallpaperDetail)
+                        },
+                        onBack = { exitProcess(0) })
                 }
 
                 composable<Categories> {
@@ -95,7 +104,7 @@ fun ScreenyApp(navController: NavHostController) {
 
 
                 composable<Routs.CategoryDetail> { backStackEntry ->
-                    val categoryDetail:Routs.CategoryDetail = backStackEntry.toRoute()
+                    val categoryDetail: Routs.CategoryDetail = backStackEntry.toRoute()
                     CategoryDetailScreen(categoryDetail.query)
                 }
 
@@ -103,8 +112,8 @@ fun ScreenyApp(navController: NavHostController) {
                     SearchedWallpaperScreen()
                 }
 
-                composable<Routs.WallpaperDetail>(){
-
+                composable<Routs.WallpaperDetail> {
+                    WallpaperDetailScreen(sharedWallpaperViewModel)
                 }
 
             }
