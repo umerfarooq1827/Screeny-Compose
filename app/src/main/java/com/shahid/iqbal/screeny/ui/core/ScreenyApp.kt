@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.shahid.iqbal.screeny.R
+import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.routs.Routs
 import com.shahid.iqbal.screeny.ui.routs.Routs.Categories
 import com.shahid.iqbal.screeny.ui.routs.Routs.Favourite
@@ -25,6 +27,7 @@ import com.shahid.iqbal.screeny.ui.routs.Routs.Setting
 import com.shahid.iqbal.screeny.ui.routs.Routs.Splash
 import com.shahid.iqbal.screeny.ui.screens.category.CategoryDetailScreen
 import com.shahid.iqbal.screeny.ui.screens.category.CategoryScreen
+import com.shahid.iqbal.screeny.ui.screens.category.CategoryViewModel
 import com.shahid.iqbal.screeny.ui.screens.components.BottomNavigationBar
 import com.shahid.iqbal.screeny.ui.screens.components.LocalNavController
 import com.shahid.iqbal.screeny.ui.screens.components.ManageBarVisibility
@@ -37,6 +40,7 @@ import com.shahid.iqbal.screeny.ui.screens.settings.SettingScreen
 import com.shahid.iqbal.screeny.ui.screens.splash.SplashScreen
 import com.shahid.iqbal.screeny.ui.screens.wallpapers.WallpaperDetailScreen
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
+import io.ktor.util.valuesOf
 import org.koin.androidx.compose.koinViewModel
 import kotlin.system.exitProcess
 
@@ -51,7 +55,12 @@ fun ScreenyApp(navController: NavHostController) {
     val sharedWallpaperViewModel = koinViewModel<SharedWallpaperViewModel>()
 
 
-    ManageBarVisibility(currentEntry = stackEntry, showTopBar = { canShowTopBar = it }, showBottomBar = { canShowBottomBar = it })
+    ManageBarVisibility(
+        context = LocalContext.current,
+        currentEntry = stackEntry,
+        showTopBar = { canShowTopBar = it },
+        showBottomBar = { canShowBottomBar = it },
+    )
 
     Scaffold(bottomBar = {
         if (canShowBottomBar) BottomNavigationBar(navController)
@@ -82,8 +91,7 @@ fun ScreenyApp(navController: NavHostController) {
 
                     HomeScreen(wallpaperViewModel,
                         onWallpaperClick = { index, list ->
-                            sharedWallpaperViewModel.updateWallpaperList(list)
-                            navController.navigate(Routs.WallpaperDetail)
+                            wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
                         },
                         onBack = { exitProcess(0) })
                 }
@@ -105,7 +113,10 @@ fun ScreenyApp(navController: NavHostController) {
 
                 composable<Routs.CategoryDetail> { backStackEntry ->
                     val categoryDetail: Routs.CategoryDetail = backStackEntry.toRoute()
-                    CategoryDetailScreen(categoryDetail.query)
+                    val categoryViewModel = koinViewModel<CategoryViewModel>()
+                    CategoryDetailScreen(categoryDetail.query, categoryViewModel) { index, list ->
+                        wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
+                    }
                 }
 
                 composable<Routs.SearchedWallpaper> {
@@ -119,8 +130,18 @@ fun ScreenyApp(navController: NavHostController) {
             }
 
         }
-
     }
+}
+
+private fun wallpaperCLick(
+    index: Int,
+    list: List<Wallpaper>,
+    sharedWallpaperViewModel: SharedWallpaperViewModel,
+    navController: NavHostController
+) {
+    sharedWallpaperViewModel.updateWallpaperList(list)
+    sharedWallpaperViewModel.updateSelectedWallpaper(list[index])
+    navController.navigate(Routs.WallpaperDetail)
 }
 
 

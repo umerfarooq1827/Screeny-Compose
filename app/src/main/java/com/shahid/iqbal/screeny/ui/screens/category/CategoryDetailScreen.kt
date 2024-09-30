@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
+import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
 import com.shahid.iqbal.screeny.ui.screens.components.LocalNavController
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
@@ -37,10 +38,11 @@ import org.koin.compose.koinInject
 @Composable
 fun CategoryDetailScreen(
     title: String,
-    searchedWallpaperViewModel: CategoryViewModel = koinViewModel()
+    categoryViewModel: CategoryViewModel,
+    onWallpaperClick: (Int, List<Wallpaper>) -> Unit
 ) {
 
-    val wallpapers = searchedWallpaperViewModel.searchWallpapers(title).collectAsLazyPagingItems()
+    val wallpapers = categoryViewModel.searchWallpapers(title).collectAsLazyPagingItems()
     val imageLoader: ImageLoader = koinInject()
     val navController = LocalNavController.current
 
@@ -70,7 +72,9 @@ fun CategoryDetailScreen(
                     if (index < wallpapers.itemCount) {
                         val wallpaper = wallpapers[index]
                         if (wallpaper != null) {
-                            WallpaperItem(wallpaper = wallpaper, imageLoader){}
+                            WallpaperItem(wallpaper = wallpaper, imageLoader) {
+                                onWallpaperClick(index, wallpapers.itemSnapshotList.items)
+                            }
                         }
                     }
                 }

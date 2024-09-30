@@ -1,7 +1,10 @@
 package com.shahid.iqbal.screeny.ui.routs
 
+import androidx.annotation.Keep
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 sealed interface Routs {
 
@@ -21,6 +24,7 @@ sealed interface Routs {
     data object Setting : Routs
 
     @Serializable
+    @Stable
     data class CategoryDetail(val query: String) : Routs
 
     @Serializable

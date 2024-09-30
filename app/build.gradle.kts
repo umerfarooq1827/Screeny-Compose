@@ -13,6 +13,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("/home/shahid-iqbal/AndroidStudioProjects/Screeny/screeny.jks")
+            storePassword = "screeny"
+            keyAlias = "key0"
+            keyPassword = "screeny"
+        }
+    }
     namespace = "com.shahid.iqbal.screeny"
     compileSdk = 35
 
@@ -37,8 +45,10 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

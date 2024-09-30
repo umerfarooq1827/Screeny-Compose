@@ -1,5 +1,6 @@
 package com.shahid.iqbal.screeny.ui.screens.components
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import com.shahid.iqbal.screeny.ui.routs.Routs
@@ -7,12 +8,15 @@ import com.shahid.iqbal.screeny.ui.routs.Routs.CategoryDetail
 import com.shahid.iqbal.screeny.ui.routs.Routs.SearchedWallpaper
 import com.shahid.iqbal.screeny.ui.routs.Routs.Splash
 import com.shahid.iqbal.screeny.ui.routs.Routs.WallpaperDetail
+import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.HideSystemBars
 import com.shahid.iqbal.screeny.utils.Extensions.debug
 
 @Composable
-fun ManageBarVisibility(currentEntry: NavBackStackEntry?, showTopBar: (Boolean) -> Unit, showBottomBar: (Boolean) -> Unit) {
+fun ManageBarVisibility(context: Context, currentEntry: NavBackStackEntry?, showTopBar: (Boolean) -> Unit, showBottomBar: (Boolean) -> Unit) {
     currentEntry?.let { entry ->
-        when (entry.destination.route?.substringBefore("/")) {
+
+        val route = entry.destination.route?.substringBefore("/")
+        when (route) {
 
             in arrayOf(
                 Splash::class.qualifiedName,
@@ -29,6 +33,10 @@ fun ManageBarVisibility(currentEntry: NavBackStackEntry?, showTopBar: (Boolean) 
                 showTopBar(true)
                 showBottomBar(true)
             }
+        }
+
+        if (route == Splash::class.qualifiedName) {
+            context.HideSystemBars(true)
         }
     }
 }

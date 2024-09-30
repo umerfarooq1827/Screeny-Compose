@@ -1,6 +1,7 @@
 package com.shahid.iqbal.screeny.ui.routs
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.Keep
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -19,14 +20,17 @@ import com.shahid.iqbal.screeny.R
 sealed interface IconType {
 
     @Stable
+    @Keep
     data class Vector(val icon: ImageVector) : IconType
 
     @Stable
+    @Keep
     data class Drawable(@DrawableRes val iconRes: Int) : IconType
 }
 
 
 @Stable
+@Keep
 data class BottomNavRoutes(@StringRes val name: Int, val route: Routs, val icon: IconType, val selectedIcon: IconType)
 
 val bottomNavigationItems = listOf(

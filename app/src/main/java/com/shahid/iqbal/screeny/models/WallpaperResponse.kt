@@ -1,9 +1,12 @@
 package com.shahid.iqbal.screeny.models
 
+import androidx.annotation.Keep
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Keep
 data class WallpaperResponse(
 
     @SerialName("next_page")

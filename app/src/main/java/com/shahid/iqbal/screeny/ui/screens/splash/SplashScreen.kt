@@ -56,7 +56,6 @@ fun SplashScreen(
         }
     }
 
-    context.HideSystemBars(true)
 
     LaunchedEffect(key1 = progress) {
         if (progress >= 1f) {
