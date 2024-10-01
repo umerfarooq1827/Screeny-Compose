@@ -19,11 +19,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,14 +33,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
@@ -110,15 +106,7 @@ fun WallpaperDetailScreen(
 
                 val wallpaper = wallpapers[page]
 
-                SinglePageContent(
-                    wallpaper = wallpaper,
-                    imageLoader = imageLoader,
-                    pagerState,
-                    page,
-                    onDownload = {},
-                    onApply = {},
-                    onFavourite = { actionViewModel.addOrRemove(wallpaper) }
-                )
+                SinglePageContent(wallpaper = wallpaper, imageLoader = imageLoader, pagerState, page, onDownload = {}, onApply = {}, onFavourite = { actionViewModel.addOrRemove(wallpaper) })
             }
         }
 
@@ -153,8 +141,9 @@ private fun SinglePageContent(
     }
 }
 
+@Preview
 @Composable
-private fun ActionButtons(onDownload: () -> Unit, onApply: () -> Unit, onFavourite: () -> Unit) {
+private fun ActionButtons(onDownload: () -> Unit = {}, onApply: () -> Unit = {}, onFavourite: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -163,23 +152,19 @@ private fun ActionButtons(onDownload: () -> Unit, onApply: () -> Unit, onFavouri
     ) {
 
 
-        Image(imageVector = Icons.Default.Close, contentDescription = null, modifier = Modifier
+        Image(painter = painterResource(id = R.drawable.download_icon), contentDescription = null, modifier = Modifier
             .size(50.dp)
-            .background(color = Color.White, shape = CircleShape)
-            .padding(5.dp)
+            .background(color = Color(0x87191E31), shape = CircleShape)
+            .padding(7.dp)
             .clickable { onDownload() })
 
-        Image(imageVector = Icons.Default.Star, contentDescription = null, modifier = Modifier
+        Image(painter = painterResource(id = R.drawable.group_191), contentDescription = null, modifier = Modifier
             .size(50.dp)
             .background(color = Color.White, shape = CircleShape)
             .padding(5.dp)
             .clickable { onApply() })
 
-        Image(imageVector = Icons.Default.FavoriteBorder, contentDescription = null, modifier = Modifier
-            .size(50.dp)
-            .background(color = Color.White, shape = CircleShape)
-            .padding(5.dp)
-            .clickable { onFavourite() })
+        Image(painterResource(id = R.drawable.favourite_unchecked), contentDescription = null, modifier = Modifier.clickable { onFavourite() })
 
 
     }
