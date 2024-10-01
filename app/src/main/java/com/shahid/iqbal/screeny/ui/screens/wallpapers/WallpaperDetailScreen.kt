@@ -95,8 +95,8 @@ fun WallpaperDetailScreen(
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                Color.Black.copy(alpha = 0.7f), // Top part of the shadow
-                                Color.Transparent // Bottom part (fading out)
+                                Color.Black.copy(alpha = 0.7f),
+                                Color.Transparent
                             )
                         )
                     )
@@ -154,7 +154,7 @@ private fun ActionButtons(onDownload: () -> Unit = {}, onApply: () -> Unit = {},
 
         Image(painter = painterResource(id = R.drawable.download_icon), contentDescription = null, modifier = Modifier
             .size(50.dp)
-            .background(color = Color(0x87191E31), shape = CircleShape)
+            .background(color = Color(0xFF191E31).copy(alpha = 0.53f), shape = CircleShape)
             .padding(7.dp)
             .clickable { onDownload() })
 
