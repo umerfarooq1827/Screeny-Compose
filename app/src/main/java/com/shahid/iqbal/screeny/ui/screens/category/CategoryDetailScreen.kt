@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -68,12 +69,12 @@ fun CategoryDetailScreen(
                     LoadingPlaceHolder(modifier = Modifier.height(200.dp))
                 }
             } else {
-                items(wallpapers.itemCount) { index ->
+                items(wallpapers.itemCount, key = { wallpapers[it]?.id ?: wallpapers.hashCode() }) { index ->
                     if (index < wallpapers.itemCount) {
                         val wallpaper = wallpapers[index]
                         if (wallpaper != null) {
                             WallpaperItem(wallpaper = wallpaper, imageLoader) {
-                                onWallpaperClick(index, wallpapers.itemSnapshotList.items)
+                                onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items)
                             }
                         }
                     }
@@ -102,8 +103,11 @@ fun ToolBar(title: String, modifier: Modifier = Modifier, onBackClick: () -> Uni
         )
 
         Text(
-            text = title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-            fontFamily = screenyFontFamily, modifier = Modifier.wrapContentSize(), textAlign = TextAlign.Center
+            text = title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            fontFamily = screenyFontFamily, modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            textAlign = TextAlign.Center
 
         )
     }

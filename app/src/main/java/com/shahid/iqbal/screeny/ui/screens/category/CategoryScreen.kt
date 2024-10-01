@@ -2,6 +2,7 @@ package com.shahid.iqbal.screeny.ui.screens.category
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -61,7 +62,8 @@ fun CategoryScreen(modifier: Modifier = Modifier, onCategoryClick: (String) -> U
     val imageLoader: ImageLoader = koinInject()
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), verticalArrangement = Arrangement.spacedBy(16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(16.dp), modifier = modifier.fillMaxSize()
+        columns = GridCells.Fixed(2), verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(16.dp), modifier = modifier.fillMaxSize()
     ) {
 
 
@@ -106,7 +108,8 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader, onClick: () -> Un
     ) {
 
         AsyncImage(
-            model = imageRequest, contentDescription = category.name, imageLoader = imageLoader, contentScale = ContentScale.Crop, onSuccess = { showShimmer = false }, modifier = Modifier
+            model = imageRequest, contentDescription = category.name, imageLoader = imageLoader,
+            contentScale = ContentScale.Crop, onSuccess = { showShimmer = false }, modifier = Modifier
                 .matchParentSize()
                 .background(
                     shimmerBrush(targetValue = 1300f, showShimmer = showShimmer), shape = RoundedCornerShape(10.dp)
@@ -121,7 +124,7 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader, onClick: () -> Un
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(Color.Black, Color(0xFF29323B))
-                    ), alpha = 0.45f
+                    ), alpha = if (isSystemInDarkTheme()) 0.45f else 0.35f
                 ), contentAlignment = Alignment.Center
         ) {
             Text(
@@ -130,6 +133,7 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader, onClick: () -> Un
                     fontWeight = FontWeight.SemiBold, fontSize = 20.sp, fontFamily = screenyFontFamily
                 ),
                 textAlign = TextAlign.Center,
+                color = Color.White
             )
         }
     }

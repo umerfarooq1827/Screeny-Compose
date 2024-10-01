@@ -37,9 +37,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun HomeScreen(
-    wallpaperViewModel: WallpaperViewModel, modifier: Modifier = Modifier,
-    onWallpaperClick: (Int, List<Wallpaper>) -> Unit,
-    onBack: () -> Unit
+    wallpaperViewModel: WallpaperViewModel, modifier: Modifier = Modifier, onWallpaperClick: (Int, List<Wallpaper>) -> Unit, onBack: () -> Unit
 ) {
 
     val wallpapers = wallpaperViewModel.getAllWallpapers.collectAsLazyPagingItems()
@@ -61,12 +59,12 @@ fun HomeScreen(
                 LoadingPlaceHolder(modifier = Modifier.height(200.dp))
             }
         } else {
-            items(wallpapers.itemCount) { index ->
+            items(wallpapers.itemCount, key = { wallpapers[it]?.id ?: wallpapers.hashCode() }) { index ->
                 if (index < wallpapers.itemCount) {
                     val wallpaper = wallpapers[index]
                     if (wallpaper != null) {
                         WallpaperItem(wallpaper = wallpaper, imageLoader) {
-                            onWallpaperClick(index,wallpapers.itemSnapshotList.items)
+                            onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items)
                         }
                     }
                 }
