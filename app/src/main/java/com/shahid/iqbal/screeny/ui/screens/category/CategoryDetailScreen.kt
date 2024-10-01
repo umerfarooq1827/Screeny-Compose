@@ -103,7 +103,7 @@ fun ToolBar(title: String, modifier: Modifier = Modifier, onBackClick: () -> Uni
         )
 
         Text(
-            text = title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            text = title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             fontFamily = screenyFontFamily, modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
