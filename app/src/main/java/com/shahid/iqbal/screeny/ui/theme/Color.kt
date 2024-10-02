@@ -12,3 +12,5 @@ val Pink40 = Color(0xFF7D5260)
 
 val SplashColor = Color(0xFF191E31)
 val GrayColor = Color(0xFFA8A8A8)
+
+val ActionIconBgColor = Color(0xFF191E31).copy(alpha = 0.53f)

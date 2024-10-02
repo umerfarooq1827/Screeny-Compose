@@ -4,6 +4,8 @@ import com.shahid.iqbal.screeny.data.local.dao.FavouriteWallpaperDao
 import com.shahid.iqbal.screeny.models.FavouriteWallpaper
 import com.shahid.iqbal.screeny.models.Wallpaper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
 class FavouriteRepo(private val dao: FavouriteWallpaperDao) {
@@ -23,4 +25,11 @@ class FavouriteRepo(private val dao: FavouriteWallpaperDao) {
             }
         }
     }
+
+    suspend fun isFavourite(id: Int): Boolean = withContext(ioDispatcher) {
+        val wallpaper = dao.getFavouriteById(id)
+        (wallpaper != null)
+    }
+
+
 }

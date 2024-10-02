@@ -15,10 +15,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,12 +33,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
@@ -45,6 +53,8 @@ import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
+import com.shahid.iqbal.screeny.ui.theme.ActionIconBgColor
+import com.shahid.iqbal.screeny.utils.Extensions.debug
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -63,6 +73,7 @@ fun WallpaperDetailScreen(
 
     val imageLoader = koinInject<ImageLoader>()
     val pagerState = rememberPagerState(initialPage = if (index != -1) index else 0) { wallpapers.size }
+    val favouriteList by actionViewModel.getAllFavourites.collectAsStateWithLifecycle()
 
     var canShowList by remember {
         mutableStateOf(false)
@@ -74,18 +85,20 @@ fun WallpaperDetailScreen(
     }
 
 
+
     AnimatedVisibility(visible = canShowList) {
 
         Box {
 
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(wallpapers[pagerState.currentPage].wallpaperSource.portrait).crossfade(true).transformations(
-                    listOf(
-                        BlurTransformation(
-                            scale = 0.5f, radius = 25
-                        )
-                    )
-                ).build(), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize()
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(wallpapers[pagerState.currentPage].wallpaperSource.portrait)
+                    .crossfade(true)
+                    .transformations(BlurTransformation(scale = 0.5f, radius = 25))
+                    .build(),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
             )
 
 
@@ -102,11 +115,26 @@ fun WallpaperDetailScreen(
                     )
             ) {}
 
-            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 20.dp), key = { wallpapers[it].id }) { page ->
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(horizontal = 20.dp),
+                key = { wallpapers[it].id }
+            ) { page ->
 
                 val wallpaper = wallpapers[page]
+                val isFavourite = favouriteList.any { it.id == wallpaper.id }
 
-                SinglePageContent(wallpaper = wallpaper, imageLoader = imageLoader, pagerState, page, onDownload = {}, onApply = {}, onFavourite = { actionViewModel.addOrRemove(wallpaper) })
+                SinglePageContent(
+                    wallpaper = wallpaper,
+                    imageLoader = imageLoader,
+                    pagerState,
+                    page,
+                    isFavourite = isFavourite,
+                    onDownload = {},
+                    onApply = {},
+                    onFavourite = { actionViewModel.addOrRemove(wallpaper) }
+                )
             }
         }
 
@@ -117,13 +145,20 @@ fun WallpaperDetailScreen(
 
 @Composable
 private fun SinglePageContent(
-    wallpaper: Wallpaper, imageLoader: ImageLoader, pagerState: PagerState, page: Int, onDownload: () -> Unit, onApply: () -> Unit, onFavourite: () -> Unit
+    wallpaper: Wallpaper,
+    imageLoader: ImageLoader,
+    pagerState: PagerState,
+    page: Int,
+    isFavourite: Boolean,
+    onDownload: () -> Unit,
+    onApply: () -> Unit,
+    onFavourite: () -> Unit
 ) {
 
     Box(
         modifier = Modifier
             .carouselTransition(page, pagerState)
-            .padding(10.dp), contentAlignment = Alignment.Center
+            .padding(10.dp), contentAlignment = Alignment.BottomCenter
     ) {
 
 
@@ -134,7 +169,10 @@ private fun SinglePageContent(
         ) {}
 
         ActionButtons(
-            onDownload = onDownload, onApply = onApply, onFavourite = onFavourite
+            isFavourite = isFavourite,
+            onDownload = onDownload,
+            onApply = onApply,
+            onFavourite = onFavourite
         )
 
 
@@ -142,30 +180,53 @@ private fun SinglePageContent(
 }
 
 @Composable
-private fun ActionButtons(onDownload: () -> Unit = {}, onApply: () -> Unit = {}, onFavourite: () -> Unit = {}) {
+private fun ActionButtons(
+    isFavourite: Boolean = false,
+    onDownload: () -> Unit = {},
+    onApply: () -> Unit = {},
+    onFavourite: () -> Unit = {}
+) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .padding(horizontal = 10.dp),
+            .fillMaxWidth(0.95f)
+            .wrapContentHeight()
+            .padding(horizontal = 10.dp, vertical = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Top
     ) {
 
 
-        Image(painter = painterResource(id = R.drawable.download_icon), contentDescription = null, modifier = Modifier
-            .size(50.dp)
-            .background(color = Color(0xFF191E31).copy(alpha = 0.53f), shape = CircleShape)
-            .padding(7.dp)
-            .clickable { onDownload() })
+        Image(
+            painter = painterResource(id = R.drawable.download_icon),
+            contentDescription = stringResource(id = R.string.download),
+            colorFilter = ColorFilter.tint(color = Color.White),
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(color = ActionIconBgColor)
+                .padding(8.dp)
+                .clickable { onDownload() }
+        )
 
-        Image(painter = painterResource(id = R.drawable.group_191), contentDescription = null, modifier = Modifier
-            .size(50.dp)
-            .background(color = Color.White, shape = CircleShape)
-            .padding(5.dp)
-            .clickable { onApply() })
+        Image(painter = painterResource(id = R.drawable.apply_icon),
+            contentDescription = null,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(color = Color.White)
+                .clickable { onApply() })
 
-        Image(painterResource(id = R.drawable.favourite_unchecked), contentDescription = null, modifier = Modifier.clickable { onFavourite() })
+        Image(
+            imageVector = if (isFavourite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+            contentDescription = stringResource(id = R.string.favourite),
+            colorFilter = ColorFilter.tint(color = Color.White),
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(color = ActionIconBgColor)
+                .padding(8.dp)
+                .clickable { onFavourite() }
+        )
 
 
     }
