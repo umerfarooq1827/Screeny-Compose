@@ -59,11 +59,11 @@ fun HomeScreen(
                 LoadingPlaceHolder(modifier = Modifier.height(200.dp))
             }
         } else {
-            items(wallpapers.itemCount, key = { wallpapers[it]?.id ?: wallpapers.hashCode() }) { index ->
+            items(wallpapers.itemCount, key = { wallpapers[it]?.createdAt ?: wallpapers.hashCode() }) { index ->
                 if (index < wallpapers.itemCount) {
                     val wallpaper = wallpapers[index]
                     if (wallpaper != null) {
-                        WallpaperItem(wallpaper = wallpaper, imageLoader) {
+                        WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
                             onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items)
                         }
                     }

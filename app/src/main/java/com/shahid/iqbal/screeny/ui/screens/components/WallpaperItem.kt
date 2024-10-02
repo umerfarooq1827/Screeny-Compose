@@ -20,7 +20,8 @@ import com.shahid.iqbal.screeny.models.Wallpaper
 
 @Composable
 fun WallpaperItem(
-    wallpaper: Wallpaper, imageLoader: ImageLoader,
+    wallpaper: String,
+    imageLoader: ImageLoader,
     modifier: Modifier = Modifier,
     onWallpaperClick: () -> Unit
 ) {
@@ -28,7 +29,7 @@ fun WallpaperItem(
     var showShimmer by remember { mutableStateOf(true) }
 
     AsyncImage(
-        model = wallpaper.wallpaperSource.portrait,
+        model = wallpaper,
         contentDescription = null,
         contentScale = ContentScale.Crop,
         imageLoader = imageLoader,
