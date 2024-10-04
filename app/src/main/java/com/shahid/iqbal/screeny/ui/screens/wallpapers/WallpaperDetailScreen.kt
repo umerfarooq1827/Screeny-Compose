@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -61,15 +64,15 @@ fun WallpaperDetailScreen(
     sharedWallpaperViewModel: SharedWallpaperViewModel
 ) {
 
+    val actionViewModel = koinViewModel<ActionViewModel>()
 
     val wallpapers by sharedWallpaperViewModel.wallpaperList.collectAsStateWithLifecycle()
-    val selectedWallpaper by sharedWallpaperViewModel.selectedWallpaper.collectAsStateWithLifecycle()
-    val index by remember { mutableIntStateOf(wallpapers.indexOf(selectedWallpaper)) }
-    val actionViewModel = koinViewModel<ActionViewModel>()
+    val index by sharedWallpaperViewModel.selectedWallpaperIndex.collectAsStateWithLifecycle()
+    val favouriteList by actionViewModel.getAllFavourites.collectAsStateWithLifecycle()
+
 
     val imageLoader = koinInject<ImageLoader>()
     val pagerState = rememberPagerState(initialPage = if (index != -1) index else 0) { wallpapers.size }
-    val favouriteList by actionViewModel.getAllFavourites.collectAsStateWithLifecycle()
 
     var canShowList by remember {
         mutableStateOf(false)
@@ -82,15 +85,24 @@ fun WallpaperDetailScreen(
     }
 
 
+    if (!canShowList) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(40.dp),
+                strokeWidth = 4.dp, strokeCap = StrokeCap.Round
+            )
+        }
+    }
+
     AnimatedVisibility(visible = canShowList) {
 
         Box {
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(wallpapers[pagerState.currentPage].wallpaperSource.portrait)
+                    .data(wallpapers[pagerState.currentPage].wallpaperSource.small)
                     .crossfade(true)
-                    .transformations(BlurTransformation(scale = 0.5f, radius = 25))
+                    .transformations(BlurTransformation(scale = 0.5f, radius = 20))
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
@@ -109,17 +121,19 @@ fun WallpaperDetailScreen(
                             )
                         )
                     )
-            ) {}
+            )
 
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 20.dp),
-                key = { wallpapers[it].id }
+                key = { wallpapers[it].createdAt },
             ) { page ->
 
                 val wallpaper = wallpapers[page]
-                val isFavourite = favouriteList.any { it.id == wallpaper.id }
+                val isFavourite = if (page == pagerState.currentPage) {
+                    favouriteList.any { it.id == wallpaper.id }
+                } else false
 
                 SinglePageContent(
                     wallpaper = wallpaper,
@@ -154,7 +168,8 @@ private fun SinglePageContent(
     Box(
         modifier = Modifier
             .carouselTransition(page, pagerState)
-            .padding(10.dp), contentAlignment = Alignment.BottomCenter
+            .padding(10.dp),
+        contentAlignment = Alignment.BottomCenter
     ) {
 
 
@@ -198,10 +213,10 @@ private fun ActionButtons(
             colorFilter = ColorFilter.tint(color = Color.White),
             modifier = Modifier
                 .size(40.dp)
+                .clickable { onDownload() }
                 .clip(CircleShape)
                 .background(color = ActionIconBgColor)
                 .padding(8.dp)
-                .clickable { onDownload() }
         )
 
         Image(painter = painterResource(id = R.drawable.apply_icon),
@@ -209,8 +224,8 @@ private fun ActionButtons(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(color = Color.White)
-                .clickable { onApply() })
+                .clickable { onApply() }
+                .background(color = Color.White))
 
         Image(
             imageVector = if (isFavourite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
@@ -219,9 +234,9 @@ private fun ActionButtons(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
+                .clickable { onFavourite() }
                 .background(color = ActionIconBgColor)
                 .padding(8.dp)
-                .clickable { onFavourite() }
         )
 
 

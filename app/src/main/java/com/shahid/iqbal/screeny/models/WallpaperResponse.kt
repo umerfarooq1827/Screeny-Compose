@@ -11,12 +11,11 @@ data class WallpaperResponse(
     @SerialName("next_page")
     val nextPage: String? = null,
     @SerialName("page")
-    val page: Int, // 2
+    val page: Int,
     @SerialName("per_page")
-    val perPage: Int, // 40
+    val perPage: Int,
     @SerialName("photos") val wallpapers: List<Wallpaper>,
     @SerialName("prev_page") val prevPage: String? = null,
-    @SerialName("total_results")
-    val totalResults: Int // 8000
+    @SerialName("total_results") val totalResults: Int
 )
 

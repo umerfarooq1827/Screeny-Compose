@@ -20,9 +20,9 @@ data class Wallpaper(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     @SerialName("photographer")
-    val photographerName: String, // Mathias Reding
+    val photographerName: String,
     @SerialName("photographer_url")
-    val photographerUrl: String, // https://www.pexels.com/@matreding
+    val photographerUrl: String,
     @SerialName("src")
     @Embedded val wallpaperSource: Src,
     @SerialName("created_at")

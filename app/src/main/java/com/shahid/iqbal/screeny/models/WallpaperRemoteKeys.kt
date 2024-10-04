@@ -9,5 +9,7 @@ import com.shahid.iqbal.screeny.data.utils.Constant.PEXEL_WALLPAPER_REMOTE_KEYS_
 @Entity(PEXEL_WALLPAPER_REMOTE_KEYS_TABLE)
 @Keep
 data class WallpaperRemoteKeys(
-    @PrimaryKey(autoGenerate = false) val id: Int, val prevPage: Int?, val nextPage: Int?
+    @PrimaryKey(autoGenerate = false) val id: Int,
+    val prevPage: Int?,
+    val nextPage: Int?
 )

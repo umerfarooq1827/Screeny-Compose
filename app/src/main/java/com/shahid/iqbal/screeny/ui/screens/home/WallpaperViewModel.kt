@@ -11,6 +11,6 @@ import kotlinx.coroutines.flow.stateIn
 
 class WallpaperViewModel(private val repo: WallpaperRepository) : ViewModel() {
 
-    val getAllWallpapers get() = repo.getAllWallpapers()
+    val getAllWallpapers get() = repo.getAllWallpapers().cachedIn(viewModelScope)
 
 }

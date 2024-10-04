@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -29,7 +29,6 @@ import com.shahid.iqbal.screeny.ui.screens.category.CategoryDetailScreen
 import com.shahid.iqbal.screeny.ui.screens.category.CategoryScreen
 import com.shahid.iqbal.screeny.ui.screens.category.CategoryViewModel
 import com.shahid.iqbal.screeny.ui.screens.components.BottomNavigationBar
-import com.shahid.iqbal.screeny.ui.screens.components.LocalNavController
 import com.shahid.iqbal.screeny.ui.screens.components.ManageBarVisibility
 import com.shahid.iqbal.screeny.ui.screens.components.TopBar
 import com.shahid.iqbal.screeny.ui.screens.favourite.FavouriteScreen
@@ -38,9 +37,9 @@ import com.shahid.iqbal.screeny.ui.screens.home.WallpaperViewModel
 import com.shahid.iqbal.screeny.ui.screens.search.SearchedWallpaperScreen
 import com.shahid.iqbal.screeny.ui.screens.settings.SettingScreen
 import com.shahid.iqbal.screeny.ui.screens.splash.SplashScreen
+import com.shahid.iqbal.screeny.ui.screens.splash.SplashViewModel
 import com.shahid.iqbal.screeny.ui.screens.wallpapers.WallpaperDetailScreen
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
-import io.ktor.util.valuesOf
 import org.koin.androidx.compose.koinViewModel
 import kotlin.system.exitProcess
 
@@ -52,7 +51,10 @@ fun ScreenyApp(navController: NavHostController) {
     var canShowBottomBar by rememberSaveable { mutableStateOf(false) }
     var canShowTopBar by rememberSaveable { mutableStateOf(false) }
     val stackEntry by navController.currentBackStackEntryAsState()
+
     val sharedWallpaperViewModel = koinViewModel<SharedWallpaperViewModel>()
+    val wallpaperViewModel: WallpaperViewModel = koinViewModel()
+
 
 
     ManageBarVisibility(
@@ -75,61 +77,62 @@ fun ScreenyApp(navController: NavHostController) {
         }
     }) { innerPadding ->
 
-        CompositionLocalProvider(LocalNavController provides navController) {
-            NavHost(
-                navController, startDestination = Splash,
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
+        NavHost(
+            navController, startDestination = Splash,
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
 
 
-                composable<Splash> { SplashScreen() }
+            composable<Splash> {
+                val splashViewModel = koinViewModel<SplashViewModel>()
+                SplashScreen(splashViewModel, onProgressFinish = {
+                    navController.navigate(Home, navOptions = NavOptions.Builder().setPopUpTo(Splash, true).build())
+                })
+            }
 
-                composable<Home> {
-                    val wallpaperViewModel: WallpaperViewModel = koinViewModel()
-
-                    HomeScreen(wallpaperViewModel,
-                        onWallpaperClick = { index, list ->
-                            wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
-                        },
-                        onBack = { exitProcess(0) })
-                }
-
-                composable<Categories> {
-                    CategoryScreen { category ->
-                        navController.navigate(Routs.CategoryDetail(category))
-                    }
-                }
-
-                composable<Favourite> {
-                    FavouriteScreen()
-                }
-
-                composable<Setting> {
-                    SettingScreen()
-                }
-
-
-                composable<Routs.CategoryDetail> { backStackEntry ->
-                    val categoryDetail: Routs.CategoryDetail = backStackEntry.toRoute()
-                    val categoryViewModel = koinViewModel<CategoryViewModel>()
-                    CategoryDetailScreen(categoryDetail.query, categoryViewModel) { index, list ->
+            composable<Home> {
+                HomeScreen(wallpaperViewModel,
+                    onWallpaperClick = { index, list ->
                         wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
-                    }
-                }
+                    },
+                    onBack = { exitProcess(0) })
+            }
 
-                composable<Routs.SearchedWallpaper> {
-                    SearchedWallpaperScreen()
+            composable<Categories> {
+                CategoryScreen { category ->
+                    navController.navigate(Routs.CategoryDetail(category))
                 }
+            }
 
-                composable<Routs.WallpaperDetail> {
-                    WallpaperDetailScreen(sharedWallpaperViewModel)
-                }
+            composable<Favourite> {
+                FavouriteScreen()
+            }
 
+            composable<Setting> {
+                SettingScreen()
+            }
+
+
+            composable<Routs.CategoryDetail> { backStackEntry ->
+                val categoryDetail: Routs.CategoryDetail = backStackEntry.toRoute()
+                val categoryViewModel = koinViewModel<CategoryViewModel>()
+                CategoryDetailScreen(categoryDetail.query, categoryViewModel, onBackClick = { navController.navigateUp() }, onWallpaperClick = { index, list ->
+                    wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
+                })
+            }
+
+            composable<Routs.SearchedWallpaper> {
+                SearchedWallpaperScreen()
+            }
+
+            composable<Routs.WallpaperDetail> {
+                WallpaperDetailScreen(sharedWallpaperViewModel)
             }
 
         }
+
     }
 }
 

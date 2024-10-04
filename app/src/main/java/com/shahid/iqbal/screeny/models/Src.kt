@@ -14,4 +14,6 @@ data class Src(
     val medium: String,
     @SerialName("portrait")
     val portrait: String,
+    @SerialName("small")
+    val small:String
 )

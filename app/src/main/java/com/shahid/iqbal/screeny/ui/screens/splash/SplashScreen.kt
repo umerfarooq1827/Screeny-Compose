@@ -27,23 +27,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavOptions
 import com.shahid.iqbal.screeny.R
-import com.shahid.iqbal.screeny.ui.routs.Routs
-import com.shahid.iqbal.screeny.ui.screens.components.LocalNavController
 import com.shahid.iqbal.screeny.ui.screens.components.SplashProgressBar
 import com.shahid.iqbal.screeny.ui.theme.SplashColor
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SplashScreen(
-    modifier: Modifier = Modifier
+    splashViewModel: SplashViewModel,
+    modifier: Modifier = Modifier,
+    onProgressFinish: () -> Unit
 ) {
 
-    val splashViewModel = koinViewModel<SplashViewModel>()
     val progress by splashViewModel.progress.collectAsStateWithLifecycle()
-    val navController = LocalNavController.current
     val context = LocalContext.current
 
     val splashTitle = remember {
@@ -58,9 +54,7 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = progress) {
         if (progress >= 1f) {
-            navController.navigate(
-                Routs.Home, navOptions = NavOptions.Builder().setPopUpTo(Routs.Splash, true).build()
-            )
+            onProgressFinish()
         }
 
     }
@@ -72,7 +66,7 @@ fun SplashScreen(
         modifier = modifier
             .fillMaxSize()
             .background(SplashColor), verticalArrangement = Arrangement.Center,
-             horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
 

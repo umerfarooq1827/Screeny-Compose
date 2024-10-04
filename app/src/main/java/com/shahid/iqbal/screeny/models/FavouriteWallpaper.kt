@@ -9,7 +9,8 @@ import androidx.room.PrimaryKey
 @Keep
 @Entity("favourite_wallpaper")
 data class FavouriteWallpaper(
-    @PrimaryKey(autoGenerate = false) val id: Int,
+    @PrimaryKey(autoGenerate = false)
+    val id: Int,
     val wallpaper: String,
     val timeStamp: Long = System.currentTimeMillis()
 )

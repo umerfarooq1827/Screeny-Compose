@@ -13,8 +13,8 @@ class SharedWallpaperViewModel : ViewModel() {
     val wallpaperList get() = _wallpaperList.asStateFlow()
 
 
-    private var _selectedWallpaper = MutableStateFlow<Wallpaper?>(null)
-    val selectedWallpaper get() = _selectedWallpaper.asStateFlow()
+    private var _selectedWallpaperIndex = MutableStateFlow(0)
+    val selectedWallpaperIndex get() = _selectedWallpaperIndex.asStateFlow()
 
 
     fun updateWallpaperList(wallpapers: List<Wallpaper>) {
@@ -25,7 +25,7 @@ class SharedWallpaperViewModel : ViewModel() {
 
     fun updateSelectedWallpaper(wallpaper: Wallpaper){
         viewModelScope.launch {
-            _selectedWallpaper.emit(wallpaper)
+            _selectedWallpaperIndex.emit(wallpaperList.value.indexOf(wallpaper))
         }
     }
 

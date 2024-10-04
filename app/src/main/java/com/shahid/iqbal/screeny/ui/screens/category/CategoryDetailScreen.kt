@@ -23,37 +23,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
-import com.shahid.iqbal.screeny.ui.screens.components.LocalNavController
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
-import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
 fun CategoryDetailScreen(
     title: String,
     categoryViewModel: CategoryViewModel,
-    onWallpaperClick: (Int, List<Wallpaper>) -> Unit
+    onWallpaperClick: (Int, List<Wallpaper>) -> Unit,
+    onBackClick: () -> Unit
 ) {
 
     val wallpapers = categoryViewModel.searchWallpapers(title).collectAsLazyPagingItems()
     val imageLoader: ImageLoader = koinInject()
-    val navController = LocalNavController.current
 
     Column(
         modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        ToolBar(title = title) {
-            navController.navigateUp()
-        }
+        ToolBar(title = title, onBackClick = onBackClick)
 
 
         LazyVerticalGrid(
@@ -94,7 +89,7 @@ fun ToolBar(title: String, modifier: Modifier = Modifier, onBackClick: () -> Uni
             .height(70.dp)
             .fillMaxWidth()
             .padding(start = 10.dp),
-             horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier
