@@ -75,11 +75,11 @@ fun WallpaperDetailScreen(
         mutableStateOf(false)
     }
 
+
     LaunchedEffect(key1 = canShowList) {
-        delay(200)
+        delay(300)
         canShowList = true
     }
-
 
 
     AnimatedVisibility(visible = canShowList) {

@@ -92,13 +92,15 @@ fun ToolBar(title: String, modifier: Modifier = Modifier, onBackClick: () -> Uni
     Row(
         modifier = modifier
             .height(70.dp)
-            .fillMaxWidth(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
+            .padding(start = 10.dp),
+             horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier
                 .wrapContentSize()
-                .padding(horizontal = 20.dp)
                 .clickable { onBackClick() }
+
 
         )
 
@@ -106,7 +108,8 @@ fun ToolBar(title: String, modifier: Modifier = Modifier, onBackClick: () -> Uni
             text = title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             fontFamily = screenyFontFamily, modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentHeight()
+                .padding(end = 30.dp),
             textAlign = TextAlign.Center
 
         )

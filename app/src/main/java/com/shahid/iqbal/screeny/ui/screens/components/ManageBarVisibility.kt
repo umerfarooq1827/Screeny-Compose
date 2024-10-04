@@ -35,7 +35,7 @@ fun ManageBarVisibility(context: Context, currentEntry: NavBackStackEntry?, show
             }
         }
 
-        if (route == Splash::class.qualifiedName) {
+        if (route in arrayOf(Splash::class.qualifiedName, WallpaperDetail::class.qualifiedName)) {
             context.HideSystemBars(true)
         }
     }

@@ -34,7 +34,10 @@ import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import com.shahid.iqbal.screeny.ui.screens.components.shimmerBrush
 import org.koin.compose.koinInject
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun HomeScreen(
     wallpaperViewModel: WallpaperViewModel, modifier: Modifier = Modifier, onWallpaperClick: (Int, List<Wallpaper>) -> Unit, onBack: () -> Unit
@@ -54,23 +57,17 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize(),
     ) {
 
-        if (wallpapers.loadState.refresh == LoadState.Loading) {
-            items(20) {
-                LoadingPlaceHolder(modifier = Modifier.height(200.dp))
-            }
-        } else {
-            items(wallpapers.itemCount, key = { wallpapers[it]?.createdAt ?: wallpapers.hashCode() }) { index ->
-                if (index < wallpapers.itemCount) {
-                    val wallpaper = wallpapers[index]
-                    if (wallpaper != null) {
-                        WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
-                            onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items)
-                        }
-                    }
+
+        items(wallpapers.itemCount, key = { wallpapers[it]?.id ?: Uuid.random() }) { index ->
+
+            val wallpaper = wallpapers[index]
+            if (wallpaper != null) {
+                WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
+                    onWallpaperClick(index, wallpapers.itemSnapshotList.items)
                 }
             }
-        }
 
+        }
     }
 }
 

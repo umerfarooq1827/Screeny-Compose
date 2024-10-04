@@ -34,7 +34,6 @@ import com.shahid.iqbal.screeny.ui.screens.components.LocalNavController
 import com.shahid.iqbal.screeny.ui.screens.components.SplashProgressBar
 import com.shahid.iqbal.screeny.ui.theme.SplashColor
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
-import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.HideSystemBars
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

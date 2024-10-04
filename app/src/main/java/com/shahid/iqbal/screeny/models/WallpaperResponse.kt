@@ -8,15 +8,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Keep
 data class WallpaperResponse(
-
     @SerialName("next_page")
-    val nextPage: String? = null, // https://api.pexels.com/v1/curated/?page=3&per_page=40
+    val nextPage: String? = null,
     @SerialName("page")
     val page: Int, // 2
     @SerialName("per_page")
     val perPage: Int, // 40
     @SerialName("photos") val wallpapers: List<Wallpaper>,
-    @SerialName("prev_page") val prevPage: String? = null, // https://api.pexels.com/v1/curated/?page=1&per_page=40
+    @SerialName("prev_page") val prevPage: String? = null,
     @SerialName("total_results")
     val totalResults: Int // 8000
 )
