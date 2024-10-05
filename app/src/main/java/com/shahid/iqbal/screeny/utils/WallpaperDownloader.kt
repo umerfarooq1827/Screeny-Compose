@@ -1,11 +1,12 @@
 package com.shahid.iqbal.screeny.utils
 
 import android.app.DownloadManager
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.os.Environment
 import androidx.core.net.toUri
 import com.shahid.iqbal.screeny.R
-import java.io.File
 
 
 interface Downloader {
