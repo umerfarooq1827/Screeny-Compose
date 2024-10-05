@@ -31,11 +31,12 @@ import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.ui.screens.components.SplashProgressBar
 import com.shahid.iqbal.screeny.ui.theme.SplashColor
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SplashScreen(
-    splashViewModel: SplashViewModel,
     modifier: Modifier = Modifier,
+    splashViewModel: SplashViewModel = koinViewModel(),
     onProgressFinish: () -> Unit
 ) {
 

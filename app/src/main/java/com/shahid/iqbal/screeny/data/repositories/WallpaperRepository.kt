@@ -18,9 +18,9 @@ class WallpaperRepository(
     private val database: PexelWallpaperDatabase
 ) {
 
-    fun getAllWallpapers(): Flow<PagingData<Wallpaper>> {
+    fun getAllWallpapers(): Pager<Int, Wallpaper> {
 
-        val pageConfig = PagingConfig(pageSize = Constant.PER_PAGE_ITEMS)
+        val pageConfig = PagingConfig(pageSize = Constant.PER_PAGE_ITEMS, prefetchDistance = 10)
         val pagingSourceFactory = { database.pexelWallpaperDao().getAllWallpapers() }
         val remoteMediator = PexelWallpaperRemoteMediator(database, api)
 
@@ -28,6 +28,6 @@ class WallpaperRepository(
             config = pageConfig,
             pagingSourceFactory = pagingSourceFactory,
             remoteMediator = remoteMediator
-        ).flow
+        )
     }
 }

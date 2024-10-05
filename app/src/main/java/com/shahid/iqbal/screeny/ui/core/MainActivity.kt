@@ -15,8 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ScreenyTheme(dynamicColor = true) {
-                val navController = rememberNavController()
-                ScreenyApp(navController)
+                ScreenyApp()
             }
         }
     }

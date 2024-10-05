@@ -12,8 +12,8 @@ import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.HideSystemBars
 import com.shahid.iqbal.screeny.utils.Extensions.debug
 
 @Composable
-fun ManageBarVisibility(context: Context, currentEntry: NavBackStackEntry?, showTopBar: (Boolean) -> Unit, showBottomBar: (Boolean) -> Unit) {
-    currentEntry?.let { entry ->
+fun ManageBarVisibility(context: Context, currentEntry: () -> NavBackStackEntry?, showTopBar: (Boolean) -> Unit, showBottomBar: (Boolean) -> Unit) {
+    currentEntry()?.let { entry ->
 
         val route = entry.destination.route?.substringBefore("/")
         when (route) {

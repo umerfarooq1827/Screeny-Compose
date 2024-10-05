@@ -1,5 +1,8 @@
 package com.shahid.iqbal.screeny.ui.core
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -16,6 +19,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.models.Wallpaper
@@ -45,21 +49,22 @@ import kotlin.system.exitProcess
 
 
 @Composable
-fun ScreenyApp(navController: NavHostController) {
+fun ScreenyApp() {
 
-
+    val navController = rememberNavController()
     var canShowBottomBar by rememberSaveable { mutableStateOf(false) }
     var canShowTopBar by rememberSaveable { mutableStateOf(false) }
     val stackEntry by navController.currentBackStackEntryAsState()
+    val wallpaperViewModel: WallpaperViewModel = koinViewModel()
 
     val sharedWallpaperViewModel = koinViewModel<SharedWallpaperViewModel>()
-    val wallpaperViewModel: WallpaperViewModel = koinViewModel()
+    val context = LocalContext.current
 
 
 
     ManageBarVisibility(
-        context = LocalContext.current,
-        currentEntry = stackEntry,
+        context = context,
+        currentEntry = { stackEntry },
         showTopBar = { canShowTopBar = it },
         showBottomBar = { canShowBottomBar = it },
     )
@@ -78,7 +83,8 @@ fun ScreenyApp(navController: NavHostController) {
     }) { innerPadding ->
 
         NavHost(
-            navController, startDestination = Splash,
+            navController,
+            startDestination = Splash,
             Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -86,17 +92,15 @@ fun ScreenyApp(navController: NavHostController) {
 
 
             composable<Splash> {
-                val splashViewModel = koinViewModel<SplashViewModel>()
-                SplashScreen(splashViewModel, onProgressFinish = {
+                SplashScreen {
                     navController.navigate(Home, navOptions = NavOptions.Builder().setPopUpTo(Splash, true).build())
-                })
+                }
             }
 
             composable<Home> {
-                HomeScreen(wallpaperViewModel,
-                    onWallpaperClick = { index, list ->
-                        wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
-                    },
+                HomeScreen(
+                    wallpaperViewModel,
+                    onWallpaperClick = { index, list -> wallpaperCLick(index, list, sharedWallpaperViewModel, navController) },
                     onBack = { exitProcess(0) })
             }
 
@@ -137,10 +141,7 @@ fun ScreenyApp(navController: NavHostController) {
 }
 
 private fun wallpaperCLick(
-    index: Int,
-    list: List<Wallpaper>,
-    sharedWallpaperViewModel: SharedWallpaperViewModel,
-    navController: NavHostController
+    index: Int, list: List<Wallpaper>, sharedWallpaperViewModel: SharedWallpaperViewModel, navController: NavHostController
 ) {
     sharedWallpaperViewModel.updateWallpaperList(list)
     sharedWallpaperViewModel.updateSelectedWallpaper(list[index])

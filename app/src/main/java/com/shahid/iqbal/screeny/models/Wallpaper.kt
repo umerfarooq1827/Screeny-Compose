@@ -10,6 +10,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.shahid.iqbal.screeny.data.utils.Constant.PEXEL_WALLPAPER_TABLE
 import com.shahid.iqbal.screeny.models.Src
+import kotlinx.serialization.Transient
 
 @Keep
 @Immutable
@@ -25,8 +26,8 @@ data class Wallpaper(
     val photographerUrl: String,
     @SerialName("src")
     @Embedded val wallpaperSource: Src,
-    @SerialName("created_at")
-    val createdAt: Long = System.currentTimeMillis()
+
+    @Transient var page: Int = 0
 
 
 )

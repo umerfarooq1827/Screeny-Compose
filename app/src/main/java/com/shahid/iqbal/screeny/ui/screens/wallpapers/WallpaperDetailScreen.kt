@@ -102,7 +102,7 @@ fun WallpaperDetailScreen(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(wallpapers[pagerState.currentPage].wallpaperSource.small)
                     .crossfade(true)
-                    .transformations(BlurTransformation(scale = 0.5f, radius = 20))
+                    .transformations(BlurTransformation(scale = 0.5f, radius = 15))
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
@@ -127,7 +127,7 @@ fun WallpaperDetailScreen(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 20.dp),
-                key = { wallpapers[it].createdAt },
+                key = { "${wallpapers[it].id}_$it" },
             ) { page ->
 
                 val wallpaper = wallpapers[page]

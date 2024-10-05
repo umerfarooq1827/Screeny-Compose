@@ -15,11 +15,11 @@ import coil.ImageLoader
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
+import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun HomeScreen(
     wallpaperViewModel: WallpaperViewModel,
@@ -44,7 +44,7 @@ fun HomeScreen(
     ) {
 
 
-        items(wallpapers.itemCount, key = { "${wallpapers[it]?.id}_it" }) { index ->
+        items(wallpapers.itemCount, key = { "${wallpapers[it]?.id}_$it" }) { index ->
 
             val wallpaper = wallpapers[index]
             if (wallpaper != null) {
