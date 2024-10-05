@@ -7,4 +7,5 @@
     <string name="search_wallpaper">Search Wallpaper</string>
     <string name="download">Download</string>
     <string name="downloading_wallpaper">Downloading Wallpaper</string>
+    <string name="downloading">Downloading</string>
 </resources>

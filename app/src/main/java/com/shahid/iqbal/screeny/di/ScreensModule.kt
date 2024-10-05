@@ -18,7 +18,7 @@ val screensModule = module {
     viewModel { CategoryViewModel(get()) }
     viewModel { SearchViewModel(get(), get()) }
     viewModel { SharedWallpaperViewModel() }
-    viewModel { ActionViewModel(get()) }
+    viewModel { ActionViewModel(get(),get()) }
     viewModel { FavouriteViewModel(get()) }
 
 

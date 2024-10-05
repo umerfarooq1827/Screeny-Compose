@@ -1,6 +1,7 @@
 package com.shahid.iqbal.screeny.ui.screens.wallpapers
 
 import BlurTransformation
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -69,6 +70,7 @@ fun WallpaperDetailScreen(
     val wallpapers by sharedWallpaperViewModel.wallpaperList.collectAsStateWithLifecycle()
     val index by sharedWallpaperViewModel.selectedWallpaperIndex.collectAsStateWithLifecycle()
     val favouriteList by actionViewModel.getAllFavourites.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
 
     val imageLoader = koinInject<ImageLoader>()
@@ -141,7 +143,10 @@ fun WallpaperDetailScreen(
                     pagerState,
                     page,
                     isFavourite = isFavourite,
-                    onDownload = {},
+                    onDownload = {
+                        actionViewModel.downloadWallpaper(url = wallpaper.wallpaperSource.portrait)
+                        Toast.makeText(context, context.getString(R.string.downloading), Toast.LENGTH_SHORT).show()
+                    },
                     onApply = {},
                     onFavourite = { actionViewModel.addOrRemove(wallpaper) }
                 )
