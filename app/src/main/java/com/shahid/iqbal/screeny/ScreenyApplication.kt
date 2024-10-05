@@ -1,6 +1,7 @@
 package com.shahid.iqbal.screeny
 
 import android.app.Application
+import com.shahid.iqbal.screeny.di.appModule
 import com.shahid.iqbal.screeny.di.networkModule
 import com.shahid.iqbal.screeny.di.screensModule
 import com.shahid.iqbal.screeny.di.sharedWallpaperModule
@@ -22,6 +23,7 @@ class ScreenyApplication : Application() {
             androidContext(this@ScreenyApplication)
             androidLogger(Level.ERROR)
             modules(
+                appModule,
                 networkModule,
                 wallpaperApiModule,
                 wallpaperDatabaseModule,
