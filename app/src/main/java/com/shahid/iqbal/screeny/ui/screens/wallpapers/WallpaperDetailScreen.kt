@@ -56,7 +56,10 @@ import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
 import com.shahid.iqbal.screeny.ui.theme.ActionIconBgColor
+import com.shahid.iqbal.screeny.utils.Extensions.debug
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import kotlin.math.absoluteValue
@@ -75,21 +78,21 @@ fun WallpaperDetailScreen(sharedWallpaperViewModel: SharedWallpaperViewModel) {
     val imageLoader = koinInject<ImageLoader>()
     val pagerState = rememberPagerState(initialPage = if (index != -1) index else 0) { wallpapers.size }
 
-    var canShowList by remember {
-        mutableStateOf(false)
-    }
+    var canShowList by remember { mutableStateOf(false) }
     var isFavourite by remember { mutableStateOf(false) }
-
 
     LaunchedEffect(key1 = canShowList) {
         delay(300)
         canShowList = true
     }
 
-    LaunchedEffect(key1 = pagerState) {
-       val wallpaper = wallpapers[pagerState.currentPage]
-        isFavourite = favouriteList.any { it.id == wallpaper.id }
+    LaunchedEffect(key1 = favouriteList.elementAt(pagerState.currentPage-1)) {
+        val wallpaper = wallpapers[pagerState.currentPage]
+        val res = favouriteList.any { it.id == wallpaper.id }
+        res.debug()
+
     }
+
 
 
     if (!canShowList) {
@@ -103,7 +106,7 @@ fun WallpaperDetailScreen(sharedWallpaperViewModel: SharedWallpaperViewModel) {
 
     AnimatedVisibility(visible = canShowList) {
 
-        Box (contentAlignment = Alignment.BottomCenter){
+        Box(contentAlignment = Alignment.BottomCenter) {
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -138,6 +141,7 @@ fun WallpaperDetailScreen(sharedWallpaperViewModel: SharedWallpaperViewModel) {
             ) { page ->
 
                 val wallpaper = wallpapers[page]
+                isFavourite = favouriteList.any { it.id == wallpaper.id }
 
                 SinglePageContent(
                     wallpaper = wallpaper,
