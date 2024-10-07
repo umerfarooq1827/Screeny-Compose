@@ -44,6 +44,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,9 +62,7 @@ import org.koin.compose.koinInject
 import kotlin.math.absoluteValue
 
 @Composable
-fun WallpaperDetailScreen(
-    sharedWallpaperViewModel: SharedWallpaperViewModel
-) {
+fun WallpaperDetailScreen(sharedWallpaperViewModel: SharedWallpaperViewModel) {
 
     val actionViewModel = koinViewModel<ActionViewModel>()
 
@@ -79,11 +78,17 @@ fun WallpaperDetailScreen(
     var canShowList by remember {
         mutableStateOf(false)
     }
+    var isFavourite by remember { mutableStateOf(false) }
 
 
     LaunchedEffect(key1 = canShowList) {
         delay(300)
         canShowList = true
+    }
+
+    LaunchedEffect(key1 = pagerState) {
+       val wallpaper = wallpapers[pagerState.currentPage]
+        isFavourite = favouriteList.any { it.id == wallpaper.id }
     }
 
 
@@ -98,7 +103,7 @@ fun WallpaperDetailScreen(
 
     AnimatedVisibility(visible = canShowList) {
 
-        Box {
+        Box (contentAlignment = Alignment.BottomCenter){
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -133,24 +138,24 @@ fun WallpaperDetailScreen(
             ) { page ->
 
                 val wallpaper = wallpapers[page]
-                val isFavourite = if (page == pagerState.currentPage) {
-                    favouriteList.any { it.id == wallpaper.id }
-                } else false
 
                 SinglePageContent(
                     wallpaper = wallpaper,
                     imageLoader = imageLoader,
-                    pagerState,
-                    page,
-                    isFavourite = isFavourite,
-                    onDownload = {
-                        actionViewModel.downloadWallpaper(url = wallpaper.wallpaperSource.portrait)
-                        Toast.makeText(context, context.getString(R.string.downloading), Toast.LENGTH_SHORT).show()
-                    },
-                    onApply = {},
-                    onFavourite = { actionViewModel.addOrRemove(wallpaper) }
+                    pagerState, page
                 )
             }
+
+
+            ActionButtons(
+                isFavourite = isFavourite,
+                onDownload = {
+                    actionViewModel.downloadWallpaper(url = wallpapers[pagerState.currentPage].wallpaperSource.portrait)
+                    Toast.makeText(context, context.getString(R.string.downloading), Toast.LENGTH_SHORT).show()
+                },
+                onApply = {},
+                onFavourite = { actionViewModel.addOrRemove(wallpaper = wallpapers[pagerState.currentPage]) }
+            )
         }
 
 
@@ -163,11 +168,7 @@ private fun SinglePageContent(
     wallpaper: Wallpaper,
     imageLoader: ImageLoader,
     pagerState: PagerState,
-    page: Int,
-    isFavourite: Boolean,
-    onDownload: () -> Unit,
-    onApply: () -> Unit,
-    onFavourite: () -> Unit
+    page: Int
 ) {
 
     Box(
@@ -183,15 +184,6 @@ private fun SinglePageContent(
                 .fillMaxHeight(0.7f)
                 .fillMaxWidth()
         ) {}
-
-        ActionButtons(
-            isFavourite = isFavourite,
-            onDownload = onDownload,
-            onApply = onApply,
-            onFavourite = onFavourite
-        )
-
-
     }
 }
 
@@ -204,11 +196,11 @@ private fun ActionButtons(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(0.95f)
+            .fillMaxWidth(0.70f)
             .wrapContentHeight()
-            .padding(horizontal = 10.dp, vertical = 20.dp),
+            .padding(vertical = 50.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top
+        verticalAlignment = Alignment.Bottom
     ) {
 
 
@@ -248,7 +240,8 @@ private fun ActionButtons(
     }
 }
 
-fun Modifier.carouselTransition(page: Int, pagerState: PagerState) = graphicsLayer {
+@Composable
+private fun Modifier.carouselTransition(page: Int, pagerState: PagerState) = graphicsLayer {
     val pageOffset = ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue
 
     val transformation = lerp(
