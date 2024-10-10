@@ -31,7 +31,7 @@ fun SinglePageContent(
             wallpaper = wallpaperUrl, imageLoader = imageLoader, modifier = Modifier
                 .fillMaxHeight(0.7f)
                 .fillMaxWidth()
-        ) {}
+        )
     }
 }
 

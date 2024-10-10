@@ -23,7 +23,7 @@ fun WallpaperItem(
     wallpaper: String,
     imageLoader: ImageLoader,
     modifier: Modifier = Modifier,
-    onWallpaperClick: () -> Unit
+    onWallpaperClick: () -> Unit = {}
 ) {
 
     var showShimmer by remember { mutableStateOf(true) }

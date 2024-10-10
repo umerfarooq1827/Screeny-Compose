@@ -1,5 +1,6 @@
 package com.shahid.iqbal.screeny.ui.screens.wallpapers
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -23,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
+import com.shahid.iqbal.screeny.models.FavouriteWallpaper
+import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.screens.components.ActionButtons
 import com.shahid.iqbal.screeny.ui.screens.components.BlurBg
 import com.shahid.iqbal.screeny.ui.screens.components.SinglePageContent
@@ -33,8 +37,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun WallpaperDetailScreen(
-    sharedWallpaperViewModel: SharedWallpaperViewModel,
-    isFromFavourite: Boolean = false
+    sharedWallpaperViewModel: SharedWallpaperViewModel, isFromFavourite: Boolean = false
 ) {
 
     val actionViewModel = koinViewModel<ActionViewModel>()
@@ -42,11 +45,14 @@ fun WallpaperDetailScreen(
     val wallpapers by sharedWallpaperViewModel.wallpaperList.collectAsStateWithLifecycle()
     val index by sharedWallpaperViewModel.selectedWallpaperIndex.collectAsStateWithLifecycle()
     val favouriteList by actionViewModel.getAllFavourites.collectAsStateWithLifecycle()
+    var canShowDialog by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
 
 
     val imageLoader = koinInject<ImageLoader>()
-    val pagerState = rememberPagerState(initialPage = if (index != -1) index else 0) { if (isFromFavourite) favouriteList.size else wallpapers.size }
+    val pagerState = rememberPagerState(initialPage = if (index != -1) index else 0)
+    { if (isFromFavourite) favouriteList.size else wallpapers.size }
 
     var canShowList by remember { mutableStateOf(false) }
     var isFavourite by remember { mutableStateOf(false) }
@@ -75,7 +81,7 @@ fun WallpaperDetailScreen(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 20.dp),
-                key = { if (isFavourite) "${favouriteList[it].id}_$it" else "${wallpapers[it].id}_$it" },
+                key = { if (isFavourite) "${favouriteList[it].id}_wallpaper" else "${wallpapers[it].id}__wallpaper" },
             ) { page ->
 
 
@@ -86,29 +92,38 @@ fun WallpaperDetailScreen(
                 }
 
                 SinglePageContent(
-                    wallpaperUrl = if (isFromFavourite) favouriteList[page].wallpaper else wallpapers[page].wallpaperSource.portrait,
-                    imageLoader = imageLoader,
-                    pagerState, page
+                    wallpaperUrl = if (isFromFavourite) favouriteList[page].wallpaper else wallpapers[page].wallpaperSource.portrait, imageLoader = imageLoader, pagerState, page
                 )
             }
 
 
-            ActionButtons(isFavourite = isFavourite,
-                onDownload = {
-                    actionViewModel.downloadWallpaper(url = if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper else wallpapers[pagerState.currentPage].wallpaperSource.portrait)
-                    Toast.makeText(context, context.getString(R.string.downloading), Toast.LENGTH_SHORT).show()
-                }, onApply = {},
-                onFavourite = {
+            ActionButtons(isFavourite = isFavourite, onDownload = {
+                downloadWallpaper(actionViewModel, isFromFavourite, favouriteList, pagerState, wallpapers, context)
+            }, onApply = {
+                canShowDialog = true
+            }, onFavourite = {
 
-                    val wallpaper = wallpapers[pagerState.currentPage]
-                    actionViewModel.addOrRemove(wallpaper = wallpaper)
-                    isFavourite = favouriteList.any { it.id == wallpaper.id }
-                })
+                val wallpaper = wallpapers[pagerState.currentPage]
+                actionViewModel.addOrRemove(wallpaper = wallpaper)
+                isFavourite = favouriteList.any { it.id == wallpaper.id }
+            })
         }
 
+        if (canShowDialog)
+            WallpaperApplyDialog(onDismissRequest = { canShowDialog = false })
 
     }
 
+}
+
+private fun downloadWallpaper(
+    actionViewModel: ActionViewModel, isFromFavourite: Boolean, favouriteList: List<FavouriteWallpaper>, pagerState: PagerState, wallpapers: List<Wallpaper>, context: Context
+) {
+    actionViewModel.downloadWallpaper(
+        url = if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper
+        else wallpapers[pagerState.currentPage].wallpaperSource.portrait
+    )
+    Toast.makeText(context, context.getString(R.string.downloading), Toast.LENGTH_SHORT).show()
 }
 
 

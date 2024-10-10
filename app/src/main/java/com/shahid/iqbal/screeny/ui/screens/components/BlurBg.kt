@@ -14,16 +14,15 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun BlurBg(wallpaperUrl:String) {
+fun BlurBg(wallpaperUrl: String) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(wallpaperUrl)
-            .crossfade(true).transformations(BlurTransformation(scale = 0.5f, radius = 15)).build(),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
+            .crossfade(true)
+            .transformations(BlurTransformation(scale = 0.5f, radius = 15))
+            .build(), contentDescription = null, contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxSize()
     )
-
 
     Box(
         modifier = Modifier

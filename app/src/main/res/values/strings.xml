@@ -8,4 +8,9 @@
     <string name="download">Download</string>
     <string name="downloading_wallpaper">Downloading Wallpaper</string>
     <string name="downloading">Downloading</string>
+    <string name="set_as_home_screen">Set on home screen</string>
+    <string name="set_as_lock_screen">Set on lock screen</string>
+    <string name="set_as_both">Set on both screen</string>
+    <string name="wallpaper_dialog_title">What would you like to do?</string>
+    <string name="cancel">Cancel</string>
 </resources>
