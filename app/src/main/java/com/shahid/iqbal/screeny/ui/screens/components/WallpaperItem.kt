@@ -1,5 +1,6 @@
 package com.shahid.iqbal.screeny.ui.screens.components
 
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ fun WallpaperItem(
     wallpaper: String,
     imageLoader: ImageLoader,
     modifier: Modifier = Modifier,
+    getDrawable:( (Drawable) -> Unit)? = null,
     onWallpaperClick: () -> Unit = {}
 ) {
 
@@ -33,7 +35,12 @@ fun WallpaperItem(
         contentDescription = null,
         contentScale = ContentScale.Crop,
         imageLoader = imageLoader,
-        onSuccess = { showShimmer = false },
+        onSuccess = { success ->
+            showShimmer = false
+            val drawable = success.result.drawable
+            getDrawable?.invoke(drawable)
+
+        },
         modifier = modifier
             .background(
                 shimmerBrush(targetValue = 1300f, showShimmer = showShimmer), shape = RoundedCornerShape(10.dp)
@@ -42,6 +49,7 @@ fun WallpaperItem(
             .height(200.dp)
             .fillMaxWidth()
             .clickable { onWallpaperClick() }
+
     )
 
 }

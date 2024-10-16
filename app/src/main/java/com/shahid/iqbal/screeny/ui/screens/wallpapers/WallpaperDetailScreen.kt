@@ -37,14 +37,17 @@ import org.koin.compose.koinInject
 
 @Composable
 fun WallpaperDetailScreen(
-    sharedWallpaperViewModel: SharedWallpaperViewModel, isFromFavourite: Boolean = false
+    sharedWallpaperViewModel: SharedWallpaperViewModel,
+    actionViewModel: ActionViewModel = koinViewModel(),
+    isFromFavourite: Boolean = false
 ) {
 
-    val actionViewModel = koinViewModel<ActionViewModel>()
 
     val wallpapers by sharedWallpaperViewModel.wallpaperList.collectAsStateWithLifecycle()
     val index by sharedWallpaperViewModel.selectedWallpaperIndex.collectAsStateWithLifecycle()
     val favouriteList by actionViewModel.getAllFavourites.collectAsStateWithLifecycle()
+    val currentlyLoadedWallpaper by sharedWallpaperViewModel.currentWallpaper.collectAsStateWithLifecycle(initialValue = null)
+
     var canShowDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
@@ -81,7 +84,7 @@ fun WallpaperDetailScreen(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 20.dp),
-                key = { if (isFavourite) "${favouriteList[it].id}_wallpaper" else "${wallpapers[it].id}__wallpaper" },
+                key = { if (isFavourite) (favouriteList.getOrNull(it)?.id ?: 0) else wallpapers.getOrNull(it)?.id ?: 0 },
             ) { page ->
 
 
@@ -92,7 +95,11 @@ fun WallpaperDetailScreen(
                 }
 
                 SinglePageContent(
-                    wallpaperUrl = if (isFromFavourite) favouriteList[page].wallpaper else wallpapers[page].wallpaperSource.portrait, imageLoader = imageLoader, pagerState, page
+                    wallpaperUrl = if (isFromFavourite) favouriteList[page].wallpaper else wallpapers[page].wallpaperSource.portrait,
+                    imageLoader = imageLoader,
+                    pagerState,
+                    page,
+                    sharedWallpaperViewModel
                 )
             }
 
@@ -110,14 +117,19 @@ fun WallpaperDetailScreen(
         }
 
         if (canShowDialog)
-            WallpaperApplyDialog(onDismissRequest = { canShowDialog = false })
+            WallpaperApplyDialog(wallpaper = currentlyLoadedWallpaper,onDismissRequest = { canShowDialog = false })
 
     }
 
 }
 
 private fun downloadWallpaper(
-    actionViewModel: ActionViewModel, isFromFavourite: Boolean, favouriteList: List<FavouriteWallpaper>, pagerState: PagerState, wallpapers: List<Wallpaper>, context: Context
+    actionViewModel: ActionViewModel,
+    isFromFavourite: Boolean,
+    favouriteList: List<FavouriteWallpaper>,
+    pagerState: PagerState,
+    wallpapers: List<Wallpaper>,
+    context: Context
 ) {
     actionViewModel.downloadWallpaper(
         url = if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper

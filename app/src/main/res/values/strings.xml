@@ -13,4 +13,6 @@
     <string name="set_as_both">Set on both screen</string>
     <string name="wallpaper_dialog_title">What would you like to do?</string>
     <string name="cancel">Cancel</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="wallpaper_set_successfully">Wallpaper set successfully!</string>
 </resources>
