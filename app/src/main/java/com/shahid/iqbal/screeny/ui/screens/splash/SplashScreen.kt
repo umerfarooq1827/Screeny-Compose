@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.ui.screens.components.SplashProgressBar
-import com.shahid.iqbal.screeny.ui.theme.SplashColor
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
 import org.koin.androidx.compose.koinViewModel
 
@@ -45,9 +45,9 @@ fun SplashScreen(
 
     val splashTitle = remember {
         buildAnnotatedString {
-            pushStyle(SpanStyle(fontWeight = FontWeight.Bold, fontSize = 29.sp, color = Color.White, fontFamily = screenyFontFamily))
+            pushStyle(SpanStyle(fontWeight = FontWeight.Bold, fontSize = 29.sp, fontFamily = screenyFontFamily))
             append(context.getString(R.string.app_name))
-            pushStyle(SpanStyle(fontWeight = FontWeight.Light, fontSize = 24.sp, color = Color.White, fontFamily = screenyFontFamily))
+            pushStyle(SpanStyle(fontWeight = FontWeight.Light, fontSize = 24.sp, fontFamily = screenyFontFamily))
             append(" Wallpaper")
         }
     }
@@ -66,7 +66,7 @@ fun SplashScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(SplashColor), verticalArrangement = Arrangement.Center,
+            .background(MaterialTheme.colorScheme.background), verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -80,7 +80,7 @@ fun SplashScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Text(text = splashTitle)
+        Text(text = splashTitle, color = MaterialTheme.colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(20.dp))
 
