@@ -51,10 +51,12 @@ import kotlin.system.exitProcess
 @Composable
 fun ScreenyApp() {
 
+
     val navController = rememberNavController()
     var canShowBottomBar by rememberSaveable { mutableStateOf(false) }
     var canShowTopBar by rememberSaveable { mutableStateOf(false) }
     val stackEntry by navController.currentBackStackEntryAsState()
+
     val wallpaperViewModel: WallpaperViewModel = koinViewModel()
 
     val sharedWallpaperViewModel = koinViewModel<SharedWallpaperViewModel>()
@@ -122,7 +124,8 @@ fun ScreenyApp() {
             composable<Routs.CategoryDetail> { backStackEntry ->
                 val categoryDetail: Routs.CategoryDetail = backStackEntry.toRoute()
                 val categoryViewModel = koinViewModel<CategoryViewModel>()
-                CategoryDetailScreen(categoryDetail.query, categoryViewModel, onBackClick = { navController.navigateUp() }, onWallpaperClick = { index, list ->
+                CategoryDetailScreen(categoryDetail.query, categoryViewModel,
+                    onBackClick = { navController.navigateUp() }, onWallpaperClick = { index, list ->
                     wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
                 })
             }

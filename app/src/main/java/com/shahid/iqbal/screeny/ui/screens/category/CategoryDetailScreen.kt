@@ -2,6 +2,7 @@ package com.shahid.iqbal.screeny.ui.screens.category
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -9,18 +10,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,6 +34,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.models.Wallpaper
+import com.shahid.iqbal.screeny.ui.screens.components.Footer
 import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
@@ -45,7 +52,9 @@ fun CategoryDetailScreen(
     val imageLoader: ImageLoader = koinInject()
 
     Column(
-        modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         ToolBar(title = title, onBackClick = onBackClick)
@@ -63,21 +72,25 @@ fun CategoryDetailScreen(
                 items(20) {
                     LoadingPlaceHolder(modifier = Modifier.height(200.dp))
                 }
-            } else {
-                items(wallpapers.itemCount, key = { wallpapers[it]?.id ?: wallpapers.hashCode() }) { index ->
-                    if (index < wallpapers.itemCount) {
-                        val wallpaper = wallpapers[index]
-                        if (wallpaper != null) {
-                            WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
-                                onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items)
-                            }
+            }
+
+            items(wallpapers.itemCount,
+                key = { "${wallpapers[it]?.id}_$it" }) { index ->
+                if (index < wallpapers.itemCount) {
+                    val wallpaper = wallpapers[index]
+                    if (wallpaper != null) {
+                        WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
+                            onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items)
                         }
                     }
                 }
             }
 
+            if (wallpapers.loadState.append == LoadState.Loading)
+                item(span = { GridItemSpan(this.maxLineSpan) }) {
+                    Footer()
+                }
         }
-
     }
 }
 

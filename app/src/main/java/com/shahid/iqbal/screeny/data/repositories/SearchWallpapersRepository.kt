@@ -11,12 +11,12 @@ import kotlinx.coroutines.flow.Flow
 
 class SearchWallpapersRepository(private val api: PexelWallpapersApi) {
 
-    fun getSearchWallpapers(query: String): Flow<PagingData<Wallpaper>> {
+    fun getSearchWallpapers(query: String): Pager<Int, Wallpaper> {
 
         val pageConfig = PagingConfig(pageSize = Constant.PER_PAGE_ITEMS)
         return Pager(
             config = pageConfig,
             pagingSourceFactory = { SearchWallpapersPagingSource(api, query) },
-        ).flow
+        )
     }
 }

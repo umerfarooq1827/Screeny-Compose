@@ -23,7 +23,8 @@ class WallpaperDownloader(private val context: Context) : Downloader {
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setTitle(context.getString(R.string.downloading_wallpaper))
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, "Screeny/${System.currentTimeMillis()}.png")
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES,
+                "Screeny/${System.currentTimeMillis()}.png")
             .setAllowedOverMetered(true)
 
         downloadManager.enqueue(request)
