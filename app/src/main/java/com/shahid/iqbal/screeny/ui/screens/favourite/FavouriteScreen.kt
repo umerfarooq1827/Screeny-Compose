@@ -33,7 +33,7 @@ fun FavouriteScreen(modifier: Modifier = Modifier) {
     ) {
 
         items(favourites, key = { favourite -> favourite.timeStamp }) { favourite ->
-            WallpaperItem(wallpaper = favourite.wallpaper, imageLoader, getDrawable = {})
+            WallpaperItem(wallpaper = favourite.wallpaper, imageLoader)
         }
 
     }

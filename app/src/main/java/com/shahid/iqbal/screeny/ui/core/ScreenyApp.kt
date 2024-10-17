@@ -85,8 +85,7 @@ fun ScreenyApp() {
     }) { innerPadding ->
 
         NavHost(
-            navController,
-            startDestination = Splash,
+            navController, startDestination = Splash,
             Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -100,10 +99,7 @@ fun ScreenyApp() {
             }
 
             composable<Home> {
-                HomeScreen(
-                    wallpaperViewModel,
-                    onWallpaperClick = { index, list -> wallpaperCLick(index, list, sharedWallpaperViewModel, navController) },
-                    onBack = { exitProcess(0) })
+                HomeScreen(wallpaperViewModel, onWallpaperClick = { index, list -> wallpaperCLick(index, list, sharedWallpaperViewModel, navController) }, onBack = { exitProcess(0) })
             }
 
             composable<Categories> {
@@ -124,14 +120,16 @@ fun ScreenyApp() {
             composable<Routs.CategoryDetail> { backStackEntry ->
                 val categoryDetail: Routs.CategoryDetail = backStackEntry.toRoute()
                 val categoryViewModel = koinViewModel<CategoryViewModel>()
-                CategoryDetailScreen(categoryDetail.query, categoryViewModel,
-                    onBackClick = { navController.navigateUp() }, onWallpaperClick = { index, list ->
+                CategoryDetailScreen(categoryDetail.query, categoryViewModel, onBackClick = { navController.navigateUp() }, onWallpaperClick = { index, list ->
                     wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
                 })
             }
 
             composable<Routs.SearchedWallpaper> {
-                SearchedWallpaperScreen(navController)
+                SearchedWallpaperScreen(onNavigateBack = { navController.navigateUp() },
+                    onWallpaperClick = { index, list ->
+                        wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
+                    })
             }
 
             composable<Routs.WallpaperDetail> {
@@ -144,7 +142,10 @@ fun ScreenyApp() {
 }
 
 private fun wallpaperCLick(
-    index: Int, list: List<Wallpaper>, sharedWallpaperViewModel: SharedWallpaperViewModel, navController: NavHostController
+    index: Int,
+    list: List<Wallpaper>,
+    sharedWallpaperViewModel: SharedWallpaperViewModel,
+    navController: NavHostController
 ) {
     sharedWallpaperViewModel.updateWallpaperList(list)
     sharedWallpaperViewModel.updateSelectedWallpaper(list[index])

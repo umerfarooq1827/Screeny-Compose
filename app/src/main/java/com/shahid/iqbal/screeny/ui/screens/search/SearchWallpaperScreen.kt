@@ -37,17 +37,19 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -64,20 +66,27 @@ import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchedWallpaperScreen(navController: NavController) {
+fun SearchedWallpaperScreen(
+    onNavigateBack: () -> Unit,
+    onWallpaperClick: (Int, List<Wallpaper>) -> Unit,
+) {
 
     val imageLoader = koinInject<ImageLoader>()
-    var text by rememberSaveable { mutableStateOf("") }
-    var expanded by rememberSaveable { mutableStateOf(true) }
     val searchViewModel = koinViewModel<SearchViewModel>()
+
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var isExpanded by rememberSaveable { mutableStateOf(true) }
+
     val recentSearches by searchViewModel.recentSearches.collectAsStateWithLifecycle()
-    val searchedWallpapers = searchViewModel.searchWallpapers(text).collectAsLazyPagingItems()
+    val searchedWallpapers = searchViewModel.searchWallpapers(searchQuery).collectAsLazyPagingItems()
+
     val localKeyboard = LocalSoftwareKeyboardController.current
     val localFocusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
 
     ) {
 
@@ -85,91 +94,84 @@ fun SearchedWallpaperScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(horizontal = if (!expanded) 20.dp else 0.dp),
-            windowInsets = if (expanded) {
+                .padding(horizontal = if (!isExpanded) 20.dp else 0.dp),
+            windowInsets = if (isExpanded) {
                 WindowInsets(0.dp)
             } else {
                 WindowInsets(top = 20.dp)
             },
             inputField = {
-                InputField(
-                    query = text,
-                    onQueryChange = { text = it },
-                    onSearch = {
-                        expanded = false
-                        searchViewModel.saveRecentSearch(text)
+                InputField(query = searchQuery, onQueryChange = { searchQuery = it }, onSearch = {
+                    if (searchQuery.isNotEmpty() && searchQuery.length >= 3) {
+                        isExpanded = false
+                        searchViewModel.saveRecentSearch(searchQuery)
                         localKeyboard?.hide()
                         localFocusManager.clearFocus(true)
-                    },
-                    expanded = false,
-                    onExpandedChange = { expanded = it },
-                    placeholder = {
-                        Text(
-                            stringResource(id = R.string.search_wallpaper),
-                        )
-                    },
-                    leadingIcon = {
-                        if (!expanded) Icon(
-                            Icons.Default.Search, contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
-                        ) else
-                            Icon(
-                                Icons.AutoMirrored.Default.ArrowBack, contentDescription = null,
-                                modifier = Modifier.clickable {
-                                    text = ""
-                                    expanded = false
-                                    navController.navigateUp()
-                                }, tint = MaterialTheme.colorScheme.onSurface
-                            )
-                    },
-                    trailingIcon = {
-                        if (text.isNotEmpty())
-                            Icon(
-                                Icons.Default.Clear, contentDescription = null,
-                                modifier =
-                                Modifier.clickable { text = "" },
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
-                    },
+                    }
+                }, expanded = false, onExpandedChange = { isExpanded = it }, placeholder = {
+                    Text(
+                        stringResource(id = R.string.search_wallpaper),
+                    )
+                }, leadingIcon = {
+                    if (!isExpanded) Icon(
+                        Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface
+                    ) else Icon(
+                        Icons.AutoMirrored.Default.ArrowBack, contentDescription = null, modifier = Modifier.clickable {
+                            searchQuery = ""
+                            isExpanded = false
+                            onNavigateBack()
+                        }, tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }, trailingIcon = {
+                    if (searchQuery.isNotEmpty() && isExpanded) Icon(
+                        Icons.Default.Clear, contentDescription = null, modifier = Modifier.clickable { searchQuery = "" }, tint = MaterialTheme.colorScheme.onSurface
+                    )
+                },
 
 
-                    modifier = if (expanded) {
+                    modifier = if (isExpanded) {
                         Modifier
                             .animateContentSize(spring(stiffness = Spring.StiffnessHigh))
+                            .focusRequester(focusRequester)
                     } else {
                         Modifier
                             .fillMaxWidth()
                             .animateContentSize(spring(stiffness = Spring.StiffnessHigh))
-                    },
-                    colors = TextFieldDefaults.colors(
+                            .focusRequester(focusRequester)
+                    }, colors = TextFieldDefaults.colors(
                         focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
             },
-            expanded = expanded,
-            onExpandedChange = { expanded = it },
+            expanded = isExpanded,
+            onExpandedChange = { isExpanded = it },
             colors = SearchBarDefaults.colors(
-                containerColor = if (expanded) {
+                containerColor = if (isExpanded) {
                     MaterialTheme.colorScheme.background
                 } else {
                     MaterialTheme.colorScheme.surfaceContainerHigh
-                },
-                dividerColor = MaterialTheme.colorScheme.outline
+                }, dividerColor = MaterialTheme.colorScheme.outline
             ),
             tonalElevation = 0.dp,
-        )
-        {
-            RecentSearches(searchViewModel, recentSearches)
+        ) {
+            RecentSearches(searchViewModel, recentSearches, onRecentItemClick = {
+                searchQuery = it
+                localKeyboard?.show()
+                focusRequester.requestFocus()
+
+            })
         }
 
         Spacer(modifier = Modifier.height(20.dp))
-        ShowWallpapers(searchedWallpapers, imageLoader)
+        ShowWallpapers(searchedWallpapers, imageLoader, onWallpaperClick)
     }
 }
 
 
 @Composable
-private fun RecentSearches(searchViewModel: SearchViewModel, recentSearches: List<RecentSearch>) {
+private fun RecentSearches(
+    searchViewModel: SearchViewModel, recentSearches: List<RecentSearch>, onRecentItemClick: (String) -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -183,11 +185,7 @@ private fun RecentSearches(searchViewModel: SearchViewModel, recentSearches: Lis
                 horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = stringResource(id = R.string.recent_searchs), fontFamily = screenyFontFamily,
-                    style = MaterialTheme.typography.titleMedium
-                        .copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
-                    modifier = Modifier
-                        .weight(1f)
+                    text = stringResource(id = R.string.recent_searchs), fontFamily = screenyFontFamily, style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier.weight(1f)
                 )
 
                 TextButton(onClick = { searchViewModel.clearAllRecent() }) {
@@ -200,21 +198,20 @@ private fun RecentSearches(searchViewModel: SearchViewModel, recentSearches: Lis
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(vertical = 10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(15.dp)
+                .padding(vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
 
-
             items(recentSearches) {
-                SingleRecentItem(recentSearch = it)
+                SingleRecentItem(recentSearch = it) { onRecentItemClick(it.query) }
             }
         }
     }
 }
 
 @Composable
-fun ShowWallpapers(wallpapers: LazyPagingItems<Wallpaper>, imageLoader: ImageLoader) {
+fun ShowWallpapers(
+    wallpapers: LazyPagingItems<Wallpaper>, imageLoader: ImageLoader, onWallpaperClick: (indexOf: Int, items: List<Wallpaper>) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(10.dp),
@@ -229,44 +226,37 @@ fun ShowWallpapers(wallpapers: LazyPagingItems<Wallpaper>, imageLoader: ImageLoa
             }
         }
 
-        items(wallpapers.itemCount,
-            key = { "${wallpapers[it]?.id}_$it" }) { index ->
+        items(wallpapers.itemCount, key = { "${wallpapers[it]?.id}_$it" }) { index ->
             if (index < wallpapers.itemCount) {
                 val wallpaper = wallpapers[index]
                 if (wallpaper != null) {
                     WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
-                        // onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items)
+                        onWallpaperClick(
+                            wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items
+                        )
                     }
                 }
             }
         }
 
-        if (wallpapers.loadState.append == LoadState.Loading)
-            item(span = { GridItemSpan(this.maxLineSpan) }) {
-                Footer()
-            }
+        if (wallpapers.loadState.append == LoadState.Loading) item(span = { GridItemSpan(this.maxLineSpan) }) {
+            Footer()
+        }
     }
 }
 
+
 @Composable
-fun SingleRecentItem(recentSearch: RecentSearch) {
+fun SingleRecentItem(recentSearch: RecentSearch, onClick: () -> Unit) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.history),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
+            painter = painterResource(id = R.drawable.history), contentDescription = null, tint = MaterialTheme.colorScheme.primary
         )
-        Text(
-            text = recentSearch.query, fontFamily = screenyFontFamily,
-            style = MaterialTheme.typography.titleMedium
-                .copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 10.dp)
-        )
+        Text(text = recentSearch.query, fontFamily = screenyFontFamily, style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier
+            .weight(1f)
+            .padding(horizontal = 10.dp)
+            .clickable { onClick() })
     }
 }
