@@ -17,6 +17,9 @@ interface RecentSearchDao {
     @Delete
     suspend fun removeRecent(recentSearch: RecentSearch)
 
+    @Query("DELETE FROM recent_search")
+    suspend fun clearAllRecent()
+
     @Query("SELECT * FROM recent_search order by date desc")
      fun getRecentSearches(): Flow<List<RecentSearch>>
 }

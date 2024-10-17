@@ -18,6 +18,11 @@ class SearchViewModel(
     val recentSearches = repo.recentSearches
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
+    fun searchWallpapers(query: String) =
+        searchRepo.getSearchWallpapers(query)
+            .flow
+            .cachedIn(viewModelScope)
+
 
     fun saveRecentSearch(query: String) {
         viewModelScope.launch {
@@ -28,6 +33,12 @@ class SearchViewModel(
     fun removeRecentSearch(query: String) {
         viewModelScope.launch {
             repo.removeRecent(RecentSearch(query))
+        }
+    }
+
+    fun clearAllRecent() {
+        viewModelScope.launch {
+            repo.clearAllRecent()
         }
     }
 

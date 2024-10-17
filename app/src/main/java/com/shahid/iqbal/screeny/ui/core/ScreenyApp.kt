@@ -131,7 +131,7 @@ fun ScreenyApp() {
             }
 
             composable<Routs.SearchedWallpaper> {
-                SearchedWallpaperScreen()
+                SearchedWallpaperScreen(navController)
             }
 
             composable<Routs.WallpaperDetail> {

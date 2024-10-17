@@ -14,12 +14,16 @@ class RecentSearchRepository(private val dao: RecentSearchDao) {
 
         val searchList = dao.getRecentSearches().firstOrNull()
 
-        if (searchList != null && searchList.size >= 20){
+        if (searchList != null && searchList.size >= 20) {
             dao.removeRecent(searchList.last())
             dao.saveRecent(recentSearch)
-        }else {
+        } else {
             dao.saveRecent(recentSearch)
         }
+    }
+
+    suspend fun clearAllRecent() = withContext(Dispatchers.IO) {
+        dao.clearAllRecent()
     }
 
     suspend fun removeRecent(recentSearch: RecentSearch) = withContext(Dispatchers.IO) {
