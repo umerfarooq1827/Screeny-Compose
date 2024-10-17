@@ -1,8 +1,5 @@
 package com.shahid.iqbal.screeny.ui.core
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -41,7 +38,6 @@ import com.shahid.iqbal.screeny.ui.screens.home.WallpaperViewModel
 import com.shahid.iqbal.screeny.ui.screens.search.SearchedWallpaperScreen
 import com.shahid.iqbal.screeny.ui.screens.settings.SettingScreen
 import com.shahid.iqbal.screeny.ui.screens.splash.SplashScreen
-import com.shahid.iqbal.screeny.ui.screens.splash.SplashViewModel
 import com.shahid.iqbal.screeny.ui.screens.wallpapers.WallpaperDetailScreen
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -99,7 +95,11 @@ fun ScreenyApp() {
             }
 
             composable<Home> {
-                HomeScreen(wallpaperViewModel, onWallpaperClick = { index, list -> wallpaperCLick(index, list, sharedWallpaperViewModel, navController) }, onBack = { exitProcess(0) })
+                HomeScreen(
+                    wallpaperViewModel,
+                    onWallpaperClick = { index, list -> wallpaperCLick(index, list, sharedWallpaperViewModel, navController) },
+                    onBack = { exitProcess(0) }
+                )
             }
 
             composable<Categories> {
@@ -120,9 +120,11 @@ fun ScreenyApp() {
             composable<Routs.CategoryDetail> { backStackEntry ->
                 val categoryDetail: Routs.CategoryDetail = backStackEntry.toRoute()
                 val categoryViewModel = koinViewModel<CategoryViewModel>()
-                CategoryDetailScreen(categoryDetail.query, categoryViewModel, onBackClick = { navController.navigateUp() }, onWallpaperClick = { index, list ->
-                    wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
-                })
+                CategoryDetailScreen(categoryDetail.query, categoryViewModel,
+                    onBackClick = { navController.navigateUp() },
+                    onWallpaperClick = { index, list ->
+                        wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
+                    })
             }
 
             composable<Routs.SearchedWallpaper> {

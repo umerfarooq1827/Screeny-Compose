@@ -12,6 +12,7 @@ ktor = "2.3.12"
 roomVersion = "2.6.1"
 pager3Version = "3.3.2"
 composeNavigationVersion = "2.8.1"
+materialVersion = "1.12.0"
 
 
 [libraries]
