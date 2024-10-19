@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.routs.Routs
@@ -54,6 +55,8 @@ fun ScreenyApp() {
     val stackEntry by navController.currentBackStackEntryAsState()
 
     val wallpaperViewModel: WallpaperViewModel = koinViewModel()
+    val wallpapers = wallpaperViewModel.getAllWallpapers.collectAsLazyPagingItems()
+
     val sharedWallpaperViewModel: SharedWallpaperViewModel = koinViewModel()
     val context = LocalContext.current
 
@@ -95,11 +98,12 @@ fun ScreenyApp() {
 
             composable<Home> {
                 HomeScreen(
-                    wallpaperViewModel,
+                    wallpapers,
                     onWallpaperClick = { index, list ->
-                        wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
+                        wallpaperCLick(index, list, sharedWallpaperViewModel,
+                            navController)
                     },
-                    onBack = { exitProcess(0) }
+                    onBack = { }
                 )
             }
 

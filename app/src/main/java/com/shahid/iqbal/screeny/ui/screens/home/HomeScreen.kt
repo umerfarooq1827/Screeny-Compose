@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.models.Wallpaper
@@ -43,25 +44,15 @@ import kotlin.uuid.Uuid
 
 @Composable
 fun HomeScreen(
-    wallpaperViewModel: WallpaperViewModel,
+    wallpapers:LazyPagingItems<Wallpaper>,
     modifier: Modifier = Modifier,
     onWallpaperClick: (Int, List<Wallpaper>) -> Unit,
     onBack: () -> Unit
 ) {
 
-    val wallpapers = wallpaperViewModel
-        .getAllWallpapers
-        .collectAsLazyPagingItems()
-
     val imageLoader: ImageLoader = koinInject()
 
-
-
-
     BackHandler { onBack() }
-
-
-
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
