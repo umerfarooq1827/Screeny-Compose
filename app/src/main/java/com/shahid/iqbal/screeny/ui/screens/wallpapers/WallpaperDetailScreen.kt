@@ -3,6 +3,7 @@ package com.shahid.iqbal.screeny.ui.screens.wallpapers
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -78,13 +79,17 @@ fun WallpaperDetailScreen(
 
         Box(contentAlignment = Alignment.BottomCenter) {
 
-            BlurBg(if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper else wallpapers[pagerState.currentPage].wallpaperSource.small)
+            BlurBg(
+                if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper
+                else wallpapers[pagerState.currentPage].wallpaperSource.small
+            )
 
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 20.dp),
-                key = { if (isFavourite) (favouriteList.getOrNull(it)?.id ?: 0) else wallpapers.getOrNull(it)?.id ?: 0 },
+                beyondViewportPageCount = 3,
+                key = { if (isFromFavourite) favouriteList[it].id  else wallpapers[it].id},
             ) { page ->
 
 
@@ -110,14 +115,14 @@ fun WallpaperDetailScreen(
                 canShowDialog = true
             }, onFavourite = {
 
-                val wallpaper = wallpapers[pagerState.currentPage]
+                val wallpaper = wallpapers[pagerState.settledPage]
                 actionViewModel.addOrRemove(wallpaper = wallpaper)
                 isFavourite = favouriteList.any { it.id == wallpaper.id }
             })
         }
 
         if (canShowDialog)
-            WallpaperApplyDialog(wallpaper = currentlyLoadedWallpaper,onDismissRequest = { canShowDialog = false })
+            WallpaperApplyDialog(wallpaper = currentlyLoadedWallpaper, onDismissRequest = { canShowDialog = false })
 
     }
 

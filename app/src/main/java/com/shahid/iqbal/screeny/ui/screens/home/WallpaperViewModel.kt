@@ -14,5 +14,5 @@ class WallpaperViewModel(private val repo: WallpaperRepository) : ViewModel() {
     val getAllWallpapers
         get() = repo.getAllWallpapers()
             .flow
-
+            .cachedIn(viewModelScope)
 }

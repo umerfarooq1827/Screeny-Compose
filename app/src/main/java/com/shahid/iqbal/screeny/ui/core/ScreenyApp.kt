@@ -54,8 +54,7 @@ fun ScreenyApp() {
     val stackEntry by navController.currentBackStackEntryAsState()
 
     val wallpaperViewModel: WallpaperViewModel = koinViewModel()
-
-    val sharedWallpaperViewModel = koinViewModel<SharedWallpaperViewModel>()
+    val sharedWallpaperViewModel: SharedWallpaperViewModel = koinViewModel()
     val context = LocalContext.current
 
 
@@ -97,7 +96,9 @@ fun ScreenyApp() {
             composable<Home> {
                 HomeScreen(
                     wallpaperViewModel,
-                    onWallpaperClick = { index, list -> wallpaperCLick(index, list, sharedWallpaperViewModel, navController) },
+                    onWallpaperClick = { index, list ->
+                        wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
+                    },
                     onBack = { exitProcess(0) }
                 )
             }

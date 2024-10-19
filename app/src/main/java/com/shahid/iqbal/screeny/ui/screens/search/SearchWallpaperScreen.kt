@@ -57,6 +57,7 @@ import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.models.RecentSearch
 import com.shahid.iqbal.screeny.models.Wallpaper
+import com.shahid.iqbal.screeny.ui.core.MainActivity
 import com.shahid.iqbal.screeny.ui.screens.components.Footer
 import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
@@ -113,7 +114,7 @@ fun SearchedWallpaperScreen(
                         stringResource(id = R.string.search_wallpaper),
                     )
                 }, leadingIcon = {
-                    if (!isExpanded) Icon(
+                    if (searchQuery.isEmpty() && !isExpanded) Icon(
                         Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface
                     ) else Icon(
                         Icons.AutoMirrored.Default.ArrowBack, contentDescription = null, modifier = Modifier.clickable {
@@ -123,8 +124,12 @@ fun SearchedWallpaperScreen(
                         }, tint = MaterialTheme.colorScheme.onSurface
                     )
                 }, trailingIcon = {
-                    if (searchQuery.isNotEmpty() && isExpanded) Icon(
-                        Icons.Default.Clear, contentDescription = null, modifier = Modifier.clickable { searchQuery = "" }, tint = MaterialTheme.colorScheme.onSurface
+                    if (searchQuery.isNotEmpty()) Icon(
+                        Icons.Default.Clear, contentDescription = null,
+                        modifier = Modifier.clickable {
+                            searchQuery = ""
+                            isExpanded = true
+                        }, tint = if (isExpanded) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
                 },
 
@@ -154,12 +159,12 @@ fun SearchedWallpaperScreen(
             ),
             tonalElevation = 0.dp,
         ) {
-            RecentSearches(searchViewModel, recentSearches, onRecentItemClick = {
-                searchQuery = it
-                localKeyboard?.show()
-                focusRequester.requestFocus()
-
-            })
+            RecentSearches(searchViewModel, recentSearches,
+                onRecentItemClick = {
+                    searchQuery = it
+                    localKeyboard?.show()
+                    focusRequester.requestFocus()
+                })
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -185,7 +190,9 @@ private fun RecentSearches(
                 horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = stringResource(id = R.string.recent_searchs), fontFamily = screenyFontFamily, style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier.weight(1f)
+                    text = stringResource(id = R.string.recent_searchs),
+                    fontFamily = screenyFontFamily,
+                    style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier.weight(1f)
                 )
 
                 TextButton(onClick = { searchViewModel.clearAllRecent() }) {
@@ -232,7 +239,8 @@ fun ShowWallpapers(
                 if (wallpaper != null) {
                     WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
                         onWallpaperClick(
-                            wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items
+                            wallpapers.itemSnapshotList.items.indexOf(wallpaper),
+                            wallpapers.itemSnapshotList.items
                         )
                     }
                 }

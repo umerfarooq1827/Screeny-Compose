@@ -13,14 +13,13 @@ class SearchWallpapersPagingSource(private val api: PexelWallpapersApi, private 
             val position = params.key ?: 1
             val response = api.searchWallpaper(position, query)
             LoadResult.Page(
-                data = response.wallpapers,
+                data = response.wallpapers.sortedBy { it.id },
                 prevKey = if (response.prevPage == null) null else position - 1,
                 nextKey = if (response.nextPage == null) null else position + 1
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
-
     }
 
     override fun getRefreshKey(state: PagingState<Int, Wallpaper>): Int? {

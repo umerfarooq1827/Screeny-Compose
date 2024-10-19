@@ -71,7 +71,9 @@ class PexelWallpaperRemoteMediator(
                         WallpaperRemoteKeys(wallpaperId = wallpaper.id, prevPage, nextPage, page)
                     }
                     remoteKeysDao.addAllRemoteKeys(remoteKeys = keys)
-                    wallpaperDao.addWallpapers(response.wallpapers.onEachIndexed { index, wallpaper -> wallpaper.page = page })
+                    wallpaperDao.addWallpapers(response.wallpapers
+                        .onEachIndexed { index, wallpaper -> wallpaper.page = page }
+                    )
                 }
                 MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
             } catch (e: Exception) {

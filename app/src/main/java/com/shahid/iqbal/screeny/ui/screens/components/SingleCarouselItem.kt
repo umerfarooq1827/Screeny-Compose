@@ -15,6 +15,7 @@ import androidx.compose.ui.util.lerp
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
+import com.shahid.iqbal.screeny.utils.Extensions.debug
 import kotlin.math.absoluteValue
 
 @Composable
@@ -47,11 +48,17 @@ fun SinglePageContent(
 
 @Composable
 private fun Modifier.carouselTransition(page: Int, pagerState: PagerState) = graphicsLayer {
-    val pageOffset = ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue
+    try {
+        val pageOffset = ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue
 
-    val transformation = lerp(
-        start = 0.7f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
-    )
-    alpha = transformation
-    scaleY = transformation
+        val transformation = lerp(
+            start = 0.7f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
+        )
+        alpha = transformation
+        scaleY = transformation
+    } catch (e: Exception) {
+        e.debug()
+    } catch (e: java.lang.Exception) {
+        e.debug()
+    }
 }
