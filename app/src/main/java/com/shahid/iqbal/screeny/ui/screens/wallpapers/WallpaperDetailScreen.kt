@@ -62,7 +62,7 @@ fun WallpaperDetailScreen(
     var isFavourite by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = canShowList) {
-        delay(300)
+        delay(100)
         canShowList = true
     }
 
@@ -89,7 +89,7 @@ fun WallpaperDetailScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 20.dp),
                 beyondViewportPageCount = 3,
-                key = { if (isFromFavourite) favouriteList[it].id  else wallpapers[it].id},
+                key = { if (isFromFavourite) favouriteList[it].id else wallpapers[it].id },
             ) { page ->
 
 
