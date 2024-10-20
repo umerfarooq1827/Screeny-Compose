@@ -36,6 +36,7 @@ import com.shahid.iqbal.screeny.ui.screens.components.TopBar
 import com.shahid.iqbal.screeny.ui.screens.favourite.FavouriteScreen
 import com.shahid.iqbal.screeny.ui.screens.home.HomeScreen
 import com.shahid.iqbal.screeny.ui.screens.home.WallpaperViewModel
+import com.shahid.iqbal.screeny.ui.screens.search.SearchViewModel
 import com.shahid.iqbal.screeny.ui.screens.search.SearchedWallpaperScreen
 import com.shahid.iqbal.screeny.ui.screens.settings.SettingScreen
 import com.shahid.iqbal.screeny.ui.screens.splash.SplashScreen
@@ -57,6 +58,15 @@ fun ScreenyApp() {
     val wallpaperViewModel: WallpaperViewModel = koinViewModel()
     val wallpapers = wallpaperViewModel.getAllWallpapers.collectAsLazyPagingItems()
 
+    val categoryViewModel: CategoryViewModel = koinViewModel()
+    var category by rememberSaveable { mutableStateOf("") }
+    val categoriesWiseWallpaperList =
+        categoryViewModel.searchWallpapers(category).collectAsLazyPagingItems()
+
+    val searchViewModel = koinViewModel<SearchViewModel>()
+
+
+
     val sharedWallpaperViewModel: SharedWallpaperViewModel = koinViewModel()
     val context = LocalContext.current
 
@@ -74,7 +84,8 @@ fun ScreenyApp() {
     }, topBar = {
         if (canShowTopBar) {
 
-            val title = stackEntry?.destination?.route?.substringAfterLast(".") ?: stringResource(id = R.string.app_name)
+            val title = stackEntry?.destination?.route?.substringAfterLast(".")
+                ?: stringResource(id = R.string.app_name)
 
             TopBar(title = title) {
                 navController.navigate(Routs.SearchedWallpaper)
@@ -92,18 +103,23 @@ fun ScreenyApp() {
 
             composable<Splash> {
                 SplashScreen {
-                    navController.navigate(Home, navOptions = NavOptions.Builder().setPopUpTo(Splash, true).build())
+                    navController.navigate(
+                        Home, navOptions =
+                        NavOptions.Builder().setPopUpTo(Splash, true).build()
+                    )
                 }
             }
 
             composable<Home> {
                 HomeScreen(
                     wallpapers,
-                    onWallpaperClick = { index, list ->
-                        wallpaperCLick(index, list, sharedWallpaperViewModel,
-                            navController)
+                    onWallpaperClick = { index ->
+                        wallpaperCLick(
+                            index, wallpapers.itemSnapshotList.items,
+                            sharedWallpaperViewModel, navController
+                        )
                     },
-                    onBack = { }
+                    onBack = { exitProcess(0) }
                 )
             }
 
@@ -124,11 +140,15 @@ fun ScreenyApp() {
 
             composable<Routs.CategoryDetail> { backStackEntry ->
                 val categoryDetail: Routs.CategoryDetail = backStackEntry.toRoute()
-                val categoryViewModel = koinViewModel<CategoryViewModel>()
-                CategoryDetailScreen(categoryDetail.query, categoryViewModel,
+                category = categoryDetail.query
+
+                CategoryDetailScreen(category, categoriesWiseWallpaperList,
                     onBackClick = { navController.navigateUp() },
-                    onWallpaperClick = { index, list ->
-                        wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
+                    onWallpaperClick = { index ->
+                        wallpaperCLick(
+                            index, categoriesWiseWallpaperList.itemSnapshotList.items,
+                            sharedWallpaperViewModel, navController
+                        )
                     })
             }
 

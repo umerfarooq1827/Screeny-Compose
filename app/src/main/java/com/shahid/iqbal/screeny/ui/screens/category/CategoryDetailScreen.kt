@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.models.Wallpaper
@@ -43,12 +44,11 @@ import org.koin.compose.koinInject
 @Composable
 fun CategoryDetailScreen(
     title: String,
-    categoryViewModel: CategoryViewModel,
-    onWallpaperClick: (Int, List<Wallpaper>) -> Unit,
+    wallpapers: LazyPagingItems<Wallpaper>,
+    onWallpaperClick: (Int) -> Unit,
     onBackClick: () -> Unit
 ) {
 
-    val wallpapers = categoryViewModel.searchWallpapers(title).collectAsLazyPagingItems()
     val imageLoader: ImageLoader = koinInject()
 
     Column(
@@ -80,7 +80,7 @@ fun CategoryDetailScreen(
                     val wallpaper = wallpapers[index]
                     if (wallpaper != null) {
                         WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
-                            onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper), wallpapers.itemSnapshotList.items)
+                            onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper))
                         }
                     }
                 }

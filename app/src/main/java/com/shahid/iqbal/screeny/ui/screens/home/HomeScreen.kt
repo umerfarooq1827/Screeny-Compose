@@ -44,9 +44,9 @@ import kotlin.uuid.Uuid
 
 @Composable
 fun HomeScreen(
-    wallpapers:LazyPagingItems<Wallpaper>,
+    wallpapers: LazyPagingItems<Wallpaper>,
     modifier: Modifier = Modifier,
-    onWallpaperClick: (Int, List<Wallpaper>) -> Unit,
+    onWallpaperClick: (Int) -> Unit,
     onBack: () -> Unit
 ) {
 
@@ -75,7 +75,7 @@ fun HomeScreen(
             val wallpaper = wallpapers[index]
             if (wallpaper != null) {
                 WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
-                    onWallpaperClick(index, wallpapers.itemSnapshotList.items)
+                    onWallpaperClick(index)
                 }
             }
         }
