@@ -16,7 +16,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -30,36 +34,40 @@ import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.ui.routs.Routs
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
 fun FavouriteScreen(
-    navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
 
     val favouriteViewModel = koinViewModel<FavouriteViewModel>()
-    val favourites by favouriteViewModel.getAllFavourites.collectAsStateWithLifecycle()
+    val favourites by favouriteViewModel.getAllFavourites.collectAsStateWithLifecycle(emptyList())
     val imageLoader = koinInject<ImageLoader>()
 
-    if (favourites.isNotEmpty()) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            contentPadding = PaddingValues(10.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = modifier.fillMaxSize(),
-        ) {
 
-            items(favourites, key = { favourite -> favourite.timeStamp }) { favourite ->
-                WallpaperItem(wallpaper = favourite.wallpaper, imageLoader)
+        if (favourites.isEmpty()) {
+            NoFavouritePlaceholder(onExplore = { navController.navigate(Routs.Home) })
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                contentPadding = PaddingValues(10.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = modifier.fillMaxSize(),
+            ) {
+
+                items(favourites, key = { favourite -> favourite.timeStamp }) { favourite ->
+                    WallpaperItem(wallpaper = favourite.wallpaper, imageLoader)
+                }
+
             }
-
         }
-    } else {
-        NoFavouritePlaceholder(onExplore = { navController.navigate(Routs.Home) })
-    }
+
+
 }
 
 @Composable
@@ -87,7 +95,6 @@ fun NoFavouritePlaceholder(onExplore: () -> Unit) {
                 .padding(vertical = 20.dp)
         )
 
-        // Optionally, you can add a button to encourage users to start exploring
         Button(
             onClick = onExplore,
             modifier = Modifier.padding(top = 16.dp)

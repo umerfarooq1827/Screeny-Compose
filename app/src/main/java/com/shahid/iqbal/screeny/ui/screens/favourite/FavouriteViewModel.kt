@@ -10,6 +10,6 @@ class FavouriteViewModel(private val favouriteRepo: FavouriteRepo) : ViewModel()
 
     val getAllFavourites
         get() =
-            favouriteRepo.getAllFavourites.stateIn(viewModelScope, SharingStarted.WhileSubscribed(3000),
-                emptyList())
+            favouriteRepo.getAllFavourites
+
 }

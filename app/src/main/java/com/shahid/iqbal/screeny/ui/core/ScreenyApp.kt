@@ -127,7 +127,7 @@ fun ScreenyApp() {
             }
 
             composable<Favourite> {
-                FavouriteScreen(navController)
+                FavouriteScreen(navController = navController)
             }
 
             composable<Setting> {
