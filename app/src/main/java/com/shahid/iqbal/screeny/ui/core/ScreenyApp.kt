@@ -63,9 +63,6 @@ fun ScreenyApp() {
     val categoriesWiseWallpaperList =
         categoryViewModel.searchWallpapers(category).collectAsLazyPagingItems()
 
-    val searchViewModel = koinViewModel<SearchViewModel>()
-
-
 
     val sharedWallpaperViewModel: SharedWallpaperViewModel = koinViewModel()
     val context = LocalContext.current
