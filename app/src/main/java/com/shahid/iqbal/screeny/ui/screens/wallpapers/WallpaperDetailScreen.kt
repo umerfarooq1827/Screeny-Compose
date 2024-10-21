@@ -3,15 +3,25 @@ package com.shahid.iqbal.screeny.ui.screens.wallpapers
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,6 +42,7 @@ import com.shahid.iqbal.screeny.ui.screens.components.ActionButtons
 import com.shahid.iqbal.screeny.ui.screens.components.BlurBg
 import com.shahid.iqbal.screeny.ui.screens.components.SinglePageContent
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
+import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.SetStatusBarBarColor
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -40,7 +51,8 @@ import org.koin.compose.koinInject
 fun WallpaperDetailScreen(
     sharedWallpaperViewModel: SharedWallpaperViewModel,
     actionViewModel: ActionViewModel = koinViewModel(),
-    isFromFavourite: Boolean = false
+    isFromFavourite: Boolean = false,
+    onBack: () -> Unit
 ) {
 
 
@@ -75,14 +87,30 @@ fun WallpaperDetailScreen(
         }
     }
 
-    AnimatedVisibility(visible = canShowList) {
+    AnimatedVisibility(
+        visible = canShowList, modifier = Modifier
+            .fillMaxSize()
+
+    ) {
 
         Box(contentAlignment = Alignment.BottomCenter) {
+
 
             BlurBg(
                 if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper
                 else wallpapers[pagerState.currentPage].wallpaperSource.small
             )
+
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .safeDrawingPadding()
+                    .padding(horizontal = 10.dp, vertical = 20.dp)
+                    .clickable { onBack() }
+            )
+
 
             HorizontalPager(
                 state = pagerState,

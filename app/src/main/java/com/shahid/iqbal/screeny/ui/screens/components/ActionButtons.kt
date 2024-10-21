@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
@@ -27,14 +29,20 @@ import com.shahid.iqbal.screeny.ui.theme.ActionIconBgColor
 
 @Composable
 fun ActionButtons(
-    isFavourite: Boolean = false, onDownload: () -> Unit = {}, onApply: () -> Unit = {}, onFavourite: () -> Unit = {}
+    isFavourite: Boolean = false,
+    onDownload: () -> Unit = {},
+    onApply: () -> Unit = {},
+    onFavourite: () -> Unit = {}
 ) {
 
     Row(
         modifier = Modifier
             .fillMaxWidth(0.70f)
             .wrapContentHeight()
-            .padding(vertical = 50.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom
+            .safeDrawingPadding()
+            .padding(bottom = 30.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
     ) {
 
 

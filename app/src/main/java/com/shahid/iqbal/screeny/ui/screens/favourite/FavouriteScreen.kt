@@ -49,23 +49,23 @@ fun FavouriteScreen(
     val imageLoader = koinInject<ImageLoader>()
 
 
-        if (favourites.isEmpty()) {
-            NoFavouritePlaceholder(onExplore = { navController.navigate(Routs.Home) })
-        } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                contentPadding = PaddingValues(10.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = modifier.fillMaxSize(),
-            ) {
+    if (favourites.isEmpty()) {
+        NoFavouritePlaceholder(onExplore = { navController.navigate(Routs.Home) })
+    } else {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            contentPadding = PaddingValues(10.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = modifier.fillMaxSize(),
+        ) {
 
-                items(favourites, key = { favourite -> favourite.timeStamp }) { favourite ->
-                    WallpaperItem(wallpaper = favourite.wallpaper, imageLoader)
-                }
-
+            items(favourites, key = { favourite -> favourite.timeStamp }) { favourite ->
+                WallpaperItem(wallpaper = favourite.wallpaper, imageLoader)
             }
+
         }
+    }
 
 
 }

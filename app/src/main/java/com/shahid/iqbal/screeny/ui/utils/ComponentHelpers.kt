@@ -2,28 +2,42 @@ package com.shahid.iqbal.screeny.ui.utils
 
 import android.app.Activity
 import android.content.Context
-import android.content.ContextWrapper
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 object ComponentHelpers {
 
-    private fun Context.findActivity(): Activity? {
-        var context = this
-        while (context is ContextWrapper) {
-            if (context is Activity) return context
-            context = context.baseContext
+
+    @Composable
+    fun SetStatusBarBarColor(isDarkMode:Boolean = false) {
+
+        val view = LocalView.current
+
+        if (!view.isInEditMode) {
+            LaunchedEffect(key1 = Unit) {
+                val window = (view.context as Activity).window
+                WindowCompat.getInsetsController(window, window.decorView).apply {
+                    isAppearanceLightStatusBars = !isDarkMode
+                    isAppearanceLightNavigationBars = !isDarkMode
+                }
+
+
+            }
         }
-        return null
     }
 
     @Composable
-    fun Context.HideSystemBars(canShowOnDispose: Boolean = true) {
+    fun HideSystemBars(canShowOnDispose: Boolean = true) {
+
+        val view = LocalView.current
         DisposableEffect(Unit) {
-            val window = findActivity()?.window ?: return@DisposableEffect onDispose {}
+            val window = (view.context as Activity).window ?: return@DisposableEffect onDispose {}
             val insetsController = WindowCompat.getInsetsController(window, window.decorView)
 
             insetsController.apply {

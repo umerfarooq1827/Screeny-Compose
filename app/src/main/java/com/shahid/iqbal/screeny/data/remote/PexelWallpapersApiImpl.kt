@@ -1,6 +1,5 @@
 package com.shahid.iqbal.screeny.data.remote
 
-import androidx.room.Query
 import com.shahid.iqbal.screeny.data.utils.Constant.PER_PAGE_ITEMS
 import com.shahid.iqbal.screeny.data.utils.HttpRoutes
 import com.shahid.iqbal.screeny.models.WallpaperResponse
