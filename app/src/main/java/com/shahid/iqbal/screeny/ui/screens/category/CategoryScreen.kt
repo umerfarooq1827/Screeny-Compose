@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.size.Size
 import com.shahid.iqbal.screeny.models.Category
@@ -55,7 +56,7 @@ fun CategoryScreen(modifier: Modifier = Modifier, onCategoryClick: (String) -> U
 
 
     LaunchedEffect(key1 = Unit) {
-        delay(500)
+        delay(250)
         showContent = true
     }
 
@@ -63,7 +64,8 @@ fun CategoryScreen(modifier: Modifier = Modifier, onCategoryClick: (String) -> U
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(16.dp), modifier = modifier.fillMaxSize()
+        horizontalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(16.dp),
+        modifier = modifier.fillMaxSize()
     ) {
 
 
@@ -92,7 +94,9 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader, onClick: () -> Un
     val context = LocalContext.current
     val categoryImageSize = Size(800.dp.toPx().toInt(), 800.dp.toPx().toInt())
     val imageRequest = remember {
-        ImageRequest.Builder(context).data(category.thumbnail).size(categoryImageSize).build()
+        ImageRequest.Builder(context).data(category.thumbnail)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .size(categoryImageSize).build()
     }
 
     var showShimmer by remember {

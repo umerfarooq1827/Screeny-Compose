@@ -1,14 +1,22 @@
 package com.shahid.iqbal.screeny.ui.shared
 
 import android.graphics.drawable.Drawable
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shahid.iqbal.screeny.models.Wallpaper
+import com.shahid.iqbal.screeny.ui.utils.BitmapUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SharedWallpaperViewModel : ViewModel() {
 
@@ -23,23 +31,48 @@ class SharedWallpaperViewModel : ViewModel() {
     private val _currentlyLoadedWallpaper = MutableStateFlow<Drawable?>(null)
     val currentWallpaper get() = _currentlyLoadedWallpaper.asStateFlow()
 
+    private val _luminanceResults = MutableStateFlow(mutableMapOf<String, Boolean>())
+    val luminanceResults:StateFlow<Map<String,Boolean>> get() = _luminanceResults
 
-    fun updateWallpaper(drawable: Drawable){
+
+    private fun updateLuminanceResult(wallpaperUrl: String, isLight: Boolean) {
         viewModelScope.launch {
-            _currentlyLoadedWallpaper.emit(drawable)
+            _luminanceResults.update {
+                it[wallpaperUrl] = isLight
+                it
+            }
         }
     }
 
-    fun updateWallpaperList(wallpapers: List<Wallpaper>) {
-        viewModelScope.launch {
-            _wallpaperList.emit(wallpapers)
+    fun performLuminanceWork(url: String, drawable: Drawable) {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (url !in luminanceResults.value) {
+                val bitmap = drawable.toBitmap()
+                BitmapUtil.createBitmapCopy(bitmap)?.let { copyBitmap ->
+                    val isLight = BitmapUtil.isImageLight(copyBitmap)
+                    updateLuminanceResult(wallpaperUrl = url, isLight = isLight)
+                }
+            }
         }
-    }
+}
 
-    fun updateSelectedWallpaper(wallpaper: Wallpaper) {
-        viewModelScope.launch {
-            _selectedWallpaperIndex.emit(wallpaperList.value.indexOf(wallpaper))
-        }
+fun updateWallpaper(drawable: Drawable) {
+    viewModelScope.launch {
+        _currentlyLoadedWallpaper.emit(drawable)
     }
+}
+
+fun updateWallpaperList(wallpapers: List<Wallpaper>) {
+    viewModelScope.launch {
+        _wallpaperList.emit(wallpapers)
+    }
+}
+
+fun updateSelectedWallpaper(wallpaper: Wallpaper) {
+    viewModelScope.launch {
+        _selectedWallpaperIndex.emit(wallpaperList.value.indexOf(wallpaper))
+    }
+}
+
 
 }

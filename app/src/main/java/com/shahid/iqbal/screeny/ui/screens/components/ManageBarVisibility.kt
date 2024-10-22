@@ -39,11 +39,8 @@ fun ManageBarVisibility(context: Context, currentEntry: () -> NavBackStackEntry?
             HideSystemBars(true)
         }
 
-        if (route in arrayOf(WallpaperDetail::class.qualifiedName)){
-            SetStatusBarBarColor(isDarkMode = true)
-        }else {
+        if (route !in arrayOf(WallpaperDetail::class.qualifiedName)){
             SetStatusBarBarColor(isDarkMode = isSystemInDarkTheme())
-
         }
     }
 }

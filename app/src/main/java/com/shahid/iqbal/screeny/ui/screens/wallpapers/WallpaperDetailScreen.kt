@@ -1,8 +1,10 @@
 package com.shahid.iqbal.screeny.ui.screens.wallpapers
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Box
@@ -25,14 +27,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
@@ -44,6 +50,8 @@ import com.shahid.iqbal.screeny.ui.screens.components.SinglePageContent
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
 import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.SetStatusBarBarColor
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -60,6 +68,7 @@ fun WallpaperDetailScreen(
     val index by sharedWallpaperViewModel.selectedWallpaperIndex.collectAsStateWithLifecycle()
     val favouriteList by actionViewModel.getAllFavourites.collectAsStateWithLifecycle()
     val currentlyLoadedWallpaper by sharedWallpaperViewModel.currentWallpaper.collectAsStateWithLifecycle(initialValue = null)
+    val luminanceResults by sharedWallpaperViewModel.luminanceResults.collectAsStateWithLifecycle()
 
     var canShowDialog by remember { mutableStateOf(false) }
 
@@ -72,11 +81,40 @@ fun WallpaperDetailScreen(
 
     var canShowList by remember { mutableStateOf(false) }
     var isFavourite by remember { mutableStateOf(false) }
+    var iconColorIsBlack by remember { mutableStateOf(true) } // Default to true (black)
+
+
+    val iconColor by animateColorAsState(
+        targetValue = if (iconColorIsBlack) Color.Black else Color.White,
+        label = "Back Button and StatusBar Color",
+    )
 
     LaunchedEffect(key1 = canShowList) {
         delay(100)
         canShowList = true
     }
+
+
+    LaunchedEffect(key1 = Unit) {
+
+        val initialWallpaper = if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper
+        else wallpapers[pagerState.currentPage].wallpaperSource.portrait
+        iconColorIsBlack = luminanceResults[initialWallpaper] ?: false
+
+
+
+        snapshotFlow {
+            val wallpaper = if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper
+            else wallpapers[pagerState.currentPage].wallpaperSource.portrait
+
+            luminanceResults[wallpaper]
+        }.filterNotNull().collectLatest { isLight ->
+            iconColorIsBlack = isLight
+        }
+    }
+
+
+    SetStatusBarBarColor(iconColorIsBlack)
 
 
     if (!canShowList) {
@@ -106,9 +144,12 @@ fun WallpaperDetailScreen(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.TopStart)
+                    .size(30.dp)
                     .safeDrawingPadding()
                     .padding(horizontal = 10.dp, vertical = 20.dp)
-                    .clickable { onBack() }
+                    .zIndex(90f)
+                    .clickable { onBack() },
+                tint = iconColor
             )
 
 
@@ -130,9 +171,10 @@ fun WallpaperDetailScreen(
                 SinglePageContent(
                     wallpaperUrl = if (isFromFavourite) favouriteList[page].wallpaper else wallpapers[page].wallpaperSource.portrait,
                     imageLoader = imageLoader,
-                    pagerState,
-                    page,
-                    sharedWallpaperViewModel
+                    pagerState = pagerState,
+                    page = page,
+                    updateWallpaper = sharedWallpaperViewModel::updateWallpaper,
+                    updateLuminanceResult = sharedWallpaperViewModel::performLuminanceWork
                 )
             }
 
@@ -155,6 +197,7 @@ fun WallpaperDetailScreen(
     }
 
 }
+
 
 private fun downloadWallpaper(
     actionViewModel: ActionViewModel,

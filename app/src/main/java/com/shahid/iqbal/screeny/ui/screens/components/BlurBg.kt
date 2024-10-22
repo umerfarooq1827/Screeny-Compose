@@ -19,7 +19,7 @@ fun BlurBg(wallpaperUrl: String) {
         model = ImageRequest.Builder(LocalContext.current)
             .data(wallpaperUrl)
             .crossfade(false)
-            .transformations(BlurTransformation(scale = 0.5f, radius = 15))
+            .transformations(BlurTransformation(scale = 0.5f, radius = 10))
             .build(), contentDescription = null, contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxSize()
     )
