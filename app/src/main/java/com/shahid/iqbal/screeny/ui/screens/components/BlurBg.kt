@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 
 @Composable
@@ -19,6 +20,7 @@ fun BlurBg(wallpaperUrl: String) {
         model = ImageRequest.Builder(LocalContext.current)
             .data(wallpaperUrl)
             .crossfade(false)
+            .memoryCachePolicy(CachePolicy.ENABLED)
             .transformations(BlurTransformation(scale = 0.5f, radius = 10))
             .build(), contentDescription = null, contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxSize()

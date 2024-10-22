@@ -2,7 +2,6 @@ package com.shahid.iqbal.screeny.ui.screens.favourite
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,32 +15,28 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
+import com.shahid.iqbal.screeny.models.FavouriteWallpaper
 import com.shahid.iqbal.screeny.ui.routs.Routs
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
-import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
 fun FavouriteScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    onWallpaperClick: (Int) -> Unit
 ) {
 
     val favouriteViewModel = koinViewModel<FavouriteViewModel>()
@@ -61,7 +56,9 @@ fun FavouriteScreen(
         ) {
 
             items(favourites, key = { favourite -> favourite.timeStamp }) { favourite ->
-                WallpaperItem(wallpaper = favourite.wallpaper, imageLoader)
+                WallpaperItem(wallpaper = favourite.wallpaper, imageLoader) {
+                    onWallpaperClick(favourites.indexOf(favourite))
+                }
             }
 
         }

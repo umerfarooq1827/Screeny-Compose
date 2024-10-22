@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -38,7 +37,6 @@ import com.shahid.iqbal.screeny.ui.screens.components.TopBar
 import com.shahid.iqbal.screeny.ui.screens.favourite.FavouriteScreen
 import com.shahid.iqbal.screeny.ui.screens.home.HomeScreen
 import com.shahid.iqbal.screeny.ui.screens.home.WallpaperViewModel
-import com.shahid.iqbal.screeny.ui.screens.search.SearchViewModel
 import com.shahid.iqbal.screeny.ui.screens.search.SearchedWallpaperScreen
 import com.shahid.iqbal.screeny.ui.screens.settings.SettingScreen
 import com.shahid.iqbal.screeny.ui.screens.splash.SplashScreen
@@ -62,17 +60,13 @@ fun ScreenyApp() {
 
     val categoryViewModel: CategoryViewModel = koinViewModel()
     var category by rememberSaveable { mutableStateOf("") }
-    val categoriesWiseWallpaperList =
-        categoryViewModel.searchWallpapers(category).collectAsLazyPagingItems()
+    val categoriesWiseWallpaperList = categoryViewModel.searchWallpapers(category).collectAsLazyPagingItems()
 
 
     val sharedWallpaperViewModel: SharedWallpaperViewModel = koinViewModel()
-    val context = LocalContext.current
-
 
 
     ManageBarVisibility(
-        context = context,
         currentEntry = { stackEntry },
         showTopBar = { canShowTopBar = it },
         showBottomBar = { canShowBottomBar = it },
@@ -83,15 +77,14 @@ fun ScreenyApp() {
     }, topBar = {
         if (canShowTopBar) {
 
-            val title = stackEntry?.destination?.route?.substringAfterLast(".")
-                ?: stringResource(id = R.string.app_name)
+            val title = stackEntry?.destination?.route?.substringAfterLast(".") ?: stringResource(id = R.string.app_name)
 
             TopBar(title = title) {
                 navController.navigate(Routs.SearchedWallpaper)
             }
         }
-    }, modifier = Modifier.fillMaxSize(),
-        contentWindowInsets = WindowInsets(0.dp)
+    }, modifier = Modifier.fillMaxSize(), contentWindowInsets = WindowInsets(0.dp)
+
     ) { innerPadding ->
 
         NavHost(
@@ -105,23 +98,17 @@ fun ScreenyApp() {
             composable<Splash> {
                 SplashScreen {
                     navController.navigate(
-                        Home, navOptions =
-                        NavOptions.Builder().setPopUpTo(Splash, true).build()
+                        Home, navOptions = NavOptions.Builder().setPopUpTo(Splash, true).build()
                     )
                 }
             }
 
             composable<Home> {
-                HomeScreen(
-                    wallpapers,
-                    onWallpaperClick = { index ->
-                        wallpaperCLick(
-                            index, wallpapers.itemSnapshotList.items,
-                            sharedWallpaperViewModel, navController
-                        )
-                    },
-                    onBack = { exitProcess(0) }
-                )
+                HomeScreen(wallpapers, onWallpaperClick = { index ->
+                    wallpaperCLick(
+                        index, wallpapers.itemSnapshotList.items, sharedWallpaperViewModel, navController, false
+                    )
+                }, onBack = { exitProcess(0) })
             }
 
             composable<Categories> {
@@ -131,7 +118,9 @@ fun ScreenyApp() {
             }
 
             composable<Favourite> {
-                FavouriteScreen(navController = navController)
+                FavouriteScreen(navController = navController) { index ->
+                    wallpaperCLick(index, emptyList(), sharedWallpaperViewModel, navController, true)
+                }
             }
 
             composable<Setting> {
@@ -143,21 +132,17 @@ fun ScreenyApp() {
                 val categoryDetail: Routs.CategoryDetail = backStackEntry.toRoute()
                 category = categoryDetail.query
 
-                CategoryDetailScreen(category, categoriesWiseWallpaperList,
-                    onBackClick = { navController.navigateUp() },
-                    onWallpaperClick = { index ->
-                        wallpaperCLick(
-                            index, categoriesWiseWallpaperList.itemSnapshotList.items,
-                            sharedWallpaperViewModel, navController
-                        )
-                    })
+                CategoryDetailScreen(category, categoriesWiseWallpaperList, onBackClick = { navController.navigateUp() }, onWallpaperClick = { index ->
+                    wallpaperCLick(
+                        index, categoriesWiseWallpaperList.itemSnapshotList.items, sharedWallpaperViewModel, navController, false
+                    )
+                })
             }
 
             composable<Routs.SearchedWallpaper> {
-                SearchedWallpaperScreen(onNavigateBack = { navController.navigateUp() },
-                    onWallpaperClick = { index, list ->
-                        wallpaperCLick(index, list, sharedWallpaperViewModel, navController)
-                    })
+                SearchedWallpaperScreen(onNavigateBack = { navController.navigateUp() }, onWallpaperClick = { index, list ->
+                    wallpaperCLick(index, list, sharedWallpaperViewModel, navController, false)
+                })
             }
 
             composable<Routs.WallpaperDetail> {
@@ -172,13 +157,17 @@ fun ScreenyApp() {
 }
 
 private fun wallpaperCLick(
-    index: Int,
-    list: List<Wallpaper>,
+    index: Int, list: List<Wallpaper>,
     sharedWallpaperViewModel: SharedWallpaperViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    isFromFavourite: Boolean = false
 ) {
     sharedWallpaperViewModel.updateWallpaperList(list)
-    sharedWallpaperViewModel.updateSelectedWallpaper(list[index])
+    sharedWallpaperViewModel.updateSelectedWallpaper(
+        isFromFavourite = isFromFavourite,
+        index = index,
+        wallpaper = if (isFromFavourite) null else list[index]
+    )
     navController.navigate(Routs.WallpaperDetail)
 }
 

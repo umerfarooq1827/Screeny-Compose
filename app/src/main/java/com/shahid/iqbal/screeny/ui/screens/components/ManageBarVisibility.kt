@@ -1,8 +1,10 @@
 package com.shahid.iqbal.screeny.ui.screens.components
 
-import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import com.shahid.iqbal.screeny.ui.routs.Routs.CategoryDetail
 import com.shahid.iqbal.screeny.ui.routs.Routs.SearchedWallpaper
@@ -12,7 +14,11 @@ import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.HideSystemBars
 import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.SetStatusBarBarColor
 
 @Composable
-fun ManageBarVisibility(context: Context, currentEntry: () -> NavBackStackEntry?, showTopBar: (Boolean) -> Unit, showBottomBar: (Boolean) -> Unit) {
+fun ManageBarVisibility(
+    currentEntry: () -> NavBackStackEntry?,
+    showTopBar: (Boolean) -> Unit,
+    showBottomBar: (Boolean) -> Unit,
+) {
     currentEntry()?.let { entry ->
 
         val route = entry.destination.route?.substringBefore("/")

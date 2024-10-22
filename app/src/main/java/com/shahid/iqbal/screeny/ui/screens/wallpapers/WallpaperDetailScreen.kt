@@ -81,7 +81,7 @@ fun WallpaperDetailScreen(
 
     var canShowList by remember { mutableStateOf(false) }
     var isFavourite by remember { mutableStateOf(false) }
-    var iconColorIsBlack by remember { mutableStateOf(true) } // Default to true (black)
+    var iconColorIsBlack by remember { mutableStateOf(true) }
 
 
     val iconColor by animateColorAsState(
@@ -144,7 +144,6 @@ fun WallpaperDetailScreen(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .size(30.dp)
                     .safeDrawingPadding()
                     .padding(horizontal = 10.dp, vertical = 20.dp)
                     .zIndex(90f)

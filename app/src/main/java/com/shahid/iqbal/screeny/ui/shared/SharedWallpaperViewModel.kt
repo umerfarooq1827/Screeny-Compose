@@ -68,9 +68,9 @@ fun updateWallpaperList(wallpapers: List<Wallpaper>) {
     }
 }
 
-fun updateSelectedWallpaper(wallpaper: Wallpaper) {
+fun updateSelectedWallpaper(wallpaper: Wallpaper?,index:Int, isFromFavourite:Boolean = false) {
     viewModelScope.launch {
-        _selectedWallpaperIndex.emit(wallpaperList.value.indexOf(wallpaper))
+        _selectedWallpaperIndex.emit(if (!isFromFavourite) wallpaperList.value.indexOf(wallpaper) else index)
     }
 }
 
