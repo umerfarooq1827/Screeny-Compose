@@ -1,22 +1,17 @@
 package com.shahid.iqbal.screeny.ui.shared
 
 import android.graphics.drawable.Drawable
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.utils.BitmapUtil
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SharedWallpaperViewModel : ViewModel() {
 
@@ -32,7 +27,7 @@ class SharedWallpaperViewModel : ViewModel() {
     val currentWallpaper get() = _currentlyLoadedWallpaper.asStateFlow()
 
     private val _luminanceResults = MutableStateFlow(mutableMapOf<String, Boolean>())
-    val luminanceResults:StateFlow<Map<String,Boolean>> get() = _luminanceResults
+    val luminanceResults: StateFlow<Map<String, Boolean>> get() = _luminanceResults
 
 
     private fun updateLuminanceResult(wallpaperUrl: String, isLight: Boolean) {
@@ -54,25 +49,25 @@ class SharedWallpaperViewModel : ViewModel() {
                 }
             }
         }
-}
-
-fun updateWallpaper(drawable: Drawable) {
-    viewModelScope.launch {
-        _currentlyLoadedWallpaper.emit(drawable)
     }
-}
 
-fun updateWallpaperList(wallpapers: List<Wallpaper>) {
-    viewModelScope.launch {
-        _wallpaperList.emit(wallpapers)
+    fun updateWallpaper(drawable: Drawable) {
+        viewModelScope.launch {
+            _currentlyLoadedWallpaper.emit(drawable)
+        }
     }
-}
 
-fun updateSelectedWallpaper(wallpaper: Wallpaper?,index:Int, isFromFavourite:Boolean = false) {
-    viewModelScope.launch {
-        _selectedWallpaperIndex.emit(if (!isFromFavourite) wallpaperList.value.indexOf(wallpaper) else index)
+    fun updateWallpaperList(wallpapers: List<Wallpaper>) {
+        viewModelScope.launch {
+            _wallpaperList.emit(wallpapers)
+        }
     }
-}
+
+    fun updateSelectedWallpaper(wallpaper: Wallpaper?) {
+        viewModelScope.launch {
+            _selectedWallpaperIndex.emit(wallpaperList.value.indexOf(wallpaper))
+        }
+    }
 
 
 }

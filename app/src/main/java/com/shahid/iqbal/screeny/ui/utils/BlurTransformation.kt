@@ -1,3 +1,5 @@
+package com.shahid.iqbal.screeny.ui.utils
+
 import android.graphics.Bitmap
 import coil.size.Size
 import coil.transform.Transformation

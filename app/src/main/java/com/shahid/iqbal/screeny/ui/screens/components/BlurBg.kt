@@ -1,6 +1,5 @@
 package com.shahid.iqbal.screeny.ui.screens.components
 
-import BlurTransformation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.shahid.iqbal.screeny.ui.utils.BlurTransformation
 
 @Composable
 fun BlurBg(wallpaperUrl: String) {
@@ -20,9 +20,9 @@ fun BlurBg(wallpaperUrl: String) {
         model = ImageRequest.Builder(LocalContext.current)
             .data(wallpaperUrl)
             .crossfade(false)
-            .memoryCachePolicy(CachePolicy.ENABLED)
             .transformations(BlurTransformation(scale = 0.5f, radius = 10))
-            .build(), contentDescription = null, contentScale = ContentScale.Crop,
+            .build(),
+        contentDescription = null, contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxSize()
     )
 

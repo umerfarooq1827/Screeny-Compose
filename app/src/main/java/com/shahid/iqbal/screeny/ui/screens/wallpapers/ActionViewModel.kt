@@ -16,16 +16,13 @@ class ActionViewModel(
 
 
     val getAllFavourites
-        get() =
-            favouriteRepo.getAllFavourites.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+        get() = favouriteRepo.getAllFavourites.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     fun addOrRemove(wallpaper: Wallpaper) {
         viewModelScope.launch {
             favouriteRepo.addOrRemove(wallpaper)
         }
     }
-
-    suspend fun getFavouriteById(id: Int) = favouriteRepo.isFavourite(id)
 
 
     fun downloadWallpaper(url: String) {

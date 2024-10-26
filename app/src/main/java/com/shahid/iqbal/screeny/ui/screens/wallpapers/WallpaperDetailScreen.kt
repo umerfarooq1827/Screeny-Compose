@@ -1,21 +1,17 @@
 package com.shahid.iqbal.screeny.ui.screens.wallpapers
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -23,11 +19,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,7 +36,6 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
-import com.shahid.iqbal.screeny.models.FavouriteWallpaper
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.screens.components.ActionButtons
 import com.shahid.iqbal.screeny.ui.screens.components.BlurBg
@@ -59,7 +52,6 @@ import org.koin.compose.koinInject
 fun WallpaperDetailScreen(
     sharedWallpaperViewModel: SharedWallpaperViewModel,
     actionViewModel: ActionViewModel = koinViewModel(),
-    isFromFavourite: Boolean = false,
     onBack: () -> Unit
 ) {
 
@@ -76,8 +68,7 @@ fun WallpaperDetailScreen(
 
 
     val imageLoader = koinInject<ImageLoader>()
-    val pagerState = rememberPagerState(initialPage = if (index != -1) index else 0)
-    { if (isFromFavourite) favouriteList.size else wallpapers.size }
+    val pagerState = rememberPagerState(initialPage = if (index != -1) index else 0) { wallpapers.size }
 
     var canShowList by remember { mutableStateOf(false) }
     var isFavourite by remember { mutableStateOf(false) }
@@ -97,15 +88,13 @@ fun WallpaperDetailScreen(
 
     LaunchedEffect(key1 = Unit) {
 
-        val initialWallpaper = if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper
-        else wallpapers[pagerState.currentPage].wallpaperSource.portrait
+        val initialWallpaper = wallpapers[pagerState.currentPage].wallpaperSource.portrait
         iconColorIsBlack = luminanceResults[initialWallpaper] ?: false
 
 
 
         snapshotFlow {
-            val wallpaper = if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper
-            else wallpapers[pagerState.currentPage].wallpaperSource.portrait
+            val wallpaper = wallpapers[pagerState.currentPage].wallpaperSource.portrait
 
             luminanceResults[wallpaper]
         }.filterNotNull().collectLatest { isLight ->
@@ -133,12 +122,7 @@ fun WallpaperDetailScreen(
 
         Box(contentAlignment = Alignment.BottomCenter) {
 
-
-            BlurBg(
-                if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper
-                else wallpapers[pagerState.currentPage].wallpaperSource.small
-            )
-
+            BlurBg(wallpapers[pagerState.currentPage].wallpaperSource.portrait)
 
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
@@ -157,18 +141,17 @@ fun WallpaperDetailScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 20.dp),
                 beyondViewportPageCount = 3,
-                key = { if (isFromFavourite) favouriteList[it].id else wallpapers[it].id },
+                key = { wallpapers[it].id },
             ) { page ->
 
 
                 if (page == pagerState.currentPage) {
-                    isFavourite = if (isFromFavourite) true else {
-                        favouriteList.any { it.id == wallpapers[pagerState.currentPage].id }
-                    }
+                    isFavourite = favouriteList.any { it.id == wallpapers[pagerState.currentPage].id }
+
                 }
 
                 SinglePageContent(
-                    wallpaperUrl = if (isFromFavourite) favouriteList[page].wallpaper else wallpapers[page].wallpaperSource.portrait,
+                    wallpaperUrl = wallpapers[page].wallpaperSource.portrait,
                     imageLoader = imageLoader,
                     pagerState = pagerState,
                     page = page,
@@ -179,7 +162,7 @@ fun WallpaperDetailScreen(
 
 
             ActionButtons(isFavourite = isFavourite, onDownload = {
-                downloadWallpaper(actionViewModel, isFromFavourite, favouriteList, pagerState, wallpapers, context)
+                downloadWallpaper(actionViewModel, pagerState, wallpapers, context)
             }, onApply = {
                 canShowDialog = true
             }, onFavourite = {
@@ -200,15 +183,12 @@ fun WallpaperDetailScreen(
 
 private fun downloadWallpaper(
     actionViewModel: ActionViewModel,
-    isFromFavourite: Boolean,
-    favouriteList: List<FavouriteWallpaper>,
     pagerState: PagerState,
     wallpapers: List<Wallpaper>,
     context: Context
 ) {
     actionViewModel.downloadWallpaper(
-        url = if (isFromFavourite) favouriteList[pagerState.currentPage].wallpaper
-        else wallpapers[pagerState.currentPage].wallpaperSource.portrait
+        url = wallpapers[pagerState.currentPage].wallpaperSource.portrait
     )
     Toast.makeText(context, context.getString(R.string.downloading), Toast.LENGTH_SHORT).show()
 }
