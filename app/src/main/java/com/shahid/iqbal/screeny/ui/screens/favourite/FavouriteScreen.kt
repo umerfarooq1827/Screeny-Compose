@@ -1,5 +1,8 @@
 package com.shahid.iqbal.screeny.ui.screens.favourite
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,17 +29,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
-import com.shahid.iqbal.screeny.models.FavouriteWallpaper
 import com.shahid.iqbal.screeny.ui.routs.Routs
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun FavouriteScreen(
+fun SharedTransitionScope.FavouriteScreen(
     modifier: Modifier = Modifier,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
-    onWallpaperClick: (Int) -> Unit
+    onWallpaperClick: (String) -> Unit
 ) {
 
     val favouriteViewModel = koinViewModel<FavouriteViewModel>()
@@ -56,9 +60,10 @@ fun FavouriteScreen(
         ) {
 
             items(favourites, key = { favourite -> favourite.timeStamp }) { favourite ->
-                WallpaperItem(wallpaper = favourite.wallpaper, imageLoader) {
-                    onWallpaperClick(favourites.indexOf(favourite))
-                }
+                FavouriteWallpaperItem(
+                    wallpaper = favourite.wallpaper, imageLoader = imageLoader,
+                    animatedVisibilityScope = animatedVisibilityScope
+                ) { wallpaper -> onWallpaperClick(wallpaper) }
             }
 
         }

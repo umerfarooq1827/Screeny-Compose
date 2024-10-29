@@ -1,6 +1,9 @@
 package com.shahid.iqbal.screeny.ui.screens.components
 
 import android.graphics.drawable.Drawable
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,14 +24,17 @@ import com.shahid.iqbal.screeny.models.Wallpaper
 
 @Composable
 fun WallpaperItem(
+    modifier: Modifier = Modifier,
     wallpaper: String,
     imageLoader: ImageLoader,
-    modifier: Modifier = Modifier,
-    getDrawable:( (Drawable) -> Unit)? = null,
-    onWallpaperClick: () -> Unit = {}
+    getDrawable: ((Drawable) -> Unit)? = null,
+    onWallpaperClick: (String) -> Unit = {}
 ) {
 
     var showShimmer by remember { mutableStateOf(true) }
+    var loadedWallpaper: Drawable? by remember {
+        mutableStateOf(null)
+    }
 
     AsyncImage(
         model = wallpaper,
@@ -39,6 +45,7 @@ fun WallpaperItem(
             showShimmer = false
             val drawable = success.result.drawable
             getDrawable?.invoke(drawable)
+            loadedWallpaper = drawable
 
         },
         modifier = modifier
@@ -48,7 +55,7 @@ fun WallpaperItem(
             .clip(RoundedCornerShape(10.dp))
             .height(200.dp)
             .fillMaxWidth()
-            .clickable { onWallpaperClick() }
+            .clickable { onWallpaperClick(wallpaper) }
 
     )
 

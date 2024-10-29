@@ -76,7 +76,7 @@ fun CategoryDetailScreen(
                 if (index < wallpapers.itemCount) {
                     val wallpaper = wallpapers[index]
                     if (wallpaper != null) {
-                        WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader) {
+                        WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader = imageLoader) {
                             onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper))
                         }
                     }

@@ -1,7 +1,9 @@
 package com.shahid.iqbal.screeny.ui.routs
 
+import android.graphics.drawable.Drawable
 import androidx.annotation.Keep
 import androidx.compose.runtime.Stable
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Keep
@@ -21,6 +23,9 @@ sealed interface Routs {
     data object Favourite : Routs
 
     @Serializable
+    data class FavouriteDetail(val wallpaper: String) : Routs
+
+    @Serializable
     data object Setting : Routs
 
     @Serializable
@@ -32,5 +37,6 @@ sealed interface Routs {
 
     @Serializable
     data object WallpaperDetail : Routs
+
 
 }

@@ -26,10 +26,6 @@ class FavouriteRepo(private val dao: FavouriteWallpaperDao) {
         }
     }
 
-    suspend fun isFavourite(id: Int): Boolean = withContext(ioDispatcher) {
-        val wallpaper = dao.getFavouriteById(id)
-        (wallpaper != null)
-    }
 
 
 }
