@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,7 +31,6 @@ import androidx.navigation.NavController
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.ui.routs.Routs
-import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -39,8 +39,7 @@ import org.koin.compose.koinInject
 fun SharedTransitionScope.FavouriteScreen(
     modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    navController: NavController,
-    onWallpaperClick: (String) -> Unit
+    navController: NavController
 ) {
 
     val favouriteViewModel = koinViewModel<FavouriteViewModel>()
@@ -62,8 +61,10 @@ fun SharedTransitionScope.FavouriteScreen(
             items(favourites, key = { favourite -> favourite.timeStamp }) { favourite ->
                 FavouriteWallpaperItem(
                     wallpaper = favourite.wallpaper, imageLoader = imageLoader,
-                    animatedVisibilityScope = animatedVisibilityScope
-                ) { wallpaper -> onWallpaperClick(wallpaper) }
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    onWallpaperClick = { wallpaper -> navController.navigate(Routs.FavouriteDetail(wallpaper)) },
+                    onRemoveFromFavClick = { wallpaper -> favouriteViewModel.removeFromFavourite(wallpaper) }
+                )
             }
 
         }
@@ -88,10 +89,10 @@ fun NoFavouritePlaceholder(onExplore: () -> Unit) {
         )
 
         Text(
-            text = "Your favorite wallpapers will appear here!\nStart exploring and add some to your favorites!",
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f), // Adjusted alpha for better visibility
-            style = MaterialTheme.typography.bodyMedium, // Use a more readable text style
-            textAlign = TextAlign.Center, // Center align the text
+            text = stringResource(R.string.your_favorite_wallpapers_will_appear_here_start_exploring_and_add_some_to_your_favorites),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .padding(vertical = 20.dp)
@@ -101,7 +102,7 @@ fun NoFavouritePlaceholder(onExplore: () -> Unit) {
             onClick = onExplore,
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text(text = "Explore Wallpapers")
+            Text(text = stringResource(R.string.explore_wallpapers))
         }
     }
 }

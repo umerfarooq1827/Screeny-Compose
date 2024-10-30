@@ -96,7 +96,9 @@ fun ScreenyApp() {
 
             NavHost(
                 navController = navController, startDestination = Splash,
-                modifier = Modifier.fillMaxSize().padding(innerPadding)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
             ) {
 
 
@@ -123,9 +125,7 @@ fun ScreenyApp() {
                 }
 
                 composable<Favourite> {
-                    FavouriteScreen(navController = navController, animatedVisibilityScope = this@composable) { wallpaper ->
-                        navController.navigate(Routs.FavouriteDetail(wallpaper))
-                    }
+                    FavouriteScreen(navController = navController, animatedVisibilityScope = this@composable)
                 }
 
                 composable<Setting> {

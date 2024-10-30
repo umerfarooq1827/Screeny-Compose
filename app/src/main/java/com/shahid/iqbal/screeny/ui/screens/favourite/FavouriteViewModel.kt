@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.shahid.iqbal.screeny.data.repositories.FavouriteRepo
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class FavouriteViewModel(private val favouriteRepo: FavouriteRepo) : ViewModel() {
 
@@ -12,4 +13,10 @@ class FavouriteViewModel(private val favouriteRepo: FavouriteRepo) : ViewModel()
         get() =
             favouriteRepo.getAllFavourites
 
+
+    fun removeFromFavourite(wallpaperUrl: String) {
+        viewModelScope.launch {
+            favouriteRepo.removeWallpaper(wallpaperUrl)
+        }
+    }
 }

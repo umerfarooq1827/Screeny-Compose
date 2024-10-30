@@ -27,5 +27,11 @@ class FavouriteRepo(private val dao: FavouriteWallpaperDao) {
     }
 
 
+    suspend fun removeWallpaper(url: String) {
+        withContext(ioDispatcher) {
+            dao.deleteViaUrl(url)
+        }
+    }
+
 
 }

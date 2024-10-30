@@ -20,6 +20,11 @@ interface FavouriteWallpaperDao {
     @Query("SELECT * FROM favourite_wallpaper WHERE id=:id limit 1")
     suspend fun getFavouriteById(id:Int):FavouriteWallpaper?
 
+
+    @Query("DELETE FROM favourite_wallpaper WHERE wallpaper=:url")
+    suspend fun deleteViaUrl(url:String)
+
     @Query("SELECT * FROM favourite_wallpaper ORDER BY timeStamp Desc")
     fun getAllFavourites(): Flow<List<FavouriteWallpaper>>
+
 }

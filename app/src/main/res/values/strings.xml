@@ -16,4 +16,6 @@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="wallpaper_set_successfully">Wallpaper set successfully!</string>
     <string name="recent_searchs">Recents Searches</string>
+    <string name="your_favorite_wallpapers_will_appear_here_start_exploring_and_add_some_to_your_favorites">Your favorite wallpapers will appear here!\nStart exploring and add some to your favorites!</string>
+    <string name="explore_wallpapers">Explore Wallpapers</string>
 </resources>

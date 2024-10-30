@@ -14,6 +14,8 @@ import androidx.navigation.NavController
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.shahid.iqbal.screeny.ui.screens.wallpapers.ActionViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -25,9 +27,12 @@ fun SharedTransitionScope.FavouriteDetailScreen(
     wallpaper: String
 ) {
 
+
+
     BackHandler { navController.navigateUp() }
 
     val imageLoader = koinInject<ImageLoader>()
+    val actionViewModel = koinViewModel<ActionViewModel>()
 
     Column(modifier = modifier.fillMaxSize()) {
 
@@ -52,6 +57,7 @@ fun SharedTransitionScope.FavouriteDetailScreen(
                 .fillMaxSize()
 
         )
+
 
     }
 }
