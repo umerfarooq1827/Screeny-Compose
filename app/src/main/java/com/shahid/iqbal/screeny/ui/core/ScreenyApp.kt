@@ -76,11 +76,13 @@ fun ScreenyApp() {
         showBottomBar = { canShowBottomBar = it },
     )
 
-    SharedTransitionLayout {
 
-        Scaffold(bottomBar = {
+
+    Scaffold(
+        bottomBar = {
             if (canShowBottomBar) BottomNavigationBar(navController)
-        }, topBar = {
+        },
+        topBar = {
             if (canShowTopBar) {
 
                 val title = stackEntry?.destination?.route?.substringAfterLast(".") ?: stringResource(id = R.string.app_name)
@@ -91,8 +93,9 @@ fun ScreenyApp() {
             }
         }, modifier = Modifier.fillMaxSize(), contentWindowInsets = WindowInsets(0.dp)
 
-        ) { innerPadding ->
+    ) { innerPadding ->
 
+        SharedTransitionLayout {
 
             NavHost(
                 navController = navController, startDestination = Splash,

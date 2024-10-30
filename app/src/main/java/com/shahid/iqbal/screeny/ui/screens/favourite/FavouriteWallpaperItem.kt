@@ -1,8 +1,12 @@
 package com.shahid.iqbal.screeny.ui.screens.favourite
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,15 +56,13 @@ fun SharedTransitionScope.FavouriteWallpaperItem(
 
     Box(
         modifier = Modifier
-            .sharedElement(
-                rememberSharedContentState(key = "image-$wallpaper"),
-                animatedVisibilityScope = animatedVisibilityScope,
-                placeHolderSize = SharedTransitionScope.PlaceHolderSize.animatedSize
-            )
             .fillMaxWidth()
             .height(200.dp)
             .clip(shape = RoundedCornerShape(10.dp))
-            .background(shimmerBrush(targetValue = 1300f, showShimmer = showShimmer), shape = RoundedCornerShape(10.dp))
+            .background(
+                shimmerBrush(targetValue = 1300f, showShimmer = showShimmer),
+                shape = RoundedCornerShape(10.dp)
+            )
     ) {
 
         AsyncImage(
@@ -70,27 +72,36 @@ fun SharedTransitionScope.FavouriteWallpaperItem(
             imageLoader = imageLoader,
             onSuccess = { showShimmer = false },
             modifier = modifier
+                .sharedElement(
+                    rememberSharedContentState(key = "image-$wallpaper"),
+                    animatedVisibilityScope = animatedVisibilityScope,
+                )
                 .fillMaxSize()
+                .clip(shape = RoundedCornerShape(10.dp))
                 .clickable { onWallpaperClick(wallpaper) }
 
         )
 
+        AnimatedVisibility(
+            visible = !showShimmer,
+            modifier = Modifier.align(Alignment.BottomStart),
+            enter = fadeIn(animationSpec = tween(durationMillis = 300)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 300))
+        ) {
+            Image(
+                imageVector = Icons.Filled.Favorite,
+                contentDescription = stringResource(id = R.string.favourite),
+                colorFilter = ColorFilter.tint(color = Color.White),
+                modifier = Modifier
+                    .size(30.dp)
+                    .padding(3.dp)
+                    .clip(CircleShape)
+                    .clickable { onRemoveFromFavClick(wallpaper) }
+                    .background(color = ActionIconBgColor)
+                    .padding(4.dp)
 
-        Image(
-            imageVector = Icons.Filled.Favorite,
-            contentDescription = stringResource(id = R.string.favourite),
-            colorFilter = ColorFilter.tint(color = Color.White),
-            modifier = Modifier
-                .size(30.dp)
-                .padding(3.dp)
-                .clip(CircleShape)
-                .clickable { onRemoveFromFavClick(wallpaper) }
-                .background(color = ActionIconBgColor)
-                .padding(4.dp)
-                .align(Alignment.BottomStart)
-
-
-        )
+            )
+        }
 
     }
 
