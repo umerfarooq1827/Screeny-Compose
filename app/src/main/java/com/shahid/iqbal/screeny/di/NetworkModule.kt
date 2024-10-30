@@ -15,7 +15,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
-const val TIME_OUT = 30000
+const val TIME_OUT = 3_000
 
 val networkModule = module {
 
@@ -36,10 +36,12 @@ val networkModule = module {
                 }
             }
 
-            install(Logging) {
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        message.debug()
+            if (BuildConfig.DEBUG) {
+                install(Logging) {
+                    logger = object : Logger {
+                        override fun log(message: String) {
+                            message.debug()
+                        }
                     }
                 }
             }
