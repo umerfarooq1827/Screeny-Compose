@@ -85,8 +85,8 @@ fun SharedTransitionScope.FavouriteWallpaperItem(
         AnimatedVisibility(
             visible = !showShimmer,
             modifier = Modifier.align(Alignment.BottomStart),
-            enter = fadeIn(animationSpec = tween(durationMillis = 300)),
-            exit = fadeOut(animationSpec = tween(durationMillis = 300))
+            enter = fadeIn(animationSpec = tween(durationMillis = 700)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 700))
         ) {
             Image(
                 imageVector = Icons.Filled.Favorite,
