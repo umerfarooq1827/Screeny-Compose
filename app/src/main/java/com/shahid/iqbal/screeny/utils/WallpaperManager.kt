@@ -24,7 +24,7 @@ class WallpaperManager(private val context: Context) {
 
 
     fun setWallpaper(drawable: Drawable, type: WallpaperType) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Default).launch {
             try {
 
                 val flag = when (type) {

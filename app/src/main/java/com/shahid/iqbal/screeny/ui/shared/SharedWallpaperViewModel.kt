@@ -53,19 +53,19 @@ class SharedWallpaperViewModel : ViewModel() {
 
     fun updateWallpaper(drawable: Drawable) {
         viewModelScope.launch {
-            _currentlyLoadedWallpaper.emit(drawable)
+            _currentlyLoadedWallpaper.update { drawable }
         }
     }
 
     fun updateWallpaperList(wallpapers: List<Wallpaper>) {
         viewModelScope.launch {
-            _wallpaperList.emit(wallpapers)
+            _wallpaperList.update { wallpapers }
         }
     }
 
     fun updateSelectedWallpaper(wallpaper: Wallpaper?) {
         viewModelScope.launch {
-            _selectedWallpaperIndex.emit(wallpaperList.value.indexOf(wallpaper))
+            _selectedWallpaperIndex.update { wallpaperList.value.indexOf(wallpaper) }
         }
     }
 

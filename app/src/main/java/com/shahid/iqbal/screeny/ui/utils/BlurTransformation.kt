@@ -32,7 +32,7 @@ class BlurTransformation(
 private suspend fun Bitmap.blur(
     scale: Float,
     radius: Int
-): Bitmap? = withContext(Dispatchers.IO) {
+): Bitmap? = withContext(Dispatchers.Default) {
     var sentBitmap = this@blur
     val width = (sentBitmap.width * scale).roundToInt()
     val height = (sentBitmap.height * scale).roundToInt()
