@@ -4,6 +4,7 @@ import android.app.WallpaperManager
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toBitmap
 import com.shahid.iqbal.screeny.R
 import kotlinx.coroutines.CoroutineScope
@@ -34,20 +35,17 @@ class WallpaperManager(private val context: Context) {
                 }
 
                 wallpaperManager.setBitmap(drawable.toBitmap(), null, false, flag)
-
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, context.getString(R.string.wallpaper_set_successfully), Toast.LENGTH_SHORT).show();
-                }
-
+                showMessage(R.string.wallpaper_set_successfully)
             } catch (e: Exception) {
-
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, context.getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show()
-                }
+                showMessage(R.string.something_went_wrong)
+            } catch (e: java.io.IOException) {
+                showMessage(R.string.something_went_wrong)
             }
-
-
         }
+    }
+
+    private suspend inline fun showMessage(@StringRes message: Int) = withContext(Dispatchers.Main) {
+        Toast.makeText(context, context.getString(message), Toast.LENGTH_SHORT).show()
     }
 
 }
