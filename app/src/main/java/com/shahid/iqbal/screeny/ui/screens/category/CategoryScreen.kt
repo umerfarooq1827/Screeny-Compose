@@ -42,6 +42,7 @@ import com.shahid.iqbal.screeny.models.Category
 import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
 import com.shahid.iqbal.screeny.ui.screens.components.shimmerBrush
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
+import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.noRippleClickable
 import com.shahid.iqbal.screeny.utils.Extensions.toPx
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
@@ -107,7 +108,7 @@ fun CategoryItem(category: Category, imageLoader: ImageLoader, onClick: () -> Un
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
             .height(100.dp)
-            .clickable { onClick() },
+            .noRippleClickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {
 

@@ -33,6 +33,7 @@ import coil.compose.AsyncImage
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.theme.ActionIconBgColor
+import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.noRippleClickable
 
 @Composable
 fun WallpaperItem(
@@ -67,7 +68,7 @@ fun WallpaperItem(
             .clip(RoundedCornerShape(10.dp))
             .height(200.dp)
             .fillMaxWidth()
-            .clickable { onWallpaperClick(wallpaper) }
+            .noRippleClickable { onWallpaperClick(wallpaper) }
 
     )
 

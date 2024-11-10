@@ -33,6 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.shahid.iqbal.screeny.R
+import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.noRippleClickable
+import com.shahid.iqbal.screeny.ui.utils.NoRippleInteractionSource
 import com.shahid.iqbal.screeny.utils.WallpaperManager
 import com.shahid.iqbal.screeny.utils.WallpaperType
 import org.koin.compose.koinInject
@@ -105,7 +107,8 @@ private fun DialogContent(wallpaper: Drawable?, onCancel: () -> Unit) {
         Button(
             onClick = onCancel, modifier = Modifier
                 .fillMaxWidth(0.7f)
-                .padding(top = 10.dp, bottom = 5.dp)
+                .padding(top = 10.dp, bottom = 5.dp),
+            interactionSource = NoRippleInteractionSource()
         ) {
             Text(text = stringResource(id = R.string.cancel), modifier = Modifier.background(Color.Transparent))
         }
@@ -128,7 +131,7 @@ private fun SingleActionItem(
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(15.dp)
-            .clickable { onClick() },
+            .noRippleClickable { onClick() },
         verticalAlignment = Alignment.CenterVertically,
     ) {
 

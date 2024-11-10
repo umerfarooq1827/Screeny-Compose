@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.ui.routs.Routs
+import com.shahid.iqbal.screeny.ui.utils.NoRippleInteractionSource
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -100,7 +101,8 @@ fun NoFavouritePlaceholder(onExplore: () -> Unit) {
 
         Button(
             onClick = onExplore,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 16.dp),
+            interactionSource = NoRippleInteractionSource()
         ) {
             Text(text = stringResource(R.string.explore_wallpapers))
         }

@@ -39,6 +39,7 @@ import coil.compose.AsyncImage
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.ui.screens.components.shimmerBrush
 import com.shahid.iqbal.screeny.ui.theme.ActionIconBgColor
+import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.noRippleClickable
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -78,7 +79,7 @@ fun SharedTransitionScope.FavouriteWallpaperItem(
                 )
                 .fillMaxSize()
                 .clip(shape = RoundedCornerShape(10.dp))
-                .clickable { onWallpaperClick(wallpaper) }
+                .noRippleClickable { onWallpaperClick(wallpaper) }
 
         )
 
@@ -96,7 +97,7 @@ fun SharedTransitionScope.FavouriteWallpaperItem(
                     .size(30.dp)
                     .padding(3.dp)
                     .clip(CircleShape)
-                    .clickable { onRemoveFromFavClick(wallpaper) }
+                    .noRippleClickable { onRemoveFromFavClick(wallpaper) }
                     .background(color = ActionIconBgColor)
                     .padding(4.dp)
 

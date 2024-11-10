@@ -1,11 +1,17 @@
 package com.shahid.iqbal.screeny.ui.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,7 +21,7 @@ object ComponentHelpers {
 
 
     @Composable
-    fun SetStatusBarBarColor(isDarkMode:Boolean = false) {
+    fun SetStatusBarBarColor(isDarkMode: Boolean = false) {
 
         val view = LocalView.current
 
@@ -57,5 +63,15 @@ object ComponentHelpers {
                 }
             }
         }
+    }
+
+
+    fun Modifier.noRippleClickable(
+        onClick: () -> Unit
+    ): Modifier = clickable(
+        indication = null,
+        interactionSource = NoRippleInteractionSource()
+    ) {
+        onClick()
     }
 }

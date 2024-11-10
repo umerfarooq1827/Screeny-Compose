@@ -50,9 +50,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun WallpaperDetailScreen(
-    sharedWallpaperViewModel: SharedWallpaperViewModel,
-    actionViewModel: ActionViewModel = koinViewModel(),
-    onBack: () -> Unit
+    sharedWallpaperViewModel: SharedWallpaperViewModel, actionViewModel: ActionViewModel = koinViewModel(), onBack: () -> Unit
 ) {
 
 
@@ -115,8 +113,7 @@ fun WallpaperDetailScreen(
     }
 
     AnimatedVisibility(
-        visible = canShowList, modifier = Modifier
-            .fillMaxSize()
+        visible = canShowList, modifier = Modifier.fillMaxSize()
 
     ) {
 
@@ -124,16 +121,13 @@ fun WallpaperDetailScreen(
 
             BlurBg(wallpapers[pagerState.currentPage].wallpaperSource.portrait)
 
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .safeDrawingPadding()
-                    .padding(horizontal = 10.dp, vertical = 20.dp)
-                    .zIndex(90f)
-                    .clickable { onBack() },
-                tint = iconColor
-            )
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null, modifier = Modifier
+                .align(Alignment.TopStart)
+                .safeDrawingPadding()
+                .clickable { onBack() }
+                .padding(horizontal = 10.dp, vertical = 20.dp)
+                .zIndex(90f), tint = iconColor)
 
 
             HorizontalPager(
@@ -151,12 +145,7 @@ fun WallpaperDetailScreen(
                 }
 
                 SinglePageContent(
-                    wallpaperUrl = wallpapers[page].wallpaperSource.portrait,
-                    imageLoader = imageLoader,
-                    pagerState = pagerState,
-                    page = page,
-                    updateWallpaper = sharedWallpaperViewModel::updateWallpaper,
-                    updateLuminanceResult = sharedWallpaperViewModel::performLuminanceWork
+                    wallpaperUrl = wallpapers[page].wallpaperSource.portrait, imageLoader = imageLoader, pagerState = pagerState, page = page, updateWallpaper = sharedWallpaperViewModel::updateWallpaper, updateLuminanceResult = sharedWallpaperViewModel::performLuminanceWork
                 )
             }
 
@@ -173,8 +162,7 @@ fun WallpaperDetailScreen(
             })
         }
 
-        if (canShowDialog)
-            WallpaperApplyDialog(wallpaper = currentlyLoadedWallpaper, onDismissRequest = { canShowDialog = false })
+        if (canShowDialog) WallpaperApplyDialog(wallpaper = currentlyLoadedWallpaper, onDismissRequest = { canShowDialog = false })
 
     }
 
@@ -182,10 +170,7 @@ fun WallpaperDetailScreen(
 
 
 private fun downloadWallpaper(
-    actionViewModel: ActionViewModel,
-    pagerState: PagerState,
-    wallpapers: List<Wallpaper>,
-    context: Context
+    actionViewModel: ActionViewModel, pagerState: PagerState, wallpapers: List<Wallpaper>, context: Context
 ) {
     actionViewModel.downloadWallpaper(
         url = wallpapers[pagerState.currentPage].wallpaperSource.portrait

@@ -34,6 +34,7 @@ import com.shahid.iqbal.screeny.ui.screens.components.Footer
 import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
+import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.noRippleClickable
 import org.koin.compose.koinInject
 
 @Composable
@@ -104,7 +105,7 @@ fun ToolBar(title: String, modifier: Modifier = Modifier, onBackClick: () -> Uni
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier
                 .wrapContentSize()
-                .clickable { onBackClick() }
+                .noRippleClickable { onBackClick() }
 
 
         )

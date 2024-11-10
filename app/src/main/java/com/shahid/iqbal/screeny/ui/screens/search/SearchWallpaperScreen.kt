@@ -63,6 +63,7 @@ import com.shahid.iqbal.screeny.ui.screens.components.Footer
 import com.shahid.iqbal.screeny.ui.screens.components.LoadingPlaceHolder
 import com.shahid.iqbal.screeny.ui.screens.components.WallpaperItem
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
+import com.shahid.iqbal.screeny.ui.utils.ComponentHelpers.noRippleClickable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -88,7 +89,8 @@ fun SearchedWallpaperScreen(
 
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .safeDrawingPadding()
 
     ) {
@@ -267,6 +269,6 @@ fun SingleRecentItem(recentSearch: RecentSearch, onClick: () -> Unit) {
         Text(text = recentSearch.query, fontFamily = screenyFontFamily, style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier
             .weight(1f)
             .padding(horizontal = 10.dp)
-            .clickable { onClick() })
+            .noRippleClickable { onClick() })
     }
 }
