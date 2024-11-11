@@ -42,6 +42,7 @@ import com.shahid.iqbal.screeny.ui.screens.home.HomeScreen
 import com.shahid.iqbal.screeny.ui.screens.home.WallpaperViewModel
 import com.shahid.iqbal.screeny.ui.screens.search.SearchedWallpaperScreen
 import com.shahid.iqbal.screeny.ui.screens.settings.SettingScreen
+import com.shahid.iqbal.screeny.ui.screens.settings.language.LanguageScreen
 import com.shahid.iqbal.screeny.ui.screens.splash.SplashScreen
 import com.shahid.iqbal.screeny.ui.screens.wallpapers.WallpaperDetailScreen
 import com.shahid.iqbal.screeny.ui.shared.SharedWallpaperViewModel
@@ -98,7 +99,7 @@ fun ScreenyApp() {
         SharedTransitionLayout {
 
             NavHost(
-                navController = navController, startDestination = Splash,
+                navController = navController, startDestination = Routs.Language,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
@@ -168,6 +169,11 @@ fun ScreenyApp() {
                         wallpaper = wallpaper,
                         navController = navController
                     )
+                }
+
+
+                composable<Routs.Language> {
+                    LanguageScreen(navController = navController)
                 }
 
             }

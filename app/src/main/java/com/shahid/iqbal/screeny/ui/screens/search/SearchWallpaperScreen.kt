@@ -251,9 +251,10 @@ fun ShowWallpapers(
             }
         }
 
-        if (wallpapers.loadState.append == LoadState.Loading) item(span = { GridItemSpan(this.maxLineSpan) }) {
-            Footer()
-        }
+        if (wallpapers.loadState.append == LoadState.Loading)
+            item(span = { GridItemSpan(this.maxLineSpan) }) {
+                Footer()
+            }
     }
 }
 
@@ -264,11 +265,13 @@ fun SingleRecentItem(recentSearch: RecentSearch, onClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.history), contentDescription = null, tint = MaterialTheme.colorScheme.primary
+            painter = painterResource(id = R.drawable.history),
+            contentDescription = null, tint = MaterialTheme.colorScheme.primary
         )
-        Text(text = recentSearch.query, fontFamily = screenyFontFamily, style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier
-            .weight(1f)
-            .padding(horizontal = 10.dp)
-            .noRippleClickable { onClick() })
+        Text(text = recentSearch.query, fontFamily = screenyFontFamily,
+            style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant), modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 10.dp)
+                .noRippleClickable { onClick() })
     }
 }

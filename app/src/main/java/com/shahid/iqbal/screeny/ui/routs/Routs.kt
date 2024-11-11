@@ -39,4 +39,8 @@ sealed interface Routs {
     data object WallpaperDetail : Routs
 
 
+    @Serializable
+    data object Language : Routs
+
+
 }

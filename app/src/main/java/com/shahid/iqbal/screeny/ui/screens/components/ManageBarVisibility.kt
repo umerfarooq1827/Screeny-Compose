@@ -27,7 +27,8 @@ fun ManageBarVisibility(
                 CategoryDetail::class.qualifiedName,
                 SearchedWallpaper::class.qualifiedName,
                 WallpaperDetail::class.qualifiedName,
-                FavouriteDetail::class.qualifiedName
+                FavouriteDetail::class.qualifiedName,
+                Language::class.qualifiedName
 
             ) -> {
                 showTopBar(false)
@@ -44,7 +45,7 @@ fun ManageBarVisibility(
             HideSystemBars(true)
         }
 
-        if (route !in arrayOf(WallpaperDetail::class.qualifiedName)){
+        if (route !in arrayOf(WallpaperDetail::class.qualifiedName)) {
             SetStatusBarBarColor(isDarkMode = isSystemInDarkTheme())
         }
     }
