@@ -21,8 +21,8 @@ android {
             keyPassword = "screeny"
         }
     }
-    namespace = "com.shahid.iqbal.screeny"
-    compileSdk = 35
+        namespace = "com.shahid.iqbal.screeny"
+        compileSdk = 35
 
 
     defaultConfig {

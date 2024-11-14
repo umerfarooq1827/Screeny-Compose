@@ -2,6 +2,8 @@ package com.shahid.iqbal.screeny.ui.screens.settings.language.utils
 
 import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.CountryFlags.getCountryFlag
 
+
+
 val LANGUAGES_LIST by lazy {
     listOf(
         LanguageEntity("sa", "Arabic (عربي)", "ar", getCountryFlag("sa")),

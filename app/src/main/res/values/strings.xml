@@ -20,4 +20,6 @@
     <string name="explore_wallpapers">Explore Wallpapers</string>
     <string name="apply">Apply</string>
     <string name="language">Languages</string>
+    <string name="current_language">Current Language</string>
+    <string name="all_languages">All Languages</string>
 </resources>
