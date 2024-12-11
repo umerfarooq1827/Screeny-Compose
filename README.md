@@ -22,7 +22,7 @@ Follow these steps to set up and run the project locally.
 
 Make sure you have the following installed:
 - [Android Studio Electric Eel](https://developer.android.com/studio) or later
-- JDK 11 or higher
+- JDK 17 or higher
 - Git
 
 ### Installation
@@ -85,8 +85,6 @@ This project is open-source and thrives on community input. Feel free to:
 
 ## License
 
-This project is licensed under the **MIT License**. For more details, see the `LICENSE` file in the repository.
+This project is licensed under the **MIT License**.
 
 ---
-
-[**GitHub Repository**](https://github.com/Shahidzbi4213/Screeny-Compose)
