@@ -8,7 +8,9 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
@@ -123,11 +125,11 @@ fun WallpaperDetailScreen(
 
             Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = null, modifier = Modifier
-                .align(Alignment.TopStart)
-                .safeDrawingPadding()
-                .clickable { onBack() }
-                .padding(horizontal = 10.dp, vertical = 20.dp)
-                .zIndex(90f), tint = iconColor)
+                    .align(Alignment.TopStart)
+                    .safeDrawingPadding()
+                    .clickable { onBack() }
+                    .padding(horizontal = 10.dp, vertical = 20.dp)
+                    .zIndex(90f), tint = iconColor)
 
 
             HorizontalPager(

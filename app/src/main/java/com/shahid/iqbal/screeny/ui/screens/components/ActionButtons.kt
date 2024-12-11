@@ -48,7 +48,7 @@ fun ActionButtons(
             .fillMaxWidth()
             .wrapContentHeight()
             .safeDrawingPadding()
-            .padding(bottom = 50.dp, start = 50.dp, end = 50.dp),
+            .padding(bottom = 35.dp, start = 50.dp, end = 50.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Bottom
     ) {

@@ -21,6 +21,7 @@ fun BlurBg(wallpaperUrl: String) {
             .data(wallpaperUrl)
             .crossfade(false)
             .transformations(BlurTransformation(scale = 0.5f, radius = 10))
+            .size(100)
             .build(),
         contentDescription = null,
         contentScale = ContentScale.Crop,
