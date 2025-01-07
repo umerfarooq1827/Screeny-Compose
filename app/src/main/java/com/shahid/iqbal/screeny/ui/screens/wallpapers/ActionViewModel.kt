@@ -3,7 +3,7 @@ package com.shahid.iqbal.screeny.ui.screens.wallpapers
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shahid.iqbal.screeny.data.repositories.FavouriteRepo
-import com.shahid.iqbal.screeny.models.Wallpaper
+import com.shahid.iqbal.screeny.models.CommonWallpaperEntity
 import com.shahid.iqbal.screeny.utils.WallpaperDownloader
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -18,7 +18,7 @@ class ActionViewModel(
     val getAllFavourites
         get() = favouriteRepo.getAllFavourites.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    fun addOrRemove(wallpaper: Wallpaper) {
+    fun addOrRemove(wallpaper: CommonWallpaperEntity) {
         viewModelScope.launch {
             favouriteRepo.addOrRemove(wallpaper)
         }
