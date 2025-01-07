@@ -12,7 +12,7 @@ import com.shahid.iqbal.screeny.data.utils.Constant.PEXEL_WALLPAPER_REMOTE_KEYS_
 data class WallpaperRemoteKeys(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
-    val wallpaperId: Int,
+    val wallpaperId: Long,
     val prevPage: Int?,
     val nextPage: Int?,
     val page: Int,

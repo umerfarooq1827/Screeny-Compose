@@ -19,7 +19,7 @@ import kotlinx.serialization.Transient
 data class Wallpaper(
     @SerialName("id")
     @PrimaryKey(autoGenerate = false)
-    val id: Int,
+    val id: Long,
     @SerialName("photographer")
     val photographerName: String,
     @SerialName("photographer_url")

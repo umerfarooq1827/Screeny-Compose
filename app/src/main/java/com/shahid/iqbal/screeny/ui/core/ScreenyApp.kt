@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.shahid.iqbal.screeny.R
+import com.shahid.iqbal.screeny.models.CommonWallpaperEntity
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.routs.Routs
 import com.shahid.iqbal.screeny.ui.routs.Routs.Categories
@@ -163,10 +164,11 @@ fun ScreenyApp() {
                 }
 
                 composable<Routs.FavouriteDetail> { backStackEntry ->
-                    val wallpaper = backStackEntry.toRoute<Routs.FavouriteDetail>().wallpaper
+                    val wallpaperId = backStackEntry.toRoute<Routs.FavouriteDetail>().wallpaperId
+                    val wallpaperUrl = backStackEntry.toRoute<Routs.FavouriteDetail>().wallpaperUrl
                     FavouriteDetailScreen(
                         animatedVisibilityScope = this@composable,
-                        wallpaper = wallpaper,
+                        wallpaper = CommonWallpaperEntity(wallpaperId,wallpaperUrl),
                         navController = navController
                     )
                 }

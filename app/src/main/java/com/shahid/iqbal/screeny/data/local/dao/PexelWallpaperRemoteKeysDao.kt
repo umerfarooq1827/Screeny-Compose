@@ -11,7 +11,7 @@ import com.shahid.iqbal.screeny.models.WallpaperRemoteKeys
 interface PexelWallpaperRemoteKeysDao {
 
     @Query("SELECT * FROM pexel_wallpaper_remote_keys_table WHERE id =:id")
-    suspend fun getRemoteKeyByWallpaperId(id: Int): WallpaperRemoteKeys?
+    suspend fun getRemoteKeyByWallpaperId(id: Long): WallpaperRemoteKeys?
 
     @Query("Select created_at From pexel_wallpaper_remote_keys_table Order By created_at DESC LIMIT 1")
     suspend fun getCreationTime(): Long?

@@ -18,7 +18,7 @@ interface FavouriteWallpaperDao {
     suspend fun removeFromFavourite(wallpaper: FavouriteWallpaper)
 
     @Query("SELECT * FROM favourite_wallpaper WHERE id=:id limit 1")
-    suspend fun getFavouriteById(id:Int):FavouriteWallpaper?
+    suspend fun getFavouriteById(id:Long):FavouriteWallpaper?
 
 
     @Query("DELETE FROM favourite_wallpaper WHERE wallpaper=:url")

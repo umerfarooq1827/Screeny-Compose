@@ -63,7 +63,7 @@ fun SharedTransitionScope.FavouriteScreen(
                 FavouriteWallpaperItem(
                     wallpaper = favourite.wallpaper, imageLoader = imageLoader,
                     animatedVisibilityScope = animatedVisibilityScope,
-                    onWallpaperClick = { wallpaper -> navController.navigate(Routs.FavouriteDetail(wallpaper)) },
+                    onWallpaperClick = { wallpaper -> navController.navigate(Routs.FavouriteDetail(favourite.id, wallpaper)) },
                     onRemoveFromFavClick = { wallpaper -> favouriteViewModel.removeFromFavourite(wallpaper) }
                 )
             }

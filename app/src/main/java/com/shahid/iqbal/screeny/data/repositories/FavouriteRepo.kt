@@ -2,10 +2,8 @@ package com.shahid.iqbal.screeny.data.repositories
 
 import com.shahid.iqbal.screeny.data.local.dao.FavouriteWallpaperDao
 import com.shahid.iqbal.screeny.models.FavouriteWallpaper
-import com.shahid.iqbal.screeny.models.Wallpaper
+import com.shahid.iqbal.screeny.models.CommonWallpaperEntity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
 class FavouriteRepo(private val dao: FavouriteWallpaperDao) {
@@ -14,13 +12,13 @@ class FavouriteRepo(private val dao: FavouriteWallpaperDao) {
 
     val getAllFavourites get() = dao.getAllFavourites()
 
-    suspend fun addOrRemove(wallpaper: Wallpaper) {
+    suspend fun addOrRemove(wallpaper: CommonWallpaperEntity) {
         withContext(ioDispatcher) {
             val savedWallpaper = dao.getFavouriteById(wallpaper.id)
 
             if (savedWallpaper != null) dao.removeFromFavourite(savedWallpaper)
             else {
-                val favouriteWallpaper = FavouriteWallpaper(wallpaper.id, wallpaper.wallpaperSource.portrait)
+                val favouriteWallpaper = FavouriteWallpaper(wallpaper.id, wallpaper.url)
                 dao.addToFavourite(favouriteWallpaper)
             }
         }

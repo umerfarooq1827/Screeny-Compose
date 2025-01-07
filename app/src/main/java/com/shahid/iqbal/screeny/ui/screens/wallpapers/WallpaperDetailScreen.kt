@@ -2,15 +2,12 @@ package com.shahid.iqbal.screeny.ui.screens.wallpapers
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
@@ -38,6 +35,7 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.ImageLoader
 import com.shahid.iqbal.screeny.R
+import com.shahid.iqbal.screeny.data.utils.toCommonWallpaperEntity
 import com.shahid.iqbal.screeny.models.Wallpaper
 import com.shahid.iqbal.screeny.ui.screens.components.ActionButtons
 import com.shahid.iqbal.screeny.ui.screens.components.BlurBg
@@ -159,7 +157,7 @@ fun WallpaperDetailScreen(
             }, onFavourite = {
 
                 val wallpaper = wallpapers[pagerState.settledPage]
-                actionViewModel.addOrRemove(wallpaper = wallpaper)
+                actionViewModel.addOrRemove(wallpaper = wallpaper.toCommonWallpaperEntity())
                 isFavourite = favouriteList.any { it.id == wallpaper.id }
             })
         }
