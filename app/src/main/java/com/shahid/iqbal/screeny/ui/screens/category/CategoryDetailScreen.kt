@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.ImageLoader
@@ -111,7 +112,7 @@ fun ToolBar(title: String, modifier: Modifier = Modifier, onBackClick: () -> Uni
         )
 
         Text(
-            text = title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            text = title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp),
             fontFamily = screenyFontFamily, modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
