@@ -1,7 +1,13 @@
 package com.shahid.iqbal.screeny.ui.screens.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.exclude
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,6 +46,6 @@ fun TopBar(title: String, onClick: () -> Unit) {
                         .clickable { onClick() }
                 )
         },
-        modifier = Modifier
+        modifier = Modifier,
     )
 }

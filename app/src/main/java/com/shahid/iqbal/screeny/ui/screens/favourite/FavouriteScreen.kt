@@ -64,8 +64,6 @@ fun SharedTransitionScope.FavouriteScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = modifier
-                .safeContentPadding()
-                .padding(top = 45.dp)
                 .fillMaxSize()
 
         ) {

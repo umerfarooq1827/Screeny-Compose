@@ -3,10 +3,15 @@ package com.shahid.iqbal.screeny.ui.core
 import android.annotation.SuppressLint
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,6 +20,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
@@ -90,9 +97,10 @@ fun ScreenyApp() {
             }
         },
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
 
-    ) {innerPadding ->
+        contentWindowInsets = WindowInsets(0.dp)
+    ) { innerPadding ->
 
         SharedTransitionLayout() {
 
@@ -100,6 +108,9 @@ fun ScreenyApp() {
                 navController = navController, startDestination = Splash,
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(innerPadding)
+
+
             ) {
 
 
@@ -125,13 +136,9 @@ fun ScreenyApp() {
                     }
                 }
 
-                composable<Favourite> {
-                    FavouriteScreen(navController = navController, animatedVisibilityScope = this@composable)
-                }
+                composable<Favourite> { FavouriteScreen(navController = navController, animatedVisibilityScope = this@composable) }
 
-                composable<Setting> {
-                    SettingScreen()
-                }
+                composable<Setting> { SettingScreen() }
 
 
                 composable<Routs.CategoryDetail> { backStackEntry ->

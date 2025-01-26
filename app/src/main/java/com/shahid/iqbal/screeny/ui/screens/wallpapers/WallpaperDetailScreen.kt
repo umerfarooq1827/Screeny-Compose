@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -88,31 +90,26 @@ fun WallpaperDetailScreen(
     }
 
     AnimatedVisibility(
-        visible = canShowList,
-        modifier = Modifier
-            .fillMaxSize()
+        visible = canShowList, modifier = Modifier.fillMaxSize()
     ) {
 
         Box(
-            contentAlignment = Alignment.BottomCenter,
-            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter, modifier = Modifier
+                .fillMaxSize()
 
-            )
-        {
+        ) {
 
             BlurBg(wallpapers[pagerState.currentPage].wallpaperSource.portrait)
 
-            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = 10.dp, top = 50.dp)
-                    .size(30.dp)
-                    .clip(CircleShape)
-                    .background(color = ActionIconBgColor, shape = CircleShape)
-                    .padding(5.dp)
-                    .align(Alignment.TopStart)
-                    .noRippleClickable { onBack() }
-                    .zIndex(90f), tint = Color.White)
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier
+                .padding(start = 10.dp, top = 50.dp)
+                .size(30.dp)
+                .clip(CircleShape)
+                .background(color = ActionIconBgColor, shape = CircleShape)
+                .padding(5.dp)
+                .align(Alignment.TopStart)
+                .noRippleClickable { onBack() }
+                .zIndex(90f), tint = Color.White)
 
 
             HorizontalPager(
@@ -130,9 +127,7 @@ fun WallpaperDetailScreen(
                 }
 
                 SinglePageContent(
-                    wallpaperUrl = wallpapers[page].wallpaperSource.portrait, imageLoader = imageLoader,
-                    pagerState = pagerState, page = page,
-                    updateWallpaper = sharedWallpaperViewModel::updateWallpaper
+                    wallpaperUrl = wallpapers[page].wallpaperSource.portrait, imageLoader = imageLoader, pagerState = pagerState, page = page, updateWallpaper = sharedWallpaperViewModel::updateWallpaper
                 )
             }
 
