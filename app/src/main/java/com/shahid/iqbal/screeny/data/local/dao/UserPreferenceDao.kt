@@ -16,6 +16,12 @@ interface UserPreferenceDao {
     @Query("Update user_preference set languageCode =:code")
     suspend fun updateLanguage(code: String)
 
+    @Query("Update user_preference set systemMode =:mode")
+    suspend fun updateAppMode(mode:Int)
+
+    @Query("Update user_preference set isDynamicColor =:color")
+    suspend fun updateDynamicColor(color:Boolean)
+
 
     @Query("SELECT * FROM user_preference limit 1")
     fun getUserPreference(): Flow<UserPreference>

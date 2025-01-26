@@ -11,9 +11,8 @@ data class UserPreference(
     @PrimaryKey(autoGenerate = false)
     var id: Int = 1,
 
-    var languageCode: String,
+    var languageCode: String = "en",
 
-    var isDarkMode: Boolean,
-
-    var isDynamicColor: Boolean
+    var systemMode: Int = -1,
+    var isDynamicColor: Boolean = true
 )

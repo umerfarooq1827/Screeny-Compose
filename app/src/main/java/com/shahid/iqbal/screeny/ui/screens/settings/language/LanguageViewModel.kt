@@ -17,9 +17,8 @@ class LanguageViewModel(private val userPreferenceRepo: UserPreferenceRepo) : Vi
 
     val currentLanguage = userPreferenceRepo.uerPreference
         .map { preference ->
-            LANGUAGES_LIST.firstOrNull { it.languageCode == preference.languageCode } ?: defaultLanguage
+            LANGUAGES_LIST.getOrElse(LANGUAGES_LIST.indexOfFirst { it.languageCode == preference.languageCode }) { defaultLanguage }
         }
-
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),

@@ -1,6 +1,5 @@
 package com.shahid.iqbal.screeny.ui.screens.category
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
@@ -51,7 +49,8 @@ fun CategoryDetailScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize().safeDrawingPadding(),
+            .fillMaxSize()
+            .safeDrawingPadding(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -73,17 +72,20 @@ fun CategoryDetailScreen(
                 }
             }
 
-            items(wallpapers.itemCount,
-                key = { "${wallpapers[it]?.id}_$it" }) { index ->
-                if (index < wallpapers.itemCount) {
-                    val wallpaper = wallpapers[index]
-                    if (wallpaper != null) {
-                        WallpaperItem(wallpaper = wallpaper.wallpaperSource.portrait, imageLoader = imageLoader) {
-                            onWallpaperClick(wallpapers.itemSnapshotList.items.indexOf(wallpaper))
-                        }
+            items(
+                count = wallpapers.itemCount,
+                key = { "${wallpapers[it]?.id}_$it" }
+            ) { index ->
+                wallpapers[index]?.let { wallpaper ->
+                    WallpaperItem(
+                        wallpaper = wallpaper.wallpaperSource.portrait,
+                        imageLoader = imageLoader
+                    ) {
+                        onWallpaperClick(index)
                     }
                 }
             }
+
 
             if (wallpapers.loadState.append == LoadState.Loading)
                 item(span = { GridItemSpan(this.maxLineSpan) }) {

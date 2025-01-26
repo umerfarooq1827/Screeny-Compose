@@ -13,4 +13,13 @@ class UserPreferenceRepo (private val dao: UserPreferenceDao) {
     suspend fun updateAppLanguage(languageEntity: LanguageEntity) = withContext(Dispatchers.IO){
         dao.updateLanguage(languageEntity.languageCode)
     }
+
+    suspend fun updateAppMode(appMode: Int) = withContext(Dispatchers.IO){
+        dao.updateAppMode(appMode)
+    }
+
+    suspend fun updateDynamicColor(isDynamicColor: Boolean) = withContext(Dispatchers.IO){
+        dao.updateDynamicColor(isDynamicColor)
+    }
+
 }
