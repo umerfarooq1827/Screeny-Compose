@@ -4,6 +4,7 @@ import android.content.res.Resources.Theme
 import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.AppMode
 
 @Keep
@@ -15,6 +16,7 @@ data class UserPreference(
 
     var languageCode: String = "en",
 
+    @TypeConverters
     var appMode: AppMode = AppMode.DEFAULT,
     var shouldShowDynamicColor: Boolean = true
 )

@@ -1,5 +1,7 @@
 package com.shahid.iqbal.screeny.utils
 
+import android.app.Activity
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -18,4 +20,5 @@ object Extensions {
     internal fun Dp.toPx(): Float {
         return this.value * LocalDensity.current.density
     }
+
 }

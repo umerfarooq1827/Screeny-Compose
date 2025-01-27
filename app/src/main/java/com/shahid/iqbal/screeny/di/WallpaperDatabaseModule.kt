@@ -6,11 +6,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.shahid.iqbal.screeny.data.local.database.PexelWallpaperDatabase
 import com.shahid.iqbal.screeny.data.utils.Constant
 import com.shahid.iqbal.screeny.models.UserPreference
+import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.AppMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.dsl.module
+import java.util.Locale
 
 
 val wallpaperDatabaseModule = module {
@@ -29,9 +31,9 @@ val wallpaperDatabaseModule = module {
                 private suspend fun addDefaultUserPreference() {
                     withContext(Dispatchers.IO) {
                         val userPreference = UserPreference(
-                            isDarkMode = false,
-                            isDynamicColor = true,
-                            languageCode = "en"
+                            appMode = AppMode.DEFAULT,
+                            shouldShowDynamicColor = true,
+                            languageCode = Locale.getDefault().language
                         )
 
                         get<PexelWallpaperDatabase>()
