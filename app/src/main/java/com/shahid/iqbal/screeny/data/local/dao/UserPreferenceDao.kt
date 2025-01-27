@@ -16,7 +16,7 @@ interface UserPreferenceDao {
     @Query("Update user_preference set languageCode =:code")
     suspend fun updateLanguage(code: String)
 
-    @Query("Update user_preference set systemMode =:mode")
+    @Query("Update user_preference set appMode =:mode")
     suspend fun updateAppMode(mode:Int)
 
     @Query("Update user_preference set isDynamicColor =:color")

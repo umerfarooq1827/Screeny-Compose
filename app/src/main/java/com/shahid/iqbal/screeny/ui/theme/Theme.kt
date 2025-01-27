@@ -38,8 +38,8 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun ScreenyTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    darkTheme: Boolean,
+    dynamicColor: Boolean,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
