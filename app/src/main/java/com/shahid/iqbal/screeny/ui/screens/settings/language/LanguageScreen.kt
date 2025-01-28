@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ import androidx.navigation.NavController
 import com.shahid.iqbal.screeny.R
 import com.shahid.iqbal.screeny.ui.screens.settings.utils.LANGUAGES_LIST
 import com.shahid.iqbal.screeny.ui.screens.settings.utils.LanguageEntity
+import com.shahid.iqbal.screeny.ui.screens.settings.utils.setUserSelectedLanguageForApp
 import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
 import org.koin.androidx.compose.koinViewModel
 
@@ -48,6 +50,7 @@ fun LanguageScreen(
         mutableStateOf<LanguageEntity?>(null)
     }
     val state = rememberLazyListState()
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -64,6 +67,7 @@ fun LanguageScreen(
                 if (localSelected == null)
                     return@Toolbar
 
+                setUserSelectedLanguageForApp(context,localSelected!!.languageCode)
                 languageViewModel.updateCurrentLanguage(localSelected!!)
                 navController.navigateUp()
             }
