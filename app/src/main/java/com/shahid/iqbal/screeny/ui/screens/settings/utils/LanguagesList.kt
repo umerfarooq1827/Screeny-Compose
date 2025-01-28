@@ -1,6 +1,6 @@
-package com.shahid.iqbal.screeny.ui.screens.settings.language.utils
+package com.shahid.iqbal.screeny.ui.screens.settings.utils
 
-import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.CountryFlags.getCountryFlag
+import com.shahid.iqbal.screeny.ui.screens.settings.utils.CountryFlags.getCountryFlag
 
 
 

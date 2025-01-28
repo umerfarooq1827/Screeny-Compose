@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Screeny</string>
+    <string name="home">Domov</string>
+    <string name="category">Kategorie</string>
+    <string name="favourite">Oblíbený</string>
+    <string name="setting">Nastavení</string>
+    <string name="search_wallpaper">Hledat tapetu</string>
+    <string name="download">Stáhnout</string>
+    <string name="downloading_wallpaper">Stahování tapety</string>
+    <string name="downloading">Stahování</string>
+    <string name="set_as_home_screen">Nastavit na domovské obrazovce</string>
+    <string name="set_as_lock_screen">Nastavit na zamykací obrazovce</string>
+    <string name="set_as_both">Nastavte na obou obrazovkách</string>
+    <string name="wallpaper_dialog_title">co bys chtěl dělat?</string>
+    <string name="cancel">Zrušit</string>
+    <string name="something_went_wrong">Něco se pokazilo</string>
+    <string name="wallpaper_set_successfully">Tapeta byla úspěšně nastavena!</string>
+    <string name="recent_searchs">Nedávná vyhledávání</string>
+    <string name="your_favorite_wallpapers_will_appear_here_start_exploring_and_add_some_to_your_favorites">Zde se objeví vaše oblíbené tapety! Začněte objevovat a přidejte si některé mezi své oblíbené!</string>
+    <string name="explore_wallpapers">Prozkoumejte tapety</string>
+    <string name="apply">Použít</string>
+    <string name="language">Jazyky</string>
+    <string name="current_language">Aktuální jazyk</string>
+    <string name="all_languages">Všechny jazyky</string>
+    <string name="general">Generál</string>
+    <string name="app_lanuage">Jazyk aplikace</string>
+    <string name="dynamic_color">Dynamická barva</string>
+    <string name="app_mode">Režim aplikace</string>
+    <string name="on">Na</string>
+    <string name="off">Vypnuto</string>
+    <string name="system_default">Výchozí nastavení systému</string>
+    <string name="dark">Tmavý</string>
+    <string name="light">Světlo</string>
+</resources>

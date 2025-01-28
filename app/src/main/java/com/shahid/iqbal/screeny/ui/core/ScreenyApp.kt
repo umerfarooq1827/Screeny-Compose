@@ -138,7 +138,7 @@ fun ScreenyApp() {
 
                 composable<Favourite> { FavouriteScreen(navController = navController, animatedVisibilityScope = this@composable) }
 
-                composable<Setting> { SettingScreen() }
+                composable<Setting> { SettingScreen(navController) }
 
 
                 composable<Routs.CategoryDetail> { backStackEntry ->
