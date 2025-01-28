@@ -22,8 +22,6 @@ fun SettingScreen(modifier: Modifier = Modifier, settingViewModel: SettingViewMo
             .fillMaxSize()
     ) {
 
-        Switch(checked = isSystemInDarkTheme(),
-            onCheckedChange = { settingViewModel.updateAppMode(AppMode.DARK) })
 
     }
 }
