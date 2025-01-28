@@ -3,8 +3,8 @@ package com.shahid.iqbal.screeny.ui.screens.settings.language
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shahid.iqbal.screeny.data.repositories.UserPreferenceRepo
-import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.LANGUAGES_LIST
-import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.LanguageEntity
+import com.shahid.iqbal.screeny.ui.screens.settings.utils.LANGUAGES_LIST
+import com.shahid.iqbal.screeny.ui.screens.settings.utils.LanguageEntity
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn

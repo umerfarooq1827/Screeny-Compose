@@ -22,4 +22,13 @@
     <string name="language">Languages</string>
     <string name="current_language">Current Language</string>
     <string name="all_languages">All Languages</string>
+    <string name="general">General</string>
+    <string name="app_lanuage">App Language</string>
+    <string name="dynamic_color">Dynamic Color</string>
+    <string name="app_mode">App Mode</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="system_default">System Default</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
 </resources>
