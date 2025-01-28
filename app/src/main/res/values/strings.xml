@@ -15,13 +15,13 @@
     <string name="cancel">Cancel</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="wallpaper_set_successfully">Wallpaper set successfully!</string>
-    <string name="recent_searchs">Recents Searches</string>
+    <string name="recent_searchs">Recent Searches</string>
     <string name="your_favorite_wallpapers_will_appear_here_start_exploring_and_add_some_to_your_favorites">Your favorite wallpapers will appear here!\nStart exploring and add some to your favorites!</string>
     <string name="explore_wallpapers">Explore Wallpapers</string>
     <string name="apply">Apply</string>
     <string name="language">Languages</string>
     <string name="current_language">Current Language</string>
-    <string name="all_languages">All Languages</string>
+    <string name="all_languages">All Language</string>
     <string name="general">General</string>
     <string name="app_lanuage">App Language</string>
     <string name="dynamic_color">Dynamic Color</string>

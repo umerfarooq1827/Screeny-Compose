@@ -22,7 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.shahid.iqbal.screeny.R
+import com.shahid.iqbal.screeny.ui.routs.Routs
 import com.shahid.iqbal.screeny.ui.screens.settings.utils.AppMode
 import com.shahid.iqbal.screeny.ui.screens.settings.utils.findLanguageByCode
 import org.koin.androidx.compose.koinViewModel
@@ -30,7 +32,11 @@ import java.util.Locale
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SettingScreen(modifier: Modifier = Modifier, settingViewModel: SettingViewModel = koinViewModel()) {
+fun SettingScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    settingViewModel: SettingViewModel = koinViewModel()
+) {
 
     val userPreference by settingViewModel.userPreference.collectAsStateWithLifecycle()
 
@@ -52,10 +58,14 @@ fun SettingScreen(modifier: Modifier = Modifier, settingViewModel: SettingViewMo
             Spacer(Modifier.height(10.dp))
 
             GeneralItem(title = R.string.app_lanuage, description = if (userPreference.languageCode == Locale.getDefault().language)
-                stringResource(R.string.system_default) else findLanguageByCode(userPreference.languageCode).languageName, icon = R.drawable.language_icon, onClick = {})
+                stringResource(R.string.system_default) else findLanguageByCode(userPreference.languageCode).languageName, icon = R.drawable.language_icon,
+                onClick = {
+                    navController.navigate(Routs.Language)
+                })
 
-            GeneralItem(title = R.string.dynamic_color, description = if (userPreference.shouldShowDynamicColor) stringResource(R.string.on).uppercase()
-            else stringResource(R.string.off).uppercase(), icon = R.drawable.language_icon, onClick = {})
+            GeneralItem(title = R.string.dynamic_color, description =
+            if (userPreference.shouldShowDynamicColor) stringResource(R.string.on).uppercase()
+            else stringResource(R.string.off).uppercase(), icon = R.drawable.dynamic_color, onClick = {})
 
             GeneralItem(title = R.string.app_mode, description = when (userPreference.appMode) {
                 AppMode.LIGHT -> stringResource(R.string.light)

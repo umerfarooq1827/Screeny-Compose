@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.shahid.iqbal.screeny.ui.theme.screenyFontFamily
 import com.shahid.iqbal.screeny.ui.utils.NoRippleInteractionSource
 
 /**
@@ -64,7 +65,11 @@ fun GeneralItem(
                 Spacer(modifier = Modifier.width(10.dp))
 
                 Text(
-                    text = stringResource(title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis
+                    text = stringResource(title),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.weight(1f),
+                    maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    fontFamily = screenyFontFamily
                 )
 
                 Text(
