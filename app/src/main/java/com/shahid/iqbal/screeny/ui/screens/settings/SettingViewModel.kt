@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shahid.iqbal.screeny.data.repositories.UserPreferenceRepo
 import com.shahid.iqbal.screeny.models.UserPreference
-import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.AppMode
+import com.shahid.iqbal.screeny.ui.screens.settings.utils.AppMode
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch

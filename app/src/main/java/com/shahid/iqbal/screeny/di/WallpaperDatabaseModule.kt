@@ -6,7 +6,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.shahid.iqbal.screeny.data.local.database.PexelWallpaperDatabase
 import com.shahid.iqbal.screeny.data.utils.Constant
 import com.shahid.iqbal.screeny.models.UserPreference
-import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.AppMode
+import com.shahid.iqbal.screeny.ui.screens.settings.utils.AppMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

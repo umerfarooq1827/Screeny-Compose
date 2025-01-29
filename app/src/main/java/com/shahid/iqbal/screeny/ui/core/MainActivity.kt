@@ -11,8 +11,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.shahid.iqbal.screeny.ui.screens.settings.SettingViewModel
-import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.AppMode
-import com.shahid.iqbal.screeny.ui.screens.settings.language.utils.currentAppMode
+import com.shahid.iqbal.screeny.ui.screens.settings.utils.AppMode
+import com.shahid.iqbal.screeny.ui.screens.settings.utils.currentAppMode
 import com.shahid.iqbal.screeny.ui.theme.ScreenyTheme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
